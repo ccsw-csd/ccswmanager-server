@@ -2,11 +2,7 @@ package com.capgemini.ccsw.ccswmanager.person;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 
@@ -15,5 +11,8 @@ import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
  *
  */
 public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
+
+  @Override
+  List<PersonEntity> findAll();
 
 }
