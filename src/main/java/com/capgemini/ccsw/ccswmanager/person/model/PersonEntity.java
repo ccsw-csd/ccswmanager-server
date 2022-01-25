@@ -22,15 +22,15 @@ public class PersonEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  private Integer id;
+  private Long id;
 
-  @Column(name = "saga", nullable = false)
+  @Column(name = "saga")
   private String saga;
 
-  @Column(name = "username", nullable = false)
+  @Column(name = "username")
   private String username;
 
-  @Column(name = "email", nullable = false)
+  @Column(name = "email")
   private String email;
 
   @Column(name = "name", nullable = false)
@@ -70,7 +70,7 @@ public class PersonEntity {
   /**
    * @return id
    */
-  public Integer getId() {
+  public Long getId() {
 
     return this.id;
   }
@@ -78,7 +78,7 @@ public class PersonEntity {
   /**
    * @param id new value of {@link #getid}.
    */
-  public void setId(Integer id) {
+  public void setId(Long id) {
 
     this.id = id;
   }

@@ -7,7 +7,7 @@ import com.capgemini.ccsw.ccswmanager.center.model.CenterDto;
  *
  */
 public class PersonDto {
-  private Integer id;
+  private Long id;
 
   private String saga;
 
@@ -40,7 +40,7 @@ public class PersonDto {
   /**
    * @return id
    */
-  public Integer getId() {
+  public Long getId() {
 
     return this.id;
   }
@@ -48,7 +48,7 @@ public class PersonDto {
   /**
    * @param id new value of {@link #getid}.
    */
-  public void setId(Integer id) {
+  public void setId(Long id) {
 
     this.id = id;
   }
