@@ -7,7 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
+import com.capgemini.ccsw.ccswmanager.center.CenterService;
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonDto;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
@@ -21,6 +21,9 @@ public class PersonServiceImpl implements PersonService {
 
   @Autowired
   PersonRepository personRepository;
+
+  @Autowired
+  CenterService centerService;
 
   @Autowired
   private BeanMapper beanMapper;
@@ -52,7 +55,7 @@ public class PersonServiceImpl implements PersonService {
 
     BeanUtils.copyProperties(personTo, person, "id", "center");
 
-    person.setCenter(this.beanMapper.map(personTo.getCenter(), CenterEntity.class));
+    person.setCenter(this.centerService.getById(personTo.getCenter().getId()));
 
     return this.personRepository.save(person);
   }
