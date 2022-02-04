@@ -237,4 +237,9 @@ public class ScholarEntity {
 	public void setActive(Integer active) {
 		this.active = active;
 	}
+
+	public ScholarEntity save(ScholarEntity scholar) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
