@@ -52,10 +52,10 @@ public class PersonEntity {
   @Column(name = "grade")
   private String grade;
 
-  @Column(name = "customer", nullable = false)
+  @Column(name = "customer")
   private String customer;
 
-  @Column(name = "role", nullable = false)
+  @Column(name = "role")
   private String role;
 
   @Column(name = "details")

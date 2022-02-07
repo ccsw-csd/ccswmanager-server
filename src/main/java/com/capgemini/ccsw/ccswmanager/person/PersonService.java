@@ -28,4 +28,10 @@ public interface PersonService {
    */
   PersonEntity get(long id);
 
+  /**
+   * @param filter
+   * @return
+   */
+  List<PersonDto> findByFilter(String filter);
+
 }

@@ -1,5 +1,6 @@
 package com.capgemini.ccsw.ccswmanager.person;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ import com.capgemini.ccsw.ccswmanager.center.CenterService;
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonDto;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
+import com.capgemini.ccsw.ccswmanager.person.model.TPersonEntity;
 
 /**
  * @author aolmosca
@@ -21,6 +23,9 @@ public class PersonServiceImpl implements PersonService {
 
   @Autowired
   PersonRepository personRepository;
+
+  @Autowired
+  TPersonRepository tpersonRepository;
 
   @Autowired
   CenterService centerService;
@@ -38,6 +43,27 @@ public class PersonServiceImpl implements PersonService {
   public PersonEntity get(long id) {
 
     return this.personRepository.findById(id).orElse(null);
+  }
+
+  @Override
+  public List<PersonDto> findByFilter(String filter) {
+
+    TPersonEntity newPerson = new TPersonEntity();
+    List<TPersonEntity> persons = new ArrayList<TPersonEntity>();
+    String lastname = "";
+
+    newPerson.setName(filter.split(" ")[0]);
+
+    for (int i = 1; i < filter.split(" ").length; i++) {
+      lastname = lastname + filter.split(" ")[i] + " ";
+    }
+
+    newPerson.setLastname(lastname);
+
+    persons.add(newPerson);
+    persons.addAll(this.tpersonRepository.findByFilter(filter));
+
+    return this.beanMapper.mapList(persons, PersonDto.class);
   }
 
   @Override
