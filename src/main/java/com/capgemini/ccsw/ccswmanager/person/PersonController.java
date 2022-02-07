@@ -3,6 +3,7 @@ package com.capgemini.ccsw.ccswmanager.person;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +33,12 @@ public class PersonController {
 
     return this.personService.findPersons();
 
+  }
+
+  @RequestMapping(path = "/{filter}", method = RequestMethod.GET)
+  public List<PersonDto> findByFilter(@PathVariable String filter) {
+
+    return this.personService.findByFilter(filter);
   }
 
   /**
