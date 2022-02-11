@@ -8,6 +8,6 @@ import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
 
 public interface ScholarRepository extends CrudRepository<ScholarEntity, Long>{
 
-	  @Override
-	  List<ScholarEntity> findAll();
+  @Override
+  List<ScholarEntity> findAll();
 }
