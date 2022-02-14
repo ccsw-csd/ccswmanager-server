@@ -19,7 +19,7 @@ public class ScholarController {
 	private ScholarService scholarService;
 
 	@RequestMapping(path = "/", method = RequestMethod.GET)
-	public List<ScholarDto> findPersons() {
+	public List<ScholarDto> findScholars() {
 
 		return this.scholarService.findScholars();
 
