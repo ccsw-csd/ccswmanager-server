@@ -20,7 +20,7 @@ public interface PersonService {
    * @param person
    * @return
    */
-  PersonEntity saveOrUpdatePerson(PersonDto person);
+  List<PersonDto> saveOrUpdatePersons(List<PersonDto> persons);
 
   /**
    * @param id
@@ -33,5 +33,10 @@ public interface PersonService {
    * @return
    */
   List<PersonDto> findByFilter(String filter);
+
+  /**
+   * @return
+   */
+  Boolean checkLDAP();
 
 }

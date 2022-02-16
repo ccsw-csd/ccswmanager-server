@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonDto;
-import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 
 /**
  * TODO asolerpa This type ...
@@ -46,10 +45,15 @@ public class PersonController {
    * @return
    */
   @RequestMapping(path = "/", method = RequestMethod.POST)
-  public PersonDto saveOrUpdatePerson(@RequestBody PersonDto person) {
+  public List<PersonDto> saveOrUpdatePersons(@RequestBody List<PersonDto> persons) {
 
-    PersonEntity entity = this.personService.saveOrUpdatePerson(person);
-    return this.beanMapper.map(entity, PersonDto.class);
+    return this.personService.saveOrUpdatePersons(persons);
+  }
+
+  @RequestMapping(path = "/ldap", method = RequestMethod.GET)
+  public boolean checkLDAP() {
+
+    return this.personService.checkLDAP();
   }
 
 }

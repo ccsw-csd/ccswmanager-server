@@ -67,23 +67,42 @@ public class PersonServiceImpl implements PersonService {
   }
 
   @Override
-  public PersonEntity saveOrUpdatePerson(PersonDto personTo) {
+  public List<PersonDto> saveOrUpdatePersons(List<PersonDto> personListTo) {
 
-    Objects.requireNonNull(personTo, "person");
+    personListTo.forEach(personTo -> {
 
-    PersonEntity person = null;
-    if (personTo.getId() != null)
-      person = get(personTo.getId());
+      Objects.requireNonNull(personTo, "person");
 
-    if (person == null) {
-      person = new PersonEntity();
-    }
+      PersonEntity person = null;
+      if (personTo.getId() != null)
+        person = get(personTo.getId());
 
-    BeanUtils.copyProperties(personTo, person, "id", "center");
+      if (person == null) {
+        person = new PersonEntity();
+      }
 
-    person.setCenter(this.centerService.getById(personTo.getCenter().getId()));
+      BeanUtils.copyProperties(personTo, person, "id", "center");
 
-    return this.personRepository.save(person);
+      person.setCenter(this.centerService.getById(personTo.getCenter().getId()));
+
+      this.personRepository.save(person);
+
+    });
+
+    return findPersons();
   }
 
+  @Override
+  public Boolean checkLDAP() {
+
+    List<String> persons = this.personRepository.comparePersonsToLdap();
+    List<String> ldap = this.personRepository.compareLdapToPersons();
+
+    if (persons.size() > 0 || ldap.size() > 0) {
+      return false;
+    } else {
+      return true;
+    }
+
+  }
 }
