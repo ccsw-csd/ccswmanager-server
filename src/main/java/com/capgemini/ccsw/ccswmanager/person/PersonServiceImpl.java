@@ -91,18 +91,4 @@ public class PersonServiceImpl implements PersonService {
 
     return findPersons();
   }
-
-  @Override
-  public Boolean checkLDAP() {
-
-    List<String> persons = this.personRepository.comparePersonsToLdap();
-    List<String> ldap = this.personRepository.compareLdapToPersons();
-
-    if (persons.size() > 0 || ldap.size() > 0) {
-      return false;
-    } else {
-      return true;
-    }
-
-  }
 }

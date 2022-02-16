@@ -49,11 +49,4 @@ public class PersonController {
 
     return this.personService.saveOrUpdatePersons(persons);
   }
-
-  @RequestMapping(path = "/ldap", method = RequestMethod.GET)
-  public boolean checkLDAP() {
-
-    return this.personService.checkLDAP();
-  }
-
 }

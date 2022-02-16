@@ -33,10 +33,4 @@ public interface PersonService {
    * @return
    */
   List<PersonDto> findByFilter(String filter);
-
-  /**
-   * @return
-   */
-  Boolean checkLDAP();
-
 }
