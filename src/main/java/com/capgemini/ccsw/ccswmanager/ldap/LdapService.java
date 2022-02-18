@@ -1,5 +1,7 @@
 package com.capgemini.ccsw.ccswmanager.ldap;
 
+import java.util.List;
+
 /**
  * TODO asolerpa This type ...
  *
@@ -7,5 +9,9 @@ package com.capgemini.ccsw.ccswmanager.ldap;
 public interface LdapService {
 
   Boolean check();
+
+  List<String[]> compareLdapToPersons();
+
+  List<String[]> comparePersonsToLdap();
 
 }
