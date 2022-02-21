@@ -1,44 +1,22 @@
 package com.capgemini.ccsw.ccswmanager.scholar.model;
 
 import com.capgemini.ccsw.ccswmanager.center.model.CenterDto;
+import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 
 import java.sql.Date;
 
 import javax.persistence.Column;
 
+
+/**
+ * @author jchengli
+ *
+ */
 public class ScholarDto {
   private Long id;
-
-  private String saga;
   
-  private String username;
+  private PersonEntity person;
   
-  private String department;
-	
-  private String name;
-
-  private String lastname;
-  
-  private Integer active;
-	
-  private String customer;
-  
-  private String grade;
-  
-  private String role;
-  
-  private String businesscode;
-  
-  private Long center_id;
-  
-  private String email;
-
-  private String details;
-  
-  private Integer hours;
-  
-  private Long scholar_id;
-
   private Date start_date;
 
   private Date end_date;
@@ -46,7 +24,21 @@ public class ScholarDto {
   private String title;
 
   private Integer action;
+  
+  private String username;
+	
+  private String name;
 
+  private String lastname;
+  
+  private String customer;
+
+  private String details;
+  
+  private Integer hours;
+  
+  private Integer active;
+  
   
 	/**
 	 * @return id
@@ -54,7 +46,7 @@ public class ScholarDto {
 	public Long getId() {
 		return id;
 	}
-
+	
 	/**
 	 * @param id new value of {@link #getid}.
 	 */
@@ -63,213 +55,17 @@ public class ScholarDto {
 	}
 	
 	/**
-	 * @return saga
+	 * @return person_id
 	 */
-	public String getSaga() {
-		return saga;
+	public PersonEntity getPerson_id() {
+		return person;
 	}
 	
 	/**
-	 * @param saga new value of {@link #getsaga}.
+	 * @param id new value of {@link #person_id}.
 	 */
-	public void setSaga(String saga) {
-		this.saga = saga;
-	}
-	
-	/**
-	 * @return username
-	 */
-	public String getUsername() {
-		return username;
-	}
-	
-	/**
-	 * @param id new value of {@link #getusername}.
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	/**
-	 * @return department
-	 */
-	public String getDepartment() {
-		return department;
-	}
-	
-	/**
-	 * @param id new value of {@link #getdepartment}.
-	 */
-	public void setDepartment(String department) {
-		this.department = department;
-	}
-	
-	/**
-	 * @return name
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * @param id new value of {@link #getname}.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	/**
-	 * @return lastname
-	 */
-	public String getLastname() {
-		return lastname;
-	}
-	
-	/**
-	 * @param id new value of {@link #getlastname}.
-	 */
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-	
-	/**
-	 * @return active
-	 */
-	public Integer getActive() {
-		return active;
-	}
-	
-	/**
-	 * @param id new value of {@link #getactive}.
-	 */
-	public void setActive(Integer active) {
-		this.active = active;
-	}
-	
-	/**
-	 * @return customer
-	 */
-	public String getCustomer() {
-		return customer;
-	}
-	
-	/**
-	 * @param id new value of {@link #getcustomer}.
-	 */
-	public void setCustomer(String customer) {
-		this.customer = customer;
-	}
-	
-	/**
-	 * @return grade
-	 */
-	public String getGrade() {
-		return grade;
-	}
-	
-	/**
-	 * @param id new value of {@link #getgrade}.
-	 */
-	public void setGrade(String grade) {
-		this.grade = grade;
-	}
-	
-	/**
-	 * @return role
-	 */
-	public String getRole() {
-		return role;
-	}
-	
-	/**
-	 * @param id new value of {@link #getrole}.
-	 */
-	public void setRole(String role) {
-		this.role = role;
-	}
-	
-	/**
-	 * @return businesscode
-	 */
-	public String getBusinesscode() {
-		return businesscode;
-	}
-	
-	/**
-	 * @param id new value of {@link #getbusinesscode}.
-	 */
-	public void setBusinesscode(String businesscode) {
-		this.businesscode = businesscode;
-	}
-	
-	/**
-	 * @return center_id
-	 */
-	public Long getCenter_id() {
-		return center_id;
-	}
-	
-	/**
-	 * @param id new value of {@link #getcenter_id}.
-	 */
-	public void setCenter_id(Long center_id) {
-		this.center_id = center_id;
-	}
-	
-	/**
-	 * @return email
-	 */
-	public String getEmail() {
-		return email;
-	}
-	
-	/**
-	 * @param id new value of {@link #getemail}.
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	/**
-	 * @return details
-	 */
-	public String getDetails() {
-		return details;
-	}
-	
-	/**
-	 * @param id new value of {@link #getdetails}.
-	 */
-	public void setDetails(String details) {
-		this.details = details;
-	}
-	
-	/**
-	 * @return hours
-	 */
-	public Integer getHours() {
-		return hours;
-	}
-	
-	/**
-	 * @param id new value of {@link #gethours}.
-	 */
-	public void setHours(Integer hours) {
-		this.hours = hours;
-	}
-	
-	/**
-	 * @return scholar_id
-	 */
-	public Long getScholar_id() {
-		return scholar_id;
-	}
-	
-	/**
-	 * @param id new value of {@link #getscholar_id}.
-	 */
-	public void setScholar_id(Long scholar_id) {
-		this.scholar_id = scholar_id;
+	public void setPerson_id(PersonEntity person) {
+		this.person = person;
 	}
 	
 	/**
@@ -327,4 +123,103 @@ public class ScholarDto {
 	public void setAction(Integer action) {
 		this.action = action;
 	}
+	
+	/**
+	 * @return username
+	 */
+	public String getUsername() {
+		return username;
+	}
+	
+	/**
+	 * @param id new value of {@link #getusername}.
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	/**
+	 * @return name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * @param id new value of {@link #getname}.
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * @return lastname
+	 */
+	public String getLastname() {
+		return lastname;
+	}
+	
+	/**
+	 * @param id new value of {@link #getlastname}.
+	 */
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+	
+	/**
+	 * @return customer
+	 */
+	public String getCustomer() {
+		return customer;
+	}
+	
+	/**
+	 * @param id new value of {@link #getcustomer}.
+	 */
+	public void setCustomer(String customer) {
+		this.customer = customer;
+	}
+	
+	/**
+	 * @return hours
+	 */
+	public Integer getHours() {
+		return hours;
+	}
+	
+	/**
+	 * @param id new value of {@link #gethours}.
+	 */
+	public void setHours(Integer hours) {
+		this.hours = hours;
+	}
+	
+	/**
+	 * @return details
+	 */
+	public String getDetails() {
+		return details;
+	}
+	
+	/**
+	 * @param id new value of {@link #getdetails}.
+	 */
+	public void setDetails(String details) {
+		this.details = details;
+	}
+	
+	/**
+	 * @return active
+	 */
+	public Integer getActive() {
+		return active;
+	}
+	
+	/**
+	 * @param id new value of {@link #getactive}.
+	 */
+	public void setActive(Integer active) {
+		this.active = active;
+	}
+
 }
