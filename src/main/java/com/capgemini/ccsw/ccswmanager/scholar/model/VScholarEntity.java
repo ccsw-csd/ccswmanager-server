@@ -68,13 +68,13 @@ public class VScholarEntity {
   private Integer hours;
   
   @Column(name = "scholar_id")
-  private Long scholar_id;
+  private Long scholarId;
 	
   @Column(name = "start_date")
-  private Date start_date;
+  private Date startDate;
 
   @Column(name = "end_date")
-  private Date end_date;
+  private Date endDate;
 
   @Column(name = "title")
   private String title;
@@ -294,45 +294,45 @@ public class VScholarEntity {
 	}
 	
 	/**
-	 * @return scholar_id
+	 * @return scholarId
 	 */
 	public Long getScholar_id() {
-		return scholar_id;
+		return scholarId;
 	}
 	
 	/**
 	 * @param id new value of {@link #getscholar_id}.
 	 */
-	public void setScholar_id(Long scholar_id) {
-		this.scholar_id = scholar_id;
+	public void setScholar_id(Long scholarId) {
+		this.scholarId = scholarId;
 	}
 	
 	/**
-	 * @return start_date
+	 * @return startDate
 	 */
 	public Date getStart_date() {
-		return start_date;
+		return startDate;
 	}
 	
 	/**
 	 * @param id new value of {@link #getstart_date}.
 	 */
-	public void setStart_date(Date start_date) {
-		this.start_date = start_date;
+	public void setStart_date(Date startDate) {
+		this.startDate = startDate;
 	}
 	
 	/**
-	 * @return end_date
+	 * @return endDate
 	 */
 	public Date getEnd_date() {
-		return end_date;
+		return endDate;
 	}
 	
 	/**
 	 * @param id new value of {@link #getend_date}.
 	 */
-	public void setEnd_date(Date end_date) {
-		this.end_date = end_date;
+	public void setEnd_date(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 	/**
