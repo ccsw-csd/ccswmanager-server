@@ -32,10 +32,10 @@ public class ScholarEntity {
   private PersonEntity person;
   
   @Column(name = "start_date")
-  private Date start_date;
+  private Date startDate;
   
   @Column(name = "end_date")
-  private Date end_date;
+  private Date endDate;
 	
   @Column(name = "title")
   private String title;
@@ -82,43 +82,43 @@ public class ScholarEntity {
 	/**
 	 * @return person_id
 	 */
-	public PersonEntity getPerson_id() {
+	public PersonEntity getPerson() {
 		return person;
 	}
-	
+
 	/**
-	 * @param id new value of {@link #person_id}.
+	 * @param id new value of {@link #person}.
 	 */
-	public void setPerson_id(PersonEntity person) {
+	public void setPerson(PersonEntity person) {
 		this.person = person;
 	}
 
 	/**
-	 * @return start_date
+	 * @return startDate
 	 */
 	public Date getStart_date() {
-		return start_date;
+		return startDate;
 	}
 	
 	/**
 	 * @param id new value of {@link #getstart_date}.
 	 */
-	public void setStart_date(Date start_date) {
-		this.start_date = start_date;
+	public void setStart_date(Date startDate) {
+		this.startDate = startDate;
 	}
 	
 	/**
-	 * @return end_date
+	 * @return endDate
 	 */
 	public Date getEnd_date() {
-		return end_date;
+		return endDate;
 	}
 	
 	/**
 	 * @param id new value of {@link #getend_date}.
 	 */
-	public void setEnd_date(Date end_date) {
-		this.end_date = end_date;
+	public void setEnd_date(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 	/**

@@ -49,18 +49,8 @@ public class ScholarServiceImpl implements ScholarService {
 		  if(scholar == null)
 			  scholar = new ScholarEntity();
 		  
-		  scholar.setPerson_id(this.personService.get(dto.getId()));
-		  scholar.setStart_date(dto.getStart_date());
-		  scholar.setEnd_date(dto.getEnd_date());
-		  scholar.setTitle(dto.getTitle());
-		  scholar.setAction(dto.getAction());
-		  scholar.setUsername(dto.getUsername());
-		  scholar.setName(dto.getName());
-		  scholar.setLastname(dto.getLastname());
-		  scholar.setCustomer(dto.getCustomer());
-		  scholar.setHours(dto.getHours());
-		  scholar.setDetails(dto.getDetails());
-		  scholar.setActive(dto.getActive());
+		  BeanUtils.copyProperties(dto, scholar, "id", "person");
+		  scholar.setPerson(this.personService.get(dto.getId()));
 		  
 		  return this.scholarRepository.save(scholar);
 	  }
