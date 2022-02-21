@@ -14,5 +14,4 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
   @Override
   List<PersonEntity> findAll();
-
 }
