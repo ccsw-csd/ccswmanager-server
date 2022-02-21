@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.ccsw.ccswmanager.ldap.model.LdapPerson;
+
 /**
  * TODO asolerpa This type ...
  *
@@ -26,13 +28,13 @@ public class LdapController {
   }
 
   @RequestMapping(path = "/ldap", method = RequestMethod.GET)
-  public List<String[]> compareLdapToPersons() {
+  public List<LdapPerson> compareLdapToPersons() {
 
     return this.ldapService.compareLdapToPersons();
   }
 
   @RequestMapping(path = "/persons", method = RequestMethod.GET)
-  public List<String[]> comparePersonsToLdap() {
+  public List<LdapPerson> comparePersonsToLdap() {
 
     return this.ldapService.comparePersonsToLdap();
   }
