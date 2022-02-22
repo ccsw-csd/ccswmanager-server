@@ -16,4 +16,6 @@ public interface LdapService {
 
   List<LdapPerson> comparePersonsToLdap();
 
+  List<String> findUsernamesList();
+
 }

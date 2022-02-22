@@ -19,10 +19,12 @@ public interface LdapRepository extends CrudRepository<PersonEntity, Long> {
       + "WHERE t2.user_cn = t1.username and t2.group_cn = 'dlessolucionesdevon.als-val') and t1.department = 'CCSw' and active = 1", nativeQuery = true)
   List<LdapPerson> comparePersonsToLdap();
 
-  @Query(value = "select t3.username, t3.name, t3.lastname from t_person t3 where exists "
-      + "(SELECT t1.user_cn FROM t_members t1 WHERE NOT EXISTS (SELECT NULL " + "FROM person t2 "
-      + "WHERE t1.user_cn = t2.username and t2.department = 'CCSw' and t2.active = 1) and t1.group_cn = 'dlessolucionesdevon.als-val' "
-      + "and t3.username = t1.user_cn)", nativeQuery = true)
+  @Query(value = "select t.username, t.name, t.lastname " + "from t_members m "
+      + "join t_person t on m.user_cn = t.username " + "where m.group_cn = 'dlessolucionesdevon.als-val' "
+      + "and not exists (select 1 from person p where p.username = m.user_cn and p.department = 'CCSw' and p.active = 1)", nativeQuery = true)
   List<LdapPerson> compareLdapToPersons();
+
+  @Query(value = "SELECT username FROM person WHERE department = 'CCSw' and active = 1", nativeQuery = true)
+  List<String> findUsernamesList();
 
 }
