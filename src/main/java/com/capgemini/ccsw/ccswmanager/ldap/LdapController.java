@@ -39,4 +39,10 @@ public class LdapController {
     return this.ldapService.comparePersonsToLdap();
   }
 
+  @RequestMapping(path = "/list", method = RequestMethod.GET)
+  public List<String> findUsernamesList() {
+
+    return this.ldapService.findUsernamesList();
+  }
+
 }
