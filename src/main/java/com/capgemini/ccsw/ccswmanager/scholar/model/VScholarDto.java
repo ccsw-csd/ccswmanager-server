@@ -29,7 +29,7 @@ public class VScholarDto {
   
   private String businesscode;
   
-  private Long center_id;
+  private Long centerId;
   
   private String email;
 
@@ -37,11 +37,11 @@ public class VScholarDto {
   
   private Integer hours;
   
-  private Long scholar_id;
+  private Long scholarId;
 
-  private Date start_date;
+  private Date startDate;
 
-  private Date end_date;
+  private Date endDate;
 
   private String title;
 
@@ -205,15 +205,15 @@ public class VScholarDto {
 	/**
 	 * @return center_id
 	 */
-	public Long getCenter_id() {
-		return center_id;
+	public Long getCenterId() {
+		return centerId;
 	}
 	
 	/**
 	 * @param id new value of {@link #getcenter_id}.
 	 */
-	public void setCenter_id(Long center_id) {
-		this.center_id = center_id;
+	public void setCenterId(Long centerId) {
+		this.centerId = centerId;
 	}
 	
 	/**
@@ -261,43 +261,43 @@ public class VScholarDto {
 	/**
 	 * @return scholar_id
 	 */
-	public Long getScholar_id() {
-		return scholar_id;
+	public Long getScholarId() {
+		return scholarId;
 	}
 	
 	/**
 	 * @param id new value of {@link #getscholar_id}.
 	 */
-	public void setScholar_id(Long scholar_id) {
-		this.scholar_id = scholar_id;
+	public void setScholarId(Long scholarId) {
+		this.scholarId = scholarId;
 	}
 	
 	/**
 	 * @return start_date
 	 */
-	public Date getStart_date() {
-		return start_date;
+	public Date getStartDate() {
+		return startDate;
 	}
 	
 	/**
 	 * @param id new value of {@link #getstart_date}.
 	 */
-	public void setStart_date(Date start_date) {
-		this.start_date = start_date;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 	
 	/**
 	 * @return end_date
 	 */
-	public Date getEnd_date() {
-		return end_date;
+	public Date getEndDate() {
+		return endDate;
 	}
 	
 	/**
 	 * @param id new value of {@link #getend_date}.
 	 */
-	public void setEnd_date(Date end_date) {
-		this.end_date = end_date;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 	/**

@@ -56,7 +56,7 @@ public class VScholarEntity {
   private String businesscode;
   
   @Column(name = "center_id")
-  private Long center_id;
+  private Long centerId;
   
   @Column(name = "email")
   private String email;
@@ -240,15 +240,15 @@ public class VScholarEntity {
 	/**
 	 * @return center_id
 	 */
-	public Long getCenter_id() {
-		return center_id;
+	public Long getCenterId() {
+		return centerId;
 	}
 	
 	/**
 	 * @param id new value of {@link #getcenter_id}.
 	 */
-	public void setCenter_id(Long center_id) {
-		this.center_id = center_id;
+	public void setCenterId(Long centerId) {
+		this.centerId = centerId;
 	}
 	
 	/**
@@ -296,42 +296,42 @@ public class VScholarEntity {
 	/**
 	 * @return scholarId
 	 */
-	public Long getScholar_id() {
+	public Long getScholarId() {
 		return scholarId;
 	}
 	
 	/**
 	 * @param id new value of {@link #getscholar_id}.
 	 */
-	public void setScholar_id(Long scholarId) {
+	public void setScholarId(Long scholarId) {
 		this.scholarId = scholarId;
 	}
 	
 	/**
 	 * @return startDate
 	 */
-	public Date getStart_date() {
+	public Date getStartDate() {
 		return startDate;
 	}
 	
 	/**
 	 * @param id new value of {@link #getstart_date}.
 	 */
-	public void setStart_date(Date startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 	
 	/**
 	 * @return endDate
 	 */
-	public Date getEnd_date() {
+	public Date getEndDate() {
 		return endDate;
 	}
 	
 	/**
 	 * @param id new value of {@link #getend_date}.
 	 */
-	public void setEnd_date(Date endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 	
