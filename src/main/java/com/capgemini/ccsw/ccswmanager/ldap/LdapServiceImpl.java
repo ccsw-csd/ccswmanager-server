@@ -48,4 +48,11 @@ public class LdapServiceImpl implements LdapService {
 
   }
 
+  @Override
+  public List<String> findUsernamesList() {
+
+    return this.ldapRepository.findUsernamesList();
+
+  }
+
 }

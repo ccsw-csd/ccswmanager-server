@@ -6,10 +6,10 @@ package com.capgemini.ccsw.ccswmanager.ldap.model;
  */
 public interface LdapPerson {
 
-  public String getName();
+  String getName();
 
-  public String getUsername();
+  String getUsername();
 
-  public String getLastname();
+  String getLastname();
 
 }
