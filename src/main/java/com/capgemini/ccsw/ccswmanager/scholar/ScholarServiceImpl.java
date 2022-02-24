@@ -39,20 +39,21 @@ public class ScholarServiceImpl implements ScholarService {
 	  }
 	  
 	  @Override
-	  public ScholarEntity saveOrUpdate (ScholarDto dto) {
-		  
-		  Objects.requireNonNull(dto, "scholar");
-		  ScholarEntity scholar = null;
-		  
-		  if(dto.getId() != null)
-			  scholar = get(dto.getId());
-		  if(scholar == null)
-			  scholar = new ScholarEntity();
-		  
-		  BeanUtils.copyProperties(dto, scholar, "id", "person");
-		  scholar.setPerson(this.personService.get(dto.getId()));
-		  
-		  return this.scholarRepository.save(scholar);
+	  public List<VScholarDto> saveOrUpdateScholars (List<VScholarDto> dtoList) {
+		  dtoList.forEach(dto -> {
+			  Objects.requireNonNull(dto, "scholar");
+			  ScholarEntity scholar = null;
+			  
+			  if(dto.getId() != null)
+				  scholar = get(dto.getId());
+			  if(scholar == null)
+				  scholar = new ScholarEntity();
+			  
+			  BeanUtils.copyProperties(dto, scholar, "id", "person");
+			  scholar.setPerson(this.personService.get(dto.getId()));
+			  
+			  this.scholarRepository.save(scholar);
+		  });
+		  return findScholars();
 	  }
-	  
 }

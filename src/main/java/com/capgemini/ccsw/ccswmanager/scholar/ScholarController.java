@@ -30,9 +30,9 @@ public class ScholarController {
 	}
 	
     @RequestMapping(path = "/", method = RequestMethod.POST)
-    public ScholarDto save(@RequestBody ScholarDto dto) {
+    public List<VScholarDto> saveOrUpdateScholars(@RequestBody List<VScholarDto> dto) {
 
-    	return this.beanMapper.map(this.scholarService.saveOrUpdate(dto), ScholarDto.class);
+    	return this.scholarService.saveOrUpdateScholars(dto);
     }
      
 }

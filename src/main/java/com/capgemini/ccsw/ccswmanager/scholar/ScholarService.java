@@ -12,5 +12,5 @@ public interface ScholarService {
 	
 	List<VScholarDto> findScholars();
 	
-	ScholarEntity saveOrUpdate (ScholarDto dto);
+	List<VScholarDto> saveOrUpdateScholars (List<VScholarDto> dto);
 }
