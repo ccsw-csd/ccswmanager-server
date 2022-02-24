@@ -13,6 +13,8 @@ import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonDto;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 import com.capgemini.ccsw.ccswmanager.person.model.TPersonEntity;
+import com.capgemini.ccsw.ccswmanager.scholar.ScholarRepository;
+import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
 
 /**
  * @author aolmosca
@@ -26,6 +28,9 @@ public class PersonServiceImpl implements PersonService {
 
   @Autowired
   TPersonRepository tpersonRepository;
+
+  @Autowired
+  ScholarRepository scholarRepository;
 
   @Autowired
   CenterService centerService;
@@ -74,19 +79,31 @@ public class PersonServiceImpl implements PersonService {
       Objects.requireNonNull(personTo, "person");
 
       PersonEntity person = null;
-      if (personTo.getId() != null)
+
+      if (personTo.getId() != null) {
         person = get(personTo.getId());
+      }
 
       if (person == null) {
         person = new PersonEntity();
       }
 
-      BeanUtils.copyProperties(personTo, person, "id", "center");
+      if (personTo.getDelete() != null && personTo.getDelete() == true) {
 
-      person.setCenter(this.centerService.getById(personTo.getCenter().getId()));
+        ScholarEntity scholarPerson = this.scholarRepository.getByPerson_Id(personTo.getId());
+        if (scholarPerson != null) {
+          this.scholarRepository.deleteById(scholarPerson.getId());
+        }
 
-      this.personRepository.save(person);
+        this.personRepository.deleteById(personTo.getId());
 
+      } else {
+        BeanUtils.copyProperties(personTo, person, "id", "center");
+
+        person.setCenter(this.centerService.getById(personTo.getCenter().getId()));
+
+        this.personRepository.save(person);
+      }
     });
 
     return findPersons();
