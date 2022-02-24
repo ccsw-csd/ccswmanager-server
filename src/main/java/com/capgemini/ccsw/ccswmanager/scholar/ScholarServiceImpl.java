@@ -16,51 +16,50 @@ import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarDto;
 @Service
 public class ScholarServiceImpl implements ScholarService {
 
-  @Autowired
-  ScholarRepository scholarRepository;
+	  @Autowired
+	  ScholarRepository scholarRepository;
+	  @Autowired
+	  VScholarRepository vScholarRepository;
+	  @Autowired
+	  PersonService personService;
 
-  @Autowired
-  VScholarRepository vScholarRepository;
+	  @Autowired
+	  private BeanMapper beanMapper;
 
-  @Autowired
-  PersonService personService;
+	  @Override
+	  public ScholarEntity get(long id) {
 
-  @Autowired
-  private BeanMapper beanMapper;
+		  return this.scholarRepository.getByPerson_Id(id);
+	  }
+	  
+	  @Override
+	  public List<VScholarDto> findScholars() {
 
-  @Override
-  public ScholarEntity get(long id) {
+	    return this.beanMapper.mapList(this.vScholarRepository.findAll(), VScholarDto.class);
+	  }
+	  
+	  @Override
+	  public List<VScholarDto> saveOrUpdateScholars (List<VScholarDto> dtoList) {
+		  dtoList.forEach(dto -> {
+			  Objects.requireNonNull(dto, "scholar");
+			  ScholarEntity scholar = null;
+			  
+			  if(dto.getId() != null)
+				  scholar = get(dto.getId());
+			  if(scholar == null)
+				  scholar = new ScholarEntity();
+			  
+			  BeanUtils.copyProperties(dto, scholar, "id", "person");
+			  scholar.setPerson(this.personService.get(dto.getId()));
+			  
+			  this.scholarRepository.save(scholar);
+		  });
+		  return findScholars();
+	  }
 
-    return this.scholarRepository.getByPerson_Id(id);
-  }
-
-  @Override
-  public List<VScholarDto> findScholars() {
-
-    return this.beanMapper.mapList(this.vScholarRepository.findAll(), VScholarDto.class);
-  }
-
-  @Override
-  public ScholarEntity saveOrUpdate(ScholarDto dto) {
-
-    Objects.requireNonNull(dto, "scholar");
-    ScholarEntity scholar = null;
-
-    if (dto.getId() != null)
-      scholar = get(dto.getId());
-    if (scholar == null)
-      scholar = new ScholarEntity();
-
-    BeanUtils.copyProperties(dto, scholar, "id", "person");
-    scholar.setPerson(this.personService.get(dto.getId()));
-
-    return this.scholarRepository.save(scholar);
-  }
-
-  @Override
-  public void deleteById(long id) {
+    @Override
+    public void deleteById(long id) {
 
     this.scholarRepository.deleteById(id);
   }
-
 }
