@@ -13,7 +13,7 @@ import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonDto;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 import com.capgemini.ccsw.ccswmanager.person.model.TPersonEntity;
-import com.capgemini.ccsw.ccswmanager.scholar.ScholarRepository;
+import com.capgemini.ccsw.ccswmanager.scholar.ScholarService;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
 
 /**
@@ -30,7 +30,7 @@ public class PersonServiceImpl implements PersonService {
   TPersonRepository tpersonRepository;
 
   @Autowired
-  ScholarRepository scholarRepository;
+  ScholarService scholarService;
 
   @Autowired
   CenterService centerService;
@@ -90,9 +90,9 @@ public class PersonServiceImpl implements PersonService {
 
       if (personTo.getDelete() != null && personTo.getDelete() == true) {
 
-        ScholarEntity scholarPerson = this.scholarRepository.getByPerson_Id(personTo.getId());
+        ScholarEntity scholarPerson = this.scholarService.get(personTo.getId());
         if (scholarPerson != null) {
-          this.scholarRepository.deleteById(scholarPerson.getId());
+          this.scholarService.deleteById(scholarPerson.getId());
         }
 
         this.personRepository.deleteById(personTo.getId());

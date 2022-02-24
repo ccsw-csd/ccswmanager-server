@@ -9,50 +9,58 @@ import org.springframework.stereotype.Service;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.PersonService;
+import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarDto;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarDto;
-import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarDto;
 
 @Service
 public class ScholarServiceImpl implements ScholarService {
 
-	  @Autowired
-	  ScholarRepository scholarRepository;
-	  @Autowired
-	  VScholarRepository vScholarRepository;
-	  @Autowired
-	  PersonService personService;
+  @Autowired
+  ScholarRepository scholarRepository;
 
-	  @Autowired
-	  private BeanMapper beanMapper;
+  @Autowired
+  VScholarRepository vScholarRepository;
 
-	  @Override
-	  public ScholarEntity get(long id) {
+  @Autowired
+  PersonService personService;
 
-		  return this.scholarRepository.getByPerson_Id(id);
-	  }
-	  
-	  @Override
-	  public List<VScholarDto> findScholars() {
+  @Autowired
+  private BeanMapper beanMapper;
 
-	    return this.beanMapper.mapList(this.vScholarRepository.findAll(), VScholarDto.class);
-	  }
-	  
-	  @Override
-	  public ScholarEntity saveOrUpdate (ScholarDto dto) {
-		  
-		  Objects.requireNonNull(dto, "scholar");
-		  ScholarEntity scholar = null;
-		  
-		  if(dto.getId() != null)
-			  scholar = get(dto.getId());
-		  if(scholar == null)
-			  scholar = new ScholarEntity();
-		  
-		  BeanUtils.copyProperties(dto, scholar, "id", "person");
-		  scholar.setPerson(this.personService.get(dto.getId()));
-		  
-		  return this.scholarRepository.save(scholar);
-	  }
-	  
+  @Override
+  public ScholarEntity get(long id) {
+
+    return this.scholarRepository.getByPerson_Id(id);
+  }
+
+  @Override
+  public List<VScholarDto> findScholars() {
+
+    return this.beanMapper.mapList(this.vScholarRepository.findAll(), VScholarDto.class);
+  }
+
+  @Override
+  public ScholarEntity saveOrUpdate(ScholarDto dto) {
+
+    Objects.requireNonNull(dto, "scholar");
+    ScholarEntity scholar = null;
+
+    if (dto.getId() != null)
+      scholar = get(dto.getId());
+    if (scholar == null)
+      scholar = new ScholarEntity();
+
+    BeanUtils.copyProperties(dto, scholar, "id", "person");
+    scholar.setPerson(this.personService.get(dto.getId()));
+
+    return this.scholarRepository.save(scholar);
+  }
+
+  @Override
+  public void deleteById(long id) {
+
+    this.scholarRepository.deleteById(id);
+  }
+
 }
