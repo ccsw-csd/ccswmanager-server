@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.PersonService;
+import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarDto;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarDto;
-import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarDto;
 
 @Service
 public class ScholarServiceImpl implements ScholarService {
@@ -56,4 +56,10 @@ public class ScholarServiceImpl implements ScholarService {
 		  });
 		  return findScholars();
 	  }
+
+    @Override
+    public void deleteById(long id) {
+
+    this.scholarRepository.deleteById(id);
+  }
 }

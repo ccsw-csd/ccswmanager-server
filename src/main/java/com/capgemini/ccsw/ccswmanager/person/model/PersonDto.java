@@ -37,6 +37,8 @@ public class PersonDto {
 
   private String department;
 
+  private Boolean delete;
+
   /**
    * @return id
    */
@@ -275,6 +277,22 @@ public class PersonDto {
   public void setDepartment(String department) {
 
     this.department = department;
+  }
+
+  /**
+   * @return delete
+   */
+  public Boolean getDelete() {
+
+    return delete;
+  }
+
+  /**
+   * @param delete new value of {@link #getdelete}.
+   */
+  public void setDelete(Boolean delete) {
+
+    this.delete = delete;
   }
 
 }
