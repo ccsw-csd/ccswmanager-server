@@ -20,7 +20,7 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
    * @return
    * @throws Exception
    */
-   UserEntity getByUsername(String username);
+	UserEntity getByUsername(String username);
 
    /**
    * Recupera los usuarios para el listado
@@ -28,4 +28,14 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
    */
    @Query(value = "select u.id, p.username, u.role, p.name, p.lastname from person p INNER JOIN user u ON p.username = u.username", nativeQuery = true)
    List<UserPerson> findAllUserPerson();
+   
+   @Query(value = "SELECT USERNAME FROM USER", nativeQuery = true)
+   List<String> getAllUsername();
+   
+   @Query(value = "SELECT * FROM USER WHERE USERNAME = ?1", nativeQuery = true)
+   UserEntity existUser(String username);
+   
+   
+   
+   
 }

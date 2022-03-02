@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 
 /**
@@ -18,7 +19,7 @@ public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  private String id;
+  private Long id;
 
   @Column(name = "username")
   private String username;
@@ -29,7 +30,7 @@ public class UserEntity {
   /**
    * @return id
    */
-  public String getId() {
+  public Long getId() {
 
     return this.id;
   }
@@ -37,7 +38,7 @@ public class UserEntity {
   /**
    * @param id new value of {@link #getid}.
    */
-  public void setId(String id) {
+  public void setId(Long id) {
 
     this.id = id;
   }
