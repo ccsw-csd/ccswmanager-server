@@ -5,6 +5,14 @@ import java.util.List;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarDto;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarDto;
+import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarSearchDto;
+import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLine;
+
+/**
+ * @author jchengli
+ *
+ */
+
 
 public interface ScholarService {
 	
@@ -13,4 +21,6 @@ public interface ScholarService {
 	List<VScholarDto> findScholars();
 	
 	List<VScholarDto> saveOrUpdateScholars (List<VScholarDto> dto);
+	
+	List<VScholarTimeLine> findScholarsByDate (VScholarSearchDto date);
 }
