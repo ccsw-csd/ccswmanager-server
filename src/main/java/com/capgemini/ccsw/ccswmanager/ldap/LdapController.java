@@ -31,20 +31,31 @@ public class LdapController {
     return this.ldapService.check();
   }
 
-  @RequestMapping(path = "/ldap/{tipoLista}", method = RequestMethod.GET)
-  public List<LdapPerson> compareLdapToPersons(@PathVariable String tipoLista) {
-		  return this.ldapService.compareLdapToPersons(tipoLista);
+  @RequestMapping(path = "/ldap/", method = RequestMethod.GET)
+  public List<LdapPerson> compareLdapToPersons() {
+		  return this.ldapService.compareLdapToPersons();
   }
 
-  @RequestMapping(path = "/persons/{tipoLista}", method = RequestMethod.GET)
-  public List<LdapPerson> comparePersonsToLdap(@PathVariable String tipoLista) {
-	  return this.ldapService.comparePersonsToLdap(tipoLista);
+  @RequestMapping(path = "/persons/", method = RequestMethod.GET)
+  public List<LdapPerson> comparePersonsToLdapBecarios() {
+	  return this.ldapService.comparePersonsToLdap();
+  }
+  
+  @RequestMapping(path = "/ldapBecarios/", method = RequestMethod.GET)
+  public List<LdapPerson> compareLdapToPersonsBecarios() {
+		  return this.ldapService.compareLdapToPersonsBecarios();
   }
 
-  @RequestMapping(path = "/list/{grade}", method = RequestMethod.GET)
-  public List<String> findUsernamesList(@PathVariable boolean grade) {
+  @RequestMapping(path = "/personsBecarios/", method = RequestMethod.GET)
+  public List<LdapPerson> comparePersonsToLdap() {
+	  return this.ldapService.comparePersonsToLdapBecarios();
+  }
 
-    return this.ldapService.findUsernamesList(grade);
+
+  @RequestMapping(path = "/list/{contrato}", method = RequestMethod.GET)
+  public List<String> findUsernamesList(@PathVariable boolean contrato) {
+
+    return this.ldapService.findUsernamesList(contrato);
   }
 
 }

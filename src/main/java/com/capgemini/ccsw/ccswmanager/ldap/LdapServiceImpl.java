@@ -24,10 +24,15 @@ public class LdapServiceImpl implements LdapService {
   @Override
   public Boolean check() {
 
-    List<LdapPerson> persons = this.ldapRepository.comparePersonsToLdap("0");
-    List<LdapPerson> ldap = this.ldapRepository.compareLdapToPersons("0");
+    List<LdapPerson> persons = this.ldapRepository.comparePersonsToLdap();
+    List<LdapPerson> ldap = this.ldapRepository.compareLdapToPersons();
+    
+    List<LdapPerson> personsBecarios = this.ldapRepository.comparePersonsToLdap();
+    List<LdapPerson> ldapBecarios = this.ldapRepository.compareLdapToPersons();
+     
 
-    if (persons.size() > 0 || ldap.size() > 0) {
+
+    if (persons.size() > 0 || ldap.size() > 0 || personsBecarios.size()>0 || ldapBecarios.size() > 0) {
       return false;
     } else {
       return true;
@@ -35,23 +40,36 @@ public class LdapServiceImpl implements LdapService {
   }
 
   @Override
-  public List<LdapPerson> compareLdapToPersons(String tipoLista) {
+  public List<LdapPerson> compareLdapToPersons() {
 
-    return this.ldapRepository.compareLdapToPersons(tipoLista);
-
-  }
-
-  @Override
-  public List<LdapPerson> comparePersonsToLdap(String tipoLista) {
-
-    return this.ldapRepository.comparePersonsToLdap(tipoLista);
+    return this.ldapRepository.compareLdapToPersons();
 
   }
 
   @Override
-  public List<String> findUsernamesList(boolean grade) {
+  public List<LdapPerson> comparePersonsToLdap() {
 
-    return this.ldapRepository.findUsernamesList(grade);
+    return this.ldapRepository.comparePersonsToLdap();
+
+  }
+
+  @Override
+  public List<LdapPerson> compareLdapToPersonsBecarios() {
+
+    return this.ldapRepository.compareLdapToPersonsBecarios();
+
+  }
+
+  @Override
+  public List<LdapPerson> comparePersonsToLdapBecarios() {
+
+    return this.ldapRepository.comparePersonsToLdapBecarios();
+
+  }
+  @Override
+  public List<String> findUsernamesList(boolean contrato) {
+
+    return this.ldapRepository.findUsernamesList(contrato);
 
   }
 

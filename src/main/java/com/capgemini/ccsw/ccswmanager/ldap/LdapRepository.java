@@ -15,26 +15,39 @@ import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
  */
 public interface LdapRepository extends CrudRepository<PersonEntity, Long> {
 
-	@Query(value = "select t1.username, t1.name, t1.lastname " //
-	         + "from person t1 where not exists (select null " //
-	         + "from t_members t2 where t2.user_cn = t1.username " //
-	         + "and t2.group_cn = 'dlesccsw' and :tipoLista = '0'or t2.group_cn = 'dlesccsw.becarios' and :tipoLista = '1') and t1.department = 'CCSw'"
-	         + "and (t1.grade is not null and t1.grade != '' and :tipoLista ='0') or (t1.grade is null or t1.grade=''and :tipoLista ='1') and active = 1 " //
+	@Query(value = "SELECT t1.username, t1.name, t1.lastname " //
+	         + "FROM person t1 " + "WHERE NOT EXISTS (SELECT NULL " //
+	         + "FROM t_members t2 " //
+	         + "WHERE t2.user_cn = t1.username and t2.group_cn = 'dlesccsw') and (t1.grade!='') and t1.department = 'CCSw' and active = 1 " //
 	         + "ORDER BY t1.lastname, t1.name", nativeQuery = true)
-  List<LdapPerson> comparePersonsToLdap(@Param("tipoLista") String tipoLista);
+  List<LdapPerson> comparePersonsToLdap();
 
-	@Query(value = "select t.username, t.name, t.lastname " //
-	         + "from t_members m join t_person t on m.user_cn = t.username " //
-	         + "where m.group_cn = 'dlesccsw' and :tipoLista = '0' or m.group_cn = 'dlesccsw.becarios' and :tipoLista = '1'"
-	         + "and (t.grade is null or t.grade='' and :tipoLista ='1' or t.grade is not null and t.grade!='' and :tipoLista='0')"
-	         + "and not exists (select 1 from person p where p.username = m.user_cn and p.department = 'CCSw' "
-	         + "and p.active = 1) ORDER BY t.lastname, t.name", nativeQuery = true)//
-	         
-  List<LdapPerson> compareLdapToPersons(@Param("tipoLista") String tipoLista);
+	 @Query(value = "select t.username, t.name, t.lastname " //
+	         + "from t_members m " //
+	         + "join t_person t on m.user_cn = t.username " //
+	         + "where m.group_cn = 'dlesccsw' " //
+	         + "and not exists (select 1 from person p where p.username = m.user_cn and (p.grade!='' or p.grade is not null)  and p.department = 'CCSw' and p.active = 1) " //
+	         + "ORDER BY t.lastname, t.name", nativeQuery = true)         
+  List<LdapPerson> compareLdapToPersons();
+	 
+	 @Query(value = "SELECT t1.username, t1.name, t1.lastname " //
+	         + "FROM person t1 " + "WHERE NOT EXISTS (SELECT NULL " //
+	         + "FROM t_members t2 " //
+	         + "WHERE t2.user_cn = t1.username and t2.group_cn = 'dlesccsw.becarios') and (t1.grade='')  and t1.department = 'CCSw' and active = 1 " //
+	         + "ORDER BY t1.lastname, t1.name", nativeQuery = true)
+  List<LdapPerson> comparePersonsToLdapBecarios();
+
+	 @Query(value = "select t.username, t.name, t.lastname " //
+	         + "from t_members m " //
+	         + "join t_person t on m.user_cn = t.username " //
+	         + "where m.group_cn = 'dlesccsw.becarios' " //
+	         + "and not exists (select 1 from person p where p.username = m.user_cn and (p.grade='') and p.department = 'CCSw' and p.active = 1) " //
+	         + "ORDER BY t.lastname, t.name", nativeQuery = true)         
+  List<LdapPerson> compareLdapToPersonsBecarios();
 
    @Query(value = "SELECT username FROM person WHERE department = 'CCSw'"
-   		+ "and (grade is null or grade='' and :grade = false or grade is not null and grade !='' and :grade=true) "
+   		+ "and (grade is null or grade='' and :contrato = false or grade is not null and grade !='' and :contrato=true) "
    		+ "and active = 1", nativeQuery = true)
-   List<String> findUsernamesList(@Param("grade") boolean grade);
+   List<String> findUsernamesList(@Param("contrato") boolean contrato);
 
 }

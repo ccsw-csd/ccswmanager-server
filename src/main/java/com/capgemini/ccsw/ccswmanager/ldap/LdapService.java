@@ -12,10 +12,14 @@ public interface LdapService {
 
   Boolean check();
 
-  List<LdapPerson> compareLdapToPersons(String tipoLista);
+  List<LdapPerson> compareLdapToPersons();
 
-  List<LdapPerson> comparePersonsToLdap(String tipoLista);
+  List<LdapPerson> comparePersonsToLdap();
+  
+  List<LdapPerson> compareLdapToPersonsBecarios();
 
-  List<String> findUsernamesList(boolean grade);
+  List<LdapPerson> comparePersonsToLdapBecarios();
+
+  List<String> findUsernamesList(boolean contrato);
 
 }
