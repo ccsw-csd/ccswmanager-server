@@ -24,9 +24,11 @@ public interface UserService {
     * Recupera los usuarios para el listado
     * @return
     */
-   List<UserPerson> findAllUserPerson();
+   List<UserDto> findAllUserPerson();
    
    boolean saveUser(UserDto userDto);
    
-   void deleteUSer(Long id);
+   void deleteUser(Long id);
+   
+   
 }

@@ -2,11 +2,18 @@ package com.capgemini.ccsw.ccswmanager.user.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 
 /**
  * @author pajimene
@@ -20,13 +27,15 @@ public class UserEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Long id;
-
-  @Column(name = "username")
-  private String username;
-
+  
   @Column(name = "role")
   private String role;
+  
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name="username")
+  private PersonEntity username;
 
+ 
   /**
    * @return id
    */
@@ -35,7 +44,15 @@ public class UserEntity {
     return this.id;
   }
 
-  /**
+  public PersonEntity getPerson() {
+	return username;
+}
+
+public void setPerson(PersonEntity person) {
+	this.username = person;
+}
+
+/**
    * @param id new value of {@link #getid}.
    */
   public void setId(Long id) {
@@ -43,21 +60,6 @@ public class UserEntity {
     this.id = id;
   }
 
-  /**
-   * @return username
-   */
-  public String getUsername() {
-
-    return this.username;
-  }
-
-  /**
-   * @param username new value of {@link #getusername}.
-   */
-  public void setUsername(String username) {
-
-    this.username = username;
-  }
 
   /**
    * @return role
