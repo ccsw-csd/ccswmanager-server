@@ -16,10 +16,10 @@ public interface LdapService {
 
   List<LdapPerson> comparePersonsToLdap();
   
-  List<LdapPerson> compareLdapToPersonsBecarios();
+  List<LdapPerson> compareLdapToPersonsScholars();
 
-  List<LdapPerson> comparePersonsToLdapBecarios();
+  List<LdapPerson> comparePersonsToLdapScholars();
 
-  List<String> findUsernamesList(boolean contrato);
+  List<String> findUsernamesList(boolean contract);
 
 }

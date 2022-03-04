@@ -41,21 +41,21 @@ public class LdapController {
 	  return this.ldapService.comparePersonsToLdap();
   }
   
-  @RequestMapping(path = "/ldapBecarios/", method = RequestMethod.GET)
+  @RequestMapping(path = "/ldapScholars/", method = RequestMethod.GET)
   public List<LdapPerson> compareLdapToPersonsBecarios() {
-		  return this.ldapService.compareLdapToPersonsBecarios();
+		  return this.ldapService.compareLdapToPersonsScholars();
   }
 
-  @RequestMapping(path = "/personsBecarios/", method = RequestMethod.GET)
+  @RequestMapping(path = "/personsScholars/", method = RequestMethod.GET)
   public List<LdapPerson> comparePersonsToLdap() {
-	  return this.ldapService.comparePersonsToLdapBecarios();
+	  return this.ldapService.comparePersonsToLdapScholars();
   }
 
 
-  @RequestMapping(path = "/list/{contrato}", method = RequestMethod.GET)
-  public List<String> findUsernamesList(@PathVariable boolean contrato) {
+  @RequestMapping(path = "/list/{contract}", method = RequestMethod.GET)
+  public List<String> findUsernamesList(@PathVariable boolean contract) {
 
-    return this.ldapService.findUsernamesList(contrato);
+    return this.ldapService.findUsernamesList(contract);
   }
 
 }
