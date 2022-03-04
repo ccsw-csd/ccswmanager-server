@@ -21,12 +21,10 @@ import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
 @Entity
 @Table(name = "person")
 public class PersonEntity implements Serializable{
-  /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
-@Id
+  private static final long serialVersionUID = 1L;
+
+  @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Long id;

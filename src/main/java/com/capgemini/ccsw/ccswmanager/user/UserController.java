@@ -18,11 +18,6 @@ public class UserController {
    @Autowired
    private UserService userService;
    
-   /*
-   @Autowired
-   private PersonService personService;
-   */
-
    @RequestMapping(path = "/", method = RequestMethod.GET)
    public List<UserDto> findAllUserPerson() {
       return this.userService.findAllUserPerson();
@@ -33,16 +28,9 @@ public class UserController {
 	   return this.userService.saveUser(data);
    }
    
-   
    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
    public void deleteUser(@PathVariable("id") Long id){
 	   this.userService.deleteUser(id);
    }
    
-   /*
-   @RequestMapping(path = "/customer", method = RequestMethod.GET)
-   public List<String> getDistinctCustomer(){
- 	  return this.personService.getDistinctCustomer();
-   }
-   */
 }

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.ccsw.ccswmanager.user.model.UserDto;
 import com.capgemini.ccsw.ccswmanager.user.model.UserEntity;
+import com.capgemini.ccsw.ccswmanager.user.model.UserMapper;
 
 /**
  * @author pajimene
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   UserRepository userRepository;
-   	
+  
    /**
    * {@inheritDoc}
    */
@@ -38,9 +39,10 @@ public class UserServiceImpl implements UserService {
    public List<UserDto> findAllUserPerson() {
      List<UserEntity> entity = (List<UserEntity>) this.userRepository.findAll();
      List<UserDto> usersDto = new ArrayList<>();
-	
+     UserMapper userMapper = new UserMapper();
+     
      for(UserEntity user : entity)
-       usersDto.add(this.transformEntity(user));
+       usersDto.add(userMapper.userMapper(user));
 	   
      return usersDto;
    }
@@ -52,49 +54,39 @@ public class UserServiceImpl implements UserService {
      boolean exist = true;
 		
      if(user == null && data.getId() == null){
-       user = new UserEntity();
        exist = false;
-       BeanUtils.copyProperties(data, user);
-       this.userRepository.save(user);
+       this.saveNewUser(data);
      }
      else if(data.getId() != null)
      {
-       if(user == null){
+       if(user == null || (user != null && data.getId() == user.getId())){
          exist = false;
-         user = this.userRepository.findById(data.getId()).orElse(null);
-         user.setUsername(data.getUsername());
-         user.setRole(data.getRole());
-         this.userRepository.save(user);
+         this.modifyUser(data);
 		}
-       else if(data.getId() == user.getId()){
-         exist = false;
-         user.setRole(data.getRole());
-         this.userRepository.save(user);
-       }
      }
 
      return exist;
    }
-	
+
+   private void saveNewUser(UserDto data)
+   {
+     UserEntity user = new UserEntity();
+     BeanUtils.copyProperties(data, user);
+     this.userRepository.save(user);
+   }
+   
+   private void modifyUser(UserDto data)
+   {
+     UserEntity user = this.userRepository.getById(data.getId());
+     user.setUsername(data.getUsername());
+     user.setRole(data.getRole());
+     this.userRepository.save(user);
+   }
+   
    @Transactional(readOnly = false)
    @Override
    public void deleteUser(Long id) {
      this.userRepository.deleteById(id);
    }
    	
-   UserDto transformEntity(UserEntity user){
-     UserDto dto = new UserDto();
-   		
-     dto.setId(user.getId());   
-     dto.setUsername(user.getUsername());
-   		
-     if(user.getPerson() != null){
-       dto.setName(user.getPerson().getName());
-       dto.setLastname(user.getPerson().getLastname());
-     }
-   		
-     dto.setRole(user.getRole());
-   		
-     return dto;
-   }
 }
