@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.capgemini.ccsw.ccswmanager.user.model.UserDto;
 import com.capgemini.ccsw.ccswmanager.user.model.UserEntity;
-import com.capgemini.ccsw.ccswmanager.user.model.UserPerson;
 
 /**
  * @author pajimene
@@ -18,17 +17,16 @@ public interface UserService {
    * @return
    * @throws Exception
    */
-	UserEntity getByUsername(String username);
+  UserEntity getByUsername(String username);
 
-   /**
-    * Recupera los usuarios para el listado
-    * @return
-    */
-   List<UserDto> findAllUserPerson();
+ /**
+  * Recupera los usuarios para el listado
+  * @return
+  */
+  List<UserDto> findAllUserPerson();
    
-   boolean saveUser(UserDto userDto);
+  boolean saveUser(UserDto userDto);
    
-   void deleteUser(Long id);
-   
+  void deleteUser(Long id);
    
 }
