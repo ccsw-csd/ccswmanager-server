@@ -1,5 +1,7 @@
 package com.capgemini.ccsw.ccswmanager.person.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,7 +20,10 @@ import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
  */
 @Entity
 @Table(name = "person")
-public class PersonEntity {
+public class PersonEntity implements Serializable{
+
+  private static final long serialVersionUID = 1L;
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
@@ -66,8 +71,9 @@ public class PersonEntity {
 
   @Column(name = "department")
   private String department;
-
-  /**
+  
+  
+/**
    * @return id
    */
   public Long getId() {
