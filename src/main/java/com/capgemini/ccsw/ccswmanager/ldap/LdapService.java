@@ -15,7 +15,11 @@ public interface LdapService {
   List<LdapPerson> compareLdapToPersons();
 
   List<LdapPerson> comparePersonsToLdap();
+  
+  List<LdapPerson> compareLdapToPersonsScholars();
 
-  List<String> findUsernamesList();
+  List<LdapPerson> comparePersonsToLdapScholars();
+
+  List<String> findUsernamesList(boolean contract);
 
 }
