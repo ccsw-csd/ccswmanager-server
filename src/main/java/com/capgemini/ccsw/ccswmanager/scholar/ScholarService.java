@@ -22,5 +22,5 @@ public interface ScholarService {
 	
 	List<VScholarDto> saveOrUpdateScholars (List<VScholarDto> dto);
 	
-	List<VScholarTimeLine> findScholarsByDate (VScholarSearchDto date);
+	List<VScholarTimeLine> findScholarsByDateTimeline (VScholarSearchDto date);
 }

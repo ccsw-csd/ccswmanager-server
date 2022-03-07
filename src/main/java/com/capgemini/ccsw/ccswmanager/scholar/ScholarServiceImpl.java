@@ -68,7 +68,7 @@ public class ScholarServiceImpl implements ScholarService {
 	  }
 	  
 	  @Override
-	  public List<VScholarTimeLine> findScholarsByDate(VScholarSearchDto date) {
+	  public List<VScholarTimeLine> findScholarsByDateTimeline(VScholarSearchDto date) {
 		  List<VScholarDto> vscholars = this.beanMapper.mapList(this.vScholarRepository.findByDate(date.getStartDate(), date.getEndDate()), VScholarDto.class);
 		  List<VScholarTimeLine> vscholarsTimeLine = new ArrayList<VScholarTimeLine>();
 

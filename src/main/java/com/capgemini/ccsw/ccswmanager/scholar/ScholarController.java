@@ -43,9 +43,9 @@ public class ScholarController {
     	return this.scholarService.saveOrUpdateScholars(dto);
     }
     @RequestMapping(path = "/dateFilter", method = RequestMethod.POST)
-    public List<VScholarTimeLine> findScholarsByDate(@RequestBody VScholarSearchDto date){
+    public List<VScholarTimeLine> findScholarsByDateTimeline(@RequestBody VScholarSearchDto date){
 		
-    	return this.scholarService.findScholarsByDate(date);
+    	return this.scholarService.findScholarsByDateTimeline(date);
     }
      
     
