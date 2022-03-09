@@ -13,11 +13,15 @@ import org.springframework.stereotype.Service;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.PersonService;
+import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarDto;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarDto;
+<<<<<<< HEAD
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarSearchDto;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLine;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarDto;
+=======
+>>>>>>> develop
 
 /**
  * @author jchengli
@@ -68,6 +72,7 @@ public class ScholarServiceImpl implements ScholarService {
 		  });
 		  return findScholars();
 	  }
+<<<<<<< HEAD
 	  
 	  @Override
 	  public List<VScholarTimeLine> findScholarsByDateTimeline(VScholarSearchDto date) {
@@ -126,4 +131,12 @@ class CompareTimeLine implements Comparator<VScholarDto> {
 		// TODO Auto-generated method stub
 		return o1.getStartDate().compareTo(o2.getStartDate());
 	}
+=======
+
+    @Override
+    public void deleteById(long id) {
+
+    this.scholarRepository.deleteById(id);
+  }
+>>>>>>> develop
 }
