@@ -3,6 +3,11 @@ package com.capgemini.ccsw.ccswmanager.scholar.model;
 import java.sql.Date;
 import java.util.ArrayList;
 
+/**
+ * @author jchengli
+ *
+ */
+
 public class VScholarTimeLine {
 	private String x;
 	

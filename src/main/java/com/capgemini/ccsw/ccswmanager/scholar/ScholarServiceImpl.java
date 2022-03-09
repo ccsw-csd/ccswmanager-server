@@ -2,6 +2,8 @@ package com.capgemini.ccsw.ccswmanager.scholar;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,10 +74,12 @@ public class ScholarServiceImpl implements ScholarService {
 		  List<VScholarDto> vscholars = this.beanMapper.mapList(this.vScholarRepository.findByDate(date.getStartDate(), date.getEndDate()), VScholarDto.class);
 		  List<VScholarTimeLine> vscholarsTimeLine = new ArrayList<VScholarTimeLine>();
 
+		  //sort scholars looking startDate
+		  Collections.sort(vscholars,new CompareTimeLine());		  
 		  for(VScholarDto vscholar : vscholars) {
 			  VScholarTimeLine vscholarTimeline = new VScholarTimeLine();
 			  ArrayList<Long> Y = new ArrayList<Long>();
-			  
+			
 
 			  vscholarTimeline.setX(vscholar.getUsername());
 			  if(vscholar.getStartDate() != null && vscholar.getEndDate() != null) {
@@ -114,4 +118,12 @@ public class ScholarServiceImpl implements ScholarService {
 		  
 		  return vscholarsTimeLine;
 	  }
+}
+class CompareTimeLine implements Comparator<VScholarDto> {
+	
+	@Override
+	public int compare(VScholarDto o1, VScholarDto o2) {
+		// TODO Auto-generated method stub
+		return o1.getStartDate().compareTo(o2.getStartDate());
+	}
 }

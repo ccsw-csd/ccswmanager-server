@@ -12,11 +12,11 @@ import javax.persistence.Table;
 import java.sql.Date;
 import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
 
-
 /**
  * @author jchengli
  *
  */
+
 @Entity
 @Table(name = "v_scholar")
 public class VScholarEntity {	

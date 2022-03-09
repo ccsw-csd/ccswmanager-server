@@ -20,10 +20,8 @@ public interface VScholarRepository extends CrudRepository<VScholarEntity, Long>
   List<VScholarEntity> findAll();
   
   @Query(value = "select * from v_scholar vs where"
-  		+ "(vs.start_date >= :start_date) and"
-  		+ "(vs.end_date <= :end_date)",
-  		//+ "(:start_date is null or vs.start_date like '%'||:start_date||'%') and"
-  		//+ "(:end_date is null or vs.end_date like '%'||:end_date||'%')",
+  		+ "(vs.start_date <= :start_date and vs.end_date >= :start_date) or"
+  		+ "(vs.start_date <= :end_date and vs.end_date >= :end_date)",
   		nativeQuery = true
   	)
   List<VScholarEntity> findByDate(@Param("start_date") Date startDate, @Param("end_date") Date endDate);
