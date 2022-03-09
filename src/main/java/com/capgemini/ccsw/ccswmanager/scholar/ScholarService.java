@@ -15,24 +15,16 @@ import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLine;
 
 
 public interface ScholarService {
-<<<<<<< HEAD
 	
-	ScholarEntity get(long id); 
+	ScholarEntity get(long id);
 	
 	List<VScholarDto> findScholars();
 	
 	List<VScholarDto> saveOrUpdateScholars (List<VScholarDto> dto);
 	
 	List<VScholarTimeLine> findScholarsByDateTimeline (VScholarSearchDto date);
-=======
 
-  ScholarEntity get(long id);
+	void deleteById(long id);
 
-  List<VScholarDto> findScholars();
 
-  List<VScholarDto> saveOrUpdateScholars (List<VScholarDto> dto);
-
-  void deleteById(long id);
-
->>>>>>> develop
 }
