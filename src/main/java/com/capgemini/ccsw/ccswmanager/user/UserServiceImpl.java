@@ -45,10 +45,9 @@ public class UserServiceImpl implements UserService {
      List<UserEntity> entity = (List<UserEntity>) this.userRepository.findAll();
      List<UserDto> usersDto = new ArrayList<>();
      UserMapper userMapper = new UserMapper();
-  
-     for(UserEntity user : entity)
-       usersDto.add(userMapper.userMapper(user));
-      
+     
+     entity.forEach(user -> usersDto.add(userMapper.userMapper(user)));
+     
      return usersDto;
    }
 
