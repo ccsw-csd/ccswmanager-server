@@ -104,8 +104,8 @@ public class UserServiceImpl implements UserService {
    
    @Transactional(readOnly = false)
    @Override
-   public void deleteUser(String username) {
-     if(this.userRepository.existsByUsername(username))
-       this.userRepository.deleteByUsername(username);
+   public void deleteUser(Long id) {
+     if(this.userRepository.existsById(id))
+       this.userRepository.deleteById(id);
    }
 }

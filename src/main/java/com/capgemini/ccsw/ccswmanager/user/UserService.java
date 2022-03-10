@@ -34,6 +34,6 @@ public interface UserService {
    */
   boolean saveUser(UserDto userDto);
    
-  void deleteUser(String username);
+  void deleteUser(Long id);
    
 }

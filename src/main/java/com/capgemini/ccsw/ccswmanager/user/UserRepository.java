@@ -23,12 +23,9 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
   
   UserEntity getById(Long id);
   
-  void deleteByUsername(String username);
   
   @Override
   @EntityGraph(attributePaths = {"person", "teams"})
   List<UserEntity> findAll();
-  
-  boolean existsByUsername(String username);
-	
+  	
 }

@@ -32,9 +32,9 @@ public class UserController {
 	   return this.userService.saveUser(data);
    }
    
-   @RequestMapping(path = "/{username}", method = RequestMethod.DELETE)
-   public void deleteUser(@PathVariable("username") String username){
-	   this.userService.deleteUser(username);
+   @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+   public void deleteUser(@PathVariable("id") Long id){
+	   this.userService.deleteUser(id);
    }
    
    @RequestMapping(path = "/customers", method = RequestMethod.GET)
