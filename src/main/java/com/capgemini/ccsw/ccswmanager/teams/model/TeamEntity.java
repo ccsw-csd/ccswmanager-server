@@ -28,8 +28,16 @@ public class TeamEntity implements Serializable{
   private String customer;
  
   @ManyToOne
-  @JoinColumn(name="username_id", nullable = false)
+  @JoinColumn(name="user_id", nullable = false)
   private UserEntity user;
+  
+  public TeamEntity(){}
+  
+  public TeamEntity(String customer, UserEntity user)
+  {
+    this.customer = customer;
+    this.user = user;
+  }
   
   public Long getId() {
     return Id;
@@ -37,10 +45,6 @@ public class TeamEntity implements Serializable{
 
   public void setId(Long id) {
     Id = id;
-  }
-
-  public static long getSerialversionuid() {
-    return serialVersionUID;
   }
 
   public UserEntity getUser() {

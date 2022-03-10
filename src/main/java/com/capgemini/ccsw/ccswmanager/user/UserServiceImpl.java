@@ -75,7 +75,6 @@ public class UserServiceImpl implements UserService {
 
    private void saveNewUser(UserDto data)
    {
-     TeamEntity team;
      List<TeamEntity> teams;
      UserEntity user = new UserEntity();
      
@@ -83,13 +82,7 @@ public class UserServiceImpl implements UserService {
      if(data.getCustomers() != null)
      {
        teams = new ArrayList<>();
-       for(String item : data.getCustomers())
-       {
-         team = new TeamEntity();
-         team.setUser(user);
-         team.setCustomer(item);
-         teams.add(team);
-       }
+       data.getCustomers().forEach(custom -> teams.add(new TeamEntity(custom, user)));
        user.setTeams(teams);
      }
      this.userRepository.save(user);
@@ -99,19 +92,12 @@ public class UserServiceImpl implements UserService {
    {
      UserEntity newUser = this.userRepository.getById(data.getId());
      List<TeamEntity> modifyEntity = new ArrayList<>();
-     TeamEntity team;
      
      newUser.setUsername(data.getUsername());
      newUser.setRole(data.getRole());
      newUser.getTeams().clear();
      
-     for(String item : data.getCustomers())
-     {
-       team = new TeamEntity();
-       team.setUser(newUser);
-       team.setCustomer(item);
-       modifyEntity.add(team);
-     }
+     data.getCustomers().forEach(custom -> modifyEntity.add(new TeamEntity(custom, newUser)));
      newUser.getTeams().addAll(modifyEntity);
 
      this.userRepository.save(newUser);
@@ -120,6 +106,7 @@ public class UserServiceImpl implements UserService {
    @Transactional(readOnly = false)
    @Override
    public void deleteUser(String username) {
-     this.userRepository.deleteByUsername(username);
+     if(this.userRepository.existsByUsername(username))
+       this.userRepository.deleteByUsername(username);
    }
 }

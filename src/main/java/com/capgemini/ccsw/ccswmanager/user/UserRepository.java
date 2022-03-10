@@ -28,5 +28,7 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
   @Override
   @EntityGraph(attributePaths = {"person", "teams"})
   List<UserEntity> findAll();
+  
+  boolean existsByUsername(String username);
 	
 }

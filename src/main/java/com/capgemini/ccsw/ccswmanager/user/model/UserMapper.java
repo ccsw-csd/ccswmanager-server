@@ -3,15 +3,12 @@ package com.capgemini.ccsw.ccswmanager.user.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.capgemini.ccsw.ccswmanager.teams.model.TeamEntity;
-
 public class UserMapper {
   
   private UserDto dto;
   
   public UserDto userMapper(UserEntity user)
   {
-    List<TeamEntity> teams;
     List<String> customer = new ArrayList<>();
     dto = new UserDto();
     
@@ -25,10 +22,7 @@ public class UserMapper {
     
     if(user.getTeams() != null)
     {
-      teams = user.getTeams();
-      for(TeamEntity data : teams)
-         customer.add(data.getCustomer());
-      
+      user.getTeams().forEach(item -> customer.add(item.getCustomer()));
       dto.setCustomers(customer);
     }
        
