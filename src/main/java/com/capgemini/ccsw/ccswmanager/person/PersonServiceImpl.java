@@ -108,4 +108,16 @@ public class PersonServiceImpl implements PersonService {
 
     return findPersons();
   }
+
+  @Override
+  public List<String> getDistinctCustomer() {
+    
+    List<String> distinctCustomer = new ArrayList<>();
+    List<PersonEntity> person = this.personRepository.findDistinctByCustomerNotNull();
+    
+    for(PersonEntity data : person)
+      distinctCustomer.add(data.getCustomer());
+    
+    return distinctCustomer;
+  }
 }

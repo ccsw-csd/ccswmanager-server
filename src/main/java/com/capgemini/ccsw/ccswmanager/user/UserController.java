@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.ccsw.ccswmanager.person.PersonService;
 import com.capgemini.ccsw.ccswmanager.user.model.UserDto;
 
 @RequestMapping(value = "/user/")
@@ -17,6 +18,9 @@ public class UserController {
 
    @Autowired
    private UserService userService;
+   
+   @Autowired
+   private PersonService personService;
    
    @RequestMapping(path = "/", method = RequestMethod.GET)
    public List<UserDto> findAllUserPerson() {
@@ -28,9 +32,13 @@ public class UserController {
 	   return this.userService.saveUser(data);
    }
    
-   @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-   public void deleteUser(@PathVariable("id") Long id){
-	   this.userService.deleteUser(id);
+   @RequestMapping(path = "/{username}", method = RequestMethod.DELETE)
+   public void deleteUser(@PathVariable("username") String username){
+	   this.userService.deleteUser(username);
    }
    
+   @RequestMapping(path = "/customers", method = RequestMethod.GET)
+   public List<String> getDistinctCustomer(){
+     return this.personService.getDistinctCustomer();
+   }
 }
