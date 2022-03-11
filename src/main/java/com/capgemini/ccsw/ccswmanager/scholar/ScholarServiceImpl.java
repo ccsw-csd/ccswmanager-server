@@ -13,7 +13,7 @@ import com.capgemini.ccsw.ccswmanager.person.PersonService;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarDto;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarEntity;
-import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLine;
+import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLineDto;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLineSearchDto;
 
 /**
@@ -37,7 +37,7 @@ public class ScholarServiceImpl implements ScholarService {
     @Override
     public ScholarEntity get(long id) {
 
-        return this.scholarRepository.getByPerson_Id(id);
+        return this.scholarRepository.getByPersonId(id);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class ScholarServiceImpl implements ScholarService {
     }
 
     @Override
-    public List<VScholarTimeLine> findScholarsTimelineByDate(VScholarTimeLineSearchDto date) {
+    public List<VScholarTimeLineDto> findScholarsTimelineByDate(VScholarTimeLineSearchDto date) {
         int accionContinuar = 2;
         int accionContrato = 1;
         int accionOut = 0;
@@ -75,13 +75,16 @@ public class ScholarServiceImpl implements ScholarService {
         String azul = "#008FFB";
         List<VScholarEntity> vscholars = vScholarRepository
                 .findAllByStartDateGreaterThanEqualAndEndDateLessThanEqual(date.getStartDate(), date.getEndDate());
-        List<VScholarEntity> vscholars2 = vScholarRepository.findAllByStartDateBetweenOrEndDateBetween(
+        List<VScholarEntity> vscholars2 = vScholarRepository
+                .findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(date.getStartDate(), date.getEndDate());
+        List<VScholarEntity> vscholars3 = vScholarRepository.findAllByStartDateBetweenOrEndDateBetween(
                 date.getStartDate(), date.getEndDate(), date.getStartDate(), date.getEndDate());
         vscholars.addAll(vscholars2);
-        List<VScholarTimeLine> vscholarsTimeLine = new ArrayList<VScholarTimeLine>();
+        vscholars.addAll(vscholars3);
+        List<VScholarTimeLineDto> vscholarsTimeLine = new ArrayList<VScholarTimeLineDto>();
 
         for (VScholarEntity vscholar : vscholars) {
-            VScholarTimeLine vscholarTimeline = new VScholarTimeLine();
+            VScholarTimeLineDto vscholarTimeline = new VScholarTimeLineDto();
             ArrayList<Long> axisY = new ArrayList<Long>();
 
             vscholarTimeline.setX(vscholar.getUsername());

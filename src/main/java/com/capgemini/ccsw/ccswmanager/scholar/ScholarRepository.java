@@ -11,5 +11,5 @@ public interface ScholarRepository extends CrudRepository<ScholarEntity, Long> {
     @Override
     List<ScholarEntity> findAll();
 
-    ScholarEntity getByPerson_Id(Long id);
+    ScholarEntity getByPersonId(Long id);
 }

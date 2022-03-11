@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 
-public class VScholarTimeLine {
+public class VScholarTimeLineDto {
     @JsonProperty("x")
     private String axisX;
 

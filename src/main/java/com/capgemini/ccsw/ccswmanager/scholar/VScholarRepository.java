@@ -14,11 +14,12 @@ import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarEntity;
 
 public interface VScholarRepository extends CrudRepository<VScholarEntity, Long> {
 
-    // quitar esto porque ya esta en crudrepository
     @Override
     List<VScholarEntity> findAll();
 
     List<VScholarEntity> findAllByStartDateGreaterThanEqualAndEndDateLessThanEqual(Date startDate, Date endDate);
+
+    List<VScholarEntity> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(Date startDate, Date endDate);
 
     List<VScholarEntity> findAllByStartDateBetweenOrEndDateBetween(Date startDate, Date endDate, Date startDate2,
             Date endDate2);

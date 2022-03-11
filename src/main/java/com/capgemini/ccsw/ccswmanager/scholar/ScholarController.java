@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarDto;
-import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLine;
+import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLineDto;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLineSearchDto;
 
 /**
@@ -40,7 +40,7 @@ public class ScholarController {
     }
 
     @RequestMapping(path = "/dateFilter", method = RequestMethod.POST)
-    public List<VScholarTimeLine> findScholarsTimelineByDate(@RequestBody VScholarTimeLineSearchDto date) {
+    public List<VScholarTimeLineDto> findScholarsTimelineByDate(@RequestBody VScholarTimeLineSearchDto date) {
 
         return this.scholarService.findScholarsTimelineByDate(date);
     }
