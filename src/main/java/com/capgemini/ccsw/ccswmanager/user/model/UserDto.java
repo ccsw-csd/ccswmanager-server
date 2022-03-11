@@ -1,5 +1,6 @@
 package com.capgemini.ccsw.ccswmanager.user.model;
 
+import java.util.List;
 
 public class UserDto {
 	
@@ -12,6 +13,8 @@ public class UserDto {
   private String name;
 	
   private String lastname;
+  
+  private List<String> customers;
 
   public Long getId() {
     return id;
@@ -51,5 +54,13 @@ public class UserDto {
 
   public void setLastname(String lastname) {
     this.lastname = lastname;
+  }
+
+  public List<String> getCustomers() {
+    return customers;
+  }
+
+  public void setCustomers(List<String> customers) {
+    this.customers = customers;
   }
 }

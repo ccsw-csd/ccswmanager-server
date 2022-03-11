@@ -12,6 +12,5 @@ import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
  */
 public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
-  @Override
-  List<PersonEntity> findAll();
+  List<PersonEntity> findDistinctByCustomerNotNull();
 }
