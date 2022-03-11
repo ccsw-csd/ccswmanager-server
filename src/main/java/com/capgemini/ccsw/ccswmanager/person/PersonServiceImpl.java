@@ -40,8 +40,7 @@ public class PersonServiceImpl implements PersonService {
 
   @Override
   public List<PersonDto> findPersons() {
-
-    return this.beanMapper.mapList(this.personRepository.findAll(), PersonDto.class);
+    return this.beanMapper.mapList((List<PersonEntity>)this.personRepository.findAll(), PersonDto.class);
   }
 
   @Override
@@ -107,5 +106,16 @@ public class PersonServiceImpl implements PersonService {
     });
 
     return findPersons();
+  }
+
+  @Override
+  public List<String> getDistinctCustomer() {
+    
+    List<String> distinctCustomer = new ArrayList<>();
+    List<PersonEntity> person = this.personRepository.findDistinctByCustomerNotNull();
+    
+    person.forEach(item -> distinctCustomer.add(item.getCustomer()));
+
+    return distinctCustomer;
   }
 }

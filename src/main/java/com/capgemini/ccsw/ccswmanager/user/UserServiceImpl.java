@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
+import com.capgemini.ccsw.ccswmanager.teams.model.TeamEntity;
 import com.capgemini.ccsw.ccswmanager.user.model.UserDto;
 import com.capgemini.ccsw.ccswmanager.user.model.UserEntity;
 import com.capgemini.ccsw.ccswmanager.user.model.UserMapper;
@@ -27,6 +29,9 @@ public class UserServiceImpl implements UserService {
   @Autowired
   UserRepository userRepository;
   
+  @Autowired
+  BeanMapper bean;
+  
    /**
    * {@inheritDoc}
    */
@@ -41,9 +46,8 @@ public class UserServiceImpl implements UserService {
      List<UserDto> usersDto = new ArrayList<>();
      UserMapper userMapper = new UserMapper();
      
-     for(UserEntity user : entity)
-       usersDto.add(userMapper.userMapper(user));
-	   
+     entity.forEach(user -> usersDto.add(userMapper.userMapper(user)));
+     
      return usersDto;
    }
 
@@ -70,23 +74,38 @@ public class UserServiceImpl implements UserService {
 
    private void saveNewUser(UserDto data)
    {
+     List<TeamEntity> teams;
      UserEntity user = new UserEntity();
+     
      BeanUtils.copyProperties(data, user);
+     if(data.getCustomers() != null)
+     {
+       teams = new ArrayList<>();
+       data.getCustomers().forEach(custom -> teams.add(new TeamEntity(custom, user)));
+       user.setTeams(teams);
+     }
      this.userRepository.save(user);
    }
    
    private void modifyUser(UserDto data)
    {
-     UserEntity user = this.userRepository.getById(data.getId());
-     user.setUsername(data.getUsername());
-     user.setRole(data.getRole());
-     this.userRepository.save(user);
+     UserEntity newUser = this.userRepository.getById(data.getId());
+     List<TeamEntity> modifyEntity = new ArrayList<>();
+     
+     newUser.setUsername(data.getUsername());
+     newUser.setRole(data.getRole());
+     newUser.getTeams().clear();
+     
+     data.getCustomers().forEach(custom -> modifyEntity.add(new TeamEntity(custom, newUser)));
+     newUser.getTeams().addAll(modifyEntity);
+
+     this.userRepository.save(newUser);
    }
    
    @Transactional(readOnly = false)
    @Override
    public void deleteUser(Long id) {
-     this.userRepository.deleteById(id);
+     if(this.userRepository.existsById(id))
+       this.userRepository.deleteById(id);
    }
-   	
 }
