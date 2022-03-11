@@ -1,7 +1,8 @@
 package com.capgemini.ccsw.ccswmanager.scholar.model;
 
-import java.sql.Date;
 import java.util.ArrayList;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author jchengli
@@ -9,35 +10,36 @@ import java.util.ArrayList;
  */
 
 public class VScholarTimeLine {
-	private String x;
-	
-	private ArrayList<Long> y;
-	
-	private String fillColor;
+    @JsonProperty("x")
+    private String axisX;
 
-	public String getX() {
-		return x;
-	}
+    @JsonProperty("y")
+    private ArrayList<Long> axisY;
 
-	public void setX(String username) {
-		this.x = username;
-	}
-	
-	public ArrayList<Long> getY() {
-		return y;
-	}
+    private String fillColor;
 
-	public void setY(ArrayList<Long> y) {
-		this.y = y;
-	}
+    public String getX() {
+        return axisX;
+    }
 
-	public String getFillColor() {
-		return fillColor;
-	}
+    public void setX(String username) {
+        this.axisX = username;
+    }
 
-	public void setFillColor(String fillColor) {
-		this.fillColor = fillColor;
-	}
+    public ArrayList<Long> getY() {
+        return axisY;
+    }
+
+    public void setY(ArrayList<Long> axisY) {
+        this.axisY = axisY;
+    }
+
+    public String getFillColor() {
+        return fillColor;
+    }
+
+    public void setFillColor(String fillColor) {
+        this.fillColor = fillColor;
+    }
 
 }
-

@@ -1,9 +1,6 @@
 package com.capgemini.ccsw.ccswmanager.scholar;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,124 +10,111 @@ import org.springframework.stereotype.Service;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.PersonService;
-import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarDto;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarDto;
-import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarSearchDto;
+import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarEntity;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLine;
+import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLineSearchDto;
 
 /**
  * @author jchengli
  *
  */
 
-
 @Service
 public class ScholarServiceImpl implements ScholarService {
 
-	  @Autowired
-	  ScholarRepository scholarRepository;
-	  @Autowired
-	  VScholarRepository vScholarRepository;
-	  @Autowired
-	  PersonService personService;
+    @Autowired
+    ScholarRepository scholarRepository;
+    @Autowired
+    VScholarRepository vScholarRepository;
+    @Autowired
+    PersonService personService;
 
-	  @Autowired
-	  private BeanMapper beanMapper;
+    @Autowired
+    private BeanMapper beanMapper;
 
-	  @Override
-	  public ScholarEntity get(long id) {
+    @Override
+    public ScholarEntity get(long id) {
 
-		  return this.scholarRepository.getByPerson_Id(id);
-	  }
-	  
-	  @Override
-	  public List<VScholarDto> findScholars() {
+        return this.scholarRepository.getByPerson_Id(id);
+    }
 
-	    return this.beanMapper.mapList(this.vScholarRepository.findAll(), VScholarDto.class);
-	  }
-	  
-	  @Override
-	  public List<VScholarDto> saveOrUpdateScholars (List<VScholarDto> dtoList) {
-		  dtoList.forEach(dto -> {
-			  Objects.requireNonNull(dto, "scholar");
-			  ScholarEntity scholar = null;
-			  
-			  if(dto.getId() != null)
-				  scholar = get(dto.getId());
-			  if(scholar == null)
-				  scholar = new ScholarEntity();
-			  
-			  BeanUtils.copyProperties(dto, scholar, "id", "person");
-			  scholar.setPerson(this.personService.get(dto.getId()));
-			  
-			  this.scholarRepository.save(scholar);
-		  });
-		  return findScholars();
-	  }
-	  
-	  @Override
-	  public List<VScholarTimeLine> findScholarsByDateTimeline(VScholarSearchDto date) {
-		  List<VScholarDto> vscholars = this.beanMapper.mapList(this.vScholarRepository.findByDate(date.getStartDate(), date.getEndDate()), VScholarDto.class);
-		  List<VScholarTimeLine> vscholarsTimeLine = new ArrayList<VScholarTimeLine>();
+    @Override
+    public List<VScholarDto> findScholars() {
 
-		  //sort scholars looking startDate
-		  Collections.sort(vscholars,new CompareTimeLine());		  
-		  for(VScholarDto vscholar : vscholars) {
-			  VScholarTimeLine vscholarTimeline = new VScholarTimeLine();
-			  ArrayList<Long> Y = new ArrayList<Long>();
-			
+        return this.beanMapper.mapList(this.vScholarRepository.findAll(), VScholarDto.class);
+    }
 
-			  vscholarTimeline.setX(vscholar.getUsername());
-			  if(vscholar.getStartDate() != null && vscholar.getEndDate() != null) {
-				  Y.add(vscholar.getStartDate().getTime());
-				  Y.add(vscholar.getEndDate().getTime());
-				  vscholarTimeline.setY(Y);
-			  }
-			  else if(vscholar.getStartDate() != null) {
-				  Y.add(vscholar.getStartDate().getTime());
-				  vscholarTimeline.setY(Y);
-			  }
-			  else if(vscholar.getEndDate() != null) {
-				  Y.add(vscholar.getEndDate().getTime());
-				  vscholarTimeline.setY(Y);
-			  }
-			  else {
-				  vscholarTimeline.setY(Y);
-			  }
-			  if(vscholar.getAction() != null) {
-				  if((Integer)vscholar.getAction() == 2 || (Integer)vscholar.getAction() == 1) {
-					  vscholarTimeline.setFillColor("#00E396");
-				  }
-				  else if((Integer)vscholar.getAction() == 0) {
-					  vscholarTimeline.setFillColor("#FF4560");
-				  }
-				  else{
-					  vscholarTimeline.setFillColor("#008FFB");
-				  }
-			  }
-			  else{
-				  vscholarTimeline.setFillColor("#008FFB");
-			  }
+    @Override
+    public List<VScholarDto> saveOrUpdateScholars(List<VScholarDto> dtoList) {
+        dtoList.forEach(dto -> {
+            Objects.requireNonNull(dto, "scholar");
+            ScholarEntity scholar = null;
 
-			  vscholarsTimeLine.add(vscholarTimeline);
-		  }
-		  
-		  return vscholarsTimeLine;
-	  }
-	  
-	    @Override
-	    public void deleteById(long id) {
+            if (dto.getId() != null)
+                scholar = get(dto.getId());
+            if (scholar == null)
+                scholar = new ScholarEntity();
 
-	    	this.scholarRepository.deleteById(id);
-	    }
-}
-class CompareTimeLine implements Comparator<VScholarDto> {
-	
-	@Override
-	public int compare(VScholarDto o1, VScholarDto o2) {
-		// TODO Auto-generated method stub
-		return o1.getStartDate().compareTo(o2.getStartDate());
-	}
+            BeanUtils.copyProperties(dto, scholar, "id", "person");
+            scholar.setPerson(this.personService.get(dto.getId()));
 
+            this.scholarRepository.save(scholar);
+        });
+        return findScholars();
+    }
+
+    @Override
+    public List<VScholarTimeLine> findScholarsTimelineByDate(VScholarTimeLineSearchDto date) {
+        int accionContinuar = 2;
+        int accionContrato = 1;
+        int accionOut = 0;
+        String verde = "#00E396";
+        String rojo = "#FF4560";
+        String azul = "#008FFB";
+        List<VScholarEntity> vscholars = vScholarRepository
+                .findAllByStartDateGreaterThanEqualAndEndDateLessThanEqual(date.getStartDate(), date.getEndDate());
+        List<VScholarEntity> vscholars2 = vScholarRepository.findAllByStartDateBetweenOrEndDateBetween(
+                date.getStartDate(), date.getEndDate(), date.getStartDate(), date.getEndDate());
+        vscholars.addAll(vscholars2);
+        List<VScholarTimeLine> vscholarsTimeLine = new ArrayList<VScholarTimeLine>();
+
+        for (VScholarEntity vscholar : vscholars) {
+            VScholarTimeLine vscholarTimeline = new VScholarTimeLine();
+            ArrayList<Long> axisY = new ArrayList<Long>();
+
+            vscholarTimeline.setX(vscholar.getUsername());
+            if (vscholar.getStartDate() != null) {
+                axisY.add(vscholar.getStartDate().getTime());
+            }
+            if (vscholar.getEndDate() != null) {
+                axisY.add(vscholar.getEndDate().getTime());
+            }
+            vscholarTimeline.setY(axisY);
+
+            if (vscholar.getAction() != null) {
+                if ((Integer) vscholar.getAction() == accionContinuar
+                        || (Integer) vscholar.getAction() == accionContrato) {
+                    vscholarTimeline.setFillColor(verde);
+                } else if ((Integer) vscholar.getAction() == accionOut) {
+                    vscholarTimeline.setFillColor(rojo);
+                } else {
+                    vscholarTimeline.setFillColor(azul);
+                }
+            } else {
+                vscholarTimeline.setFillColor(azul);
+            }
+
+            vscholarsTimeLine.add(vscholarTimeline);
+        }
+
+        return vscholarsTimeLine;
+    }
+
+    @Override
+    public void deleteById(long id) {
+
+        this.scholarRepository.deleteById(id);
+    }
 }
