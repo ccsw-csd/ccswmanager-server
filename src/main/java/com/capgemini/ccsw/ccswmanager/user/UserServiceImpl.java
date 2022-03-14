@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
-import com.capgemini.ccsw.ccswmanager.teams.model.TeamEntity;
 import com.capgemini.ccsw.ccswmanager.user.model.UserDto;
 import com.capgemini.ccsw.ccswmanager.user.model.UserEntity;
 import com.capgemini.ccsw.ccswmanager.user.model.UserMapper;
@@ -74,31 +73,19 @@ public class UserServiceImpl implements UserService {
 
    private void saveNewUser(UserDto data)
    {
-     List<TeamEntity> teams;
      UserEntity user = new UserEntity();
      
      BeanUtils.copyProperties(data, user);
-     if(data.getCustomers() != null)
-     {
-       teams = new ArrayList<>();
-       data.getCustomers().forEach(custom -> teams.add(new TeamEntity(custom, user)));
-       user.setTeams(teams);
-     }
      this.userRepository.save(user);
    }
    
    private void modifyUser(UserDto data)
    {
      UserEntity newUser = this.userRepository.getById(data.getId());
-     List<TeamEntity> modifyEntity = new ArrayList<>();
      
      newUser.setUsername(data.getUsername());
      newUser.setRole(data.getRole());
-     newUser.getTeams().clear();
      
-     data.getCustomers().forEach(custom -> modifyEntity.add(new TeamEntity(custom, newUser)));
-     newUser.getTeams().addAll(modifyEntity);
-
      this.userRepository.save(newUser);
    }
    
