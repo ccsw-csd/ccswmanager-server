@@ -17,10 +17,8 @@ public interface VScholarRepository extends CrudRepository<VScholarEntity, Long>
     @Override
     List<VScholarEntity> findAll();
 
-    List<VScholarEntity> findAllByStartDateGreaterThanEqualAndEndDateLessThanEqual(Date startDate, Date endDate);
+    List<VScholarEntity> findAllByStartDateGreaterThanEqualAndEndDateLessThanEqualOrStartDateLessThanEqualAndEndDateGreaterThanEqualOrStartDateBetweenOrEndDateBetweenOrderByStartDateAsc(
+            Date startDate, Date endDate, Date startDate1, Date endDate1, Date startDate2, Date endDate2,
+            Date startDate3, Date endDate3);
 
-    List<VScholarEntity> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(Date startDate, Date endDate);
-
-    List<VScholarEntity> findAllByStartDateBetweenOrEndDateBetween(Date startDate, Date endDate, Date startDate2,
-            Date endDate2);
 }

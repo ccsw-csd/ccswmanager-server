@@ -23,6 +23,12 @@ import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLineSearchDto;
 
 @Service
 public class ScholarServiceImpl implements ScholarService {
+    static final int ACCION_CONTINUAR = 2;
+    static final int ACCION_CONTRATO = 1;
+    static final int ACCION_OUT = 0;
+    static final String VERDE = "#00E396";
+    static final String ROJO = "#FF4560";
+    static final String AZUL = "#008FFB";
 
     @Autowired
     ScholarRepository scholarRepository;
@@ -67,25 +73,21 @@ public class ScholarServiceImpl implements ScholarService {
 
     @Override
     public List<VScholarTimeLineDto> findScholarsTimelineByDate(VScholarTimeLineSearchDto date) {
-        int accionContinuar = 2;
-        int accionContrato = 1;
-        int accionOut = 0;
-        String verde = "#00E396";
-        String rojo = "#FF4560";
-        String azul = "#008FFB";
+
         List<VScholarEntity> vscholars = vScholarRepository
-                .findAllByStartDateGreaterThanEqualAndEndDateLessThanEqual(date.getStartDate(), date.getEndDate());
-        List<VScholarEntity> vscholars2 = vScholarRepository
-                .findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(date.getStartDate(), date.getEndDate());
-        List<VScholarEntity> vscholars3 = vScholarRepository.findAllByStartDateBetweenOrEndDateBetween(
-                date.getStartDate(), date.getEndDate(), date.getStartDate(), date.getEndDate());
-        vscholars.addAll(vscholars2);
-        vscholars.addAll(vscholars3);
+                .findAllByStartDateGreaterThanEqualAndEndDateLessThanEqualOrStartDateLessThanEqualAndEndDateGreaterThanEqualOrStartDateBetweenOrEndDateBetweenOrderByStartDateAsc(
+                        date.getStartDate(), date.getEndDate(), date.getStartDate(), date.getEndDate(),
+                        date.getStartDate(), date.getEndDate(), date.getStartDate(), date.getEndDate());
         List<VScholarTimeLineDto> vscholarsTimeLine = new ArrayList<VScholarTimeLineDto>();
 
         for (VScholarEntity vscholar : vscholars) {
             VScholarTimeLineDto vscholarTimeline = new VScholarTimeLineDto();
             ArrayList<Long> axisY = new ArrayList<Long>();
+            /*
+             * SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
+             * f.setTimeZone(Timezone.getTimeZone("UTC")); System.out.println(f.format(new
+             * date()));
+             */
 
             vscholarTimeline.setX(vscholar.getUsername());
             if (vscholar.getStartDate() != null) {
@@ -97,16 +99,16 @@ public class ScholarServiceImpl implements ScholarService {
             vscholarTimeline.setY(axisY);
 
             if (vscholar.getAction() != null) {
-                if ((Integer) vscholar.getAction() == accionContinuar
-                        || (Integer) vscholar.getAction() == accionContrato) {
-                    vscholarTimeline.setFillColor(verde);
-                } else if ((Integer) vscholar.getAction() == accionOut) {
-                    vscholarTimeline.setFillColor(rojo);
+                if ((Integer) vscholar.getAction() == ACCION_CONTINUAR
+                        || (Integer) vscholar.getAction() == ACCION_CONTRATO) {
+                    vscholarTimeline.setFillColor(VERDE);
+                } else if ((Integer) vscholar.getAction() == ACCION_OUT) {
+                    vscholarTimeline.setFillColor(ROJO);
                 } else {
-                    vscholarTimeline.setFillColor(azul);
+                    vscholarTimeline.setFillColor(AZUL);
                 }
             } else {
-                vscholarTimeline.setFillColor(azul);
+                vscholarTimeline.setFillColor(AZUL);
             }
 
             vscholarsTimeLine.add(vscholarTimeline);
