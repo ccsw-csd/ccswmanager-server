@@ -34,8 +34,4 @@ public interface PersonService {
    */
   List<PersonDto> findByFilter(String filter);
   
-  /**
-   * @return
-   */
-  List<String> getDistinctCustomer();
 }

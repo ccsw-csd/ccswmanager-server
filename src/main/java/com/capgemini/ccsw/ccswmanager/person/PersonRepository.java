@@ -12,5 +12,4 @@ import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
  */
 public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
-  List<PersonEntity> findDistinctByCustomerNotNull();
 }
