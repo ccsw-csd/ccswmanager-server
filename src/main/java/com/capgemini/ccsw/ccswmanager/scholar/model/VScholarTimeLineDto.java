@@ -1,6 +1,6 @@
 package com.capgemini.ccsw.ccswmanager.scholar.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,23 +14,23 @@ public class VScholarTimeLineDto {
     private String axisX;
 
     @JsonProperty("y")
-    private ArrayList<Long> axisY;
+    private List<Long> axisY;
 
     private String fillColor;
 
-    public String getX() {
+    public String getAxisX() {
         return axisX;
     }
 
-    public void setX(String username) {
+    public void setAxisX(String username) {
         this.axisX = username;
     }
 
-    public ArrayList<Long> getY() {
+    public List<Long> getAxisY() {
         return axisY;
     }
 
-    public void setY(ArrayList<Long> axisY) {
+    public void setAxisY(List<Long> axisY) {
         this.axisY = axisY;
     }
 

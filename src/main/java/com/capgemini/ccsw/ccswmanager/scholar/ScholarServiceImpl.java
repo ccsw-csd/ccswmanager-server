@@ -27,12 +27,12 @@ import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLineSearchDto;
 
 @Service
 public class ScholarServiceImpl implements ScholarService {
-    static final int ACCION_CONTINUAR = 2;
-    static final int ACCION_CONTRATO = 1;
-    static final int ACCION_OUT = 0;
-    static final String VERDE = "#00E396";
-    static final String ROJO = "#FF4560";
-    static final String AZUL = "#008FFB";
+    static final Integer ACTION_CONTINUE = 2;
+    static final Integer ACTION_CONTRACT = 1;
+    static final Integer ACTION_OUT = 0;
+    static final String GREEN = "#00E396";
+    static final String RED = "#FF4560";
+    static final String BLUE = "#008FFB";
 
     @Autowired
     ScholarRepository scholarRepository;
@@ -79,36 +79,32 @@ public class ScholarServiceImpl implements ScholarService {
     public List<VScholarTimeLineDto> findScholarsTimelineByDate(VScholarTimeLineSearchDto date) {
 
         List<VScholarEntity> vscholars = vScholarRepository
-                .findAllByStartDateGreaterThanEqualAndEndDateLessThanEqualOrStartDateLessThanEqualAndEndDateGreaterThanEqualOrStartDateBetweenOrEndDateBetweenOrderByStartDateAsc(
+                .findByStartDateGreaterThanEqualAndEndDateLessThanEqualOrStartDateLessThanEqualAndEndDateGreaterThanEqualOrStartDateBetweenOrEndDateBetweenOrderByStartDateAsc(
                         date.getStartDate(), date.getEndDate(), date.getStartDate(), date.getEndDate(),
                         date.getStartDate(), date.getEndDate(), date.getStartDate(), date.getEndDate());
         List<VScholarTimeLineDto> vscholarsTimeLine = new ArrayList<VScholarTimeLineDto>();
 
         for (VScholarEntity vscholar : vscholars) {
             VScholarTimeLineDto vscholarTimeline = new VScholarTimeLineDto();
-            ArrayList<Long> axisY = new ArrayList<Long>();
+            List<Long> axisY = new ArrayList<Long>();
 
             vscholarTimeline
-                    .setX(vscholar.getUsername() + "(" + vscholar.getName() + " " + vscholar.getLastname() + ")");
+                    .setAxisX(vscholar.getName() + " " + vscholar.getLastname() + "(" + vscholar.getUsername() + ")");
             if (vscholar.getStartDate() != null) {
                 axisY.add(getParsedTimestamp(vscholar.getStartDate()));
             }
             if (vscholar.getEndDate() != null) {
                 axisY.add(getParsedTimestamp(vscholar.getEndDate()));
             }
-            vscholarTimeline.setY(axisY);
+            vscholarTimeline.setAxisY(axisY);
 
-            if (vscholar.getAction() != null) {
-                if ((Integer) vscholar.getAction() == ACCION_CONTINUAR
-                        || (Integer) vscholar.getAction() == ACCION_CONTRATO) {
-                    vscholarTimeline.setFillColor(VERDE);
-                } else if ((Integer) vscholar.getAction() == ACCION_OUT) {
-                    vscholarTimeline.setFillColor(ROJO);
-                } else {
-                    vscholarTimeline.setFillColor(AZUL);
-                }
+            if (ACTION_CONTINUE.equals((Integer) vscholar.getAction())
+                    || ACTION_CONTRACT.equals((Integer) vscholar.getAction())) {
+                vscholarTimeline.setFillColor(GREEN);
+            } else if (ACTION_OUT.equals((Integer) vscholar.getAction())) {
+                vscholarTimeline.setFillColor(RED);
             } else {
-                vscholarTimeline.setFillColor(AZUL);
+                vscholarTimeline.setFillColor(BLUE);
             }
 
             vscholarsTimeLine.add(vscholarTimeline);

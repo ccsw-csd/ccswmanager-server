@@ -1,6 +1,6 @@
 package com.capgemini.ccsw.ccswmanager.scholar.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 

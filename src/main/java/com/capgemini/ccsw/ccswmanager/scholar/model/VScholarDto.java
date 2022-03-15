@@ -1,6 +1,6 @@
 package com.capgemini.ccsw.ccswmanager.scholar.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class VScholarDto {
     private Long id;
