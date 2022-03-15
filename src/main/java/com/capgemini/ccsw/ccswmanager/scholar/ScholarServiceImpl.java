@@ -1,6 +1,10 @@
 package com.capgemini.ccsw.ccswmanager.scholar;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -91,10 +95,10 @@ public class ScholarServiceImpl implements ScholarService {
 
             vscholarTimeline.setX(vscholar.getUsername());
             if (vscholar.getStartDate() != null) {
-                axisY.add(vscholar.getStartDate().getTime());
+                axisY.add(getParsedTimestamp(vscholar.getStartDate()));
             }
             if (vscholar.getEndDate() != null) {
-                axisY.add(vscholar.getEndDate().getTime());
+                axisY.add(getParsedTimestamp(vscholar.getEndDate()));
             }
             vscholarTimeline.setY(axisY);
 
@@ -115,6 +119,12 @@ public class ScholarServiceImpl implements ScholarService {
         }
 
         return vscholarsTimeLine;
+    }
+
+    private Long getParsedTimestamp(Date date) {
+        LocalDate ld = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        ZonedDateTime zdtAtUtc = ld.atStartOfDay().atZone(ZoneId.of("UTC"));
+        return zdtAtUtc.toInstant().toEpochMilli();
     }
 
     @Override
