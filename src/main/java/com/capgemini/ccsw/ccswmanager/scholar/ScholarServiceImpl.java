@@ -87,11 +87,6 @@ public class ScholarServiceImpl implements ScholarService {
         for (VScholarEntity vscholar : vscholars) {
             VScholarTimeLineDto vscholarTimeline = new VScholarTimeLineDto();
             ArrayList<Long> axisY = new ArrayList<Long>();
-            /*
-             * SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
-             * f.setTimeZone(Timezone.getTimeZone("UTC")); System.out.println(f.format(new
-             * date()));
-             */
 
             vscholarTimeline.setX(vscholar.getUsername());
             if (vscholar.getStartDate() != null) {
