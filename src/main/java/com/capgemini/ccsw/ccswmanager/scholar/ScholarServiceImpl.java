@@ -88,7 +88,8 @@ public class ScholarServiceImpl implements ScholarService {
             VScholarTimeLineDto vscholarTimeline = new VScholarTimeLineDto();
             ArrayList<Long> axisY = new ArrayList<Long>();
 
-            vscholarTimeline.setX(vscholar.getUsername());
+            vscholarTimeline
+                    .setX(vscholar.getUsername() + "(" + vscholar.getName() + " " + vscholar.getLastname() + ")");
             if (vscholar.getStartDate() != null) {
                 axisY.add(getParsedTimestamp(vscholar.getStartDate()));
             }
