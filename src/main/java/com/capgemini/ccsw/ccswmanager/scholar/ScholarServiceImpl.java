@@ -98,10 +98,9 @@ public class ScholarServiceImpl implements ScholarService {
             }
             vscholarTimeline.setAxisY(axisY);
 
-            if (ACTION_CONTINUE.equals((Integer) vscholar.getAction())
-                    || ACTION_CONTRACT.equals((Integer) vscholar.getAction())) {
+            if (ACTION_CONTINUE.equals(vscholar.getAction()) || ACTION_CONTRACT.equals(vscholar.getAction())) {
                 vscholarTimeline.setFillColor(GREEN);
-            } else if (ACTION_OUT.equals((Integer) vscholar.getAction())) {
+            } else if (ACTION_OUT.equals(vscholar.getAction())) {
                 vscholarTimeline.setFillColor(RED);
             } else {
                 vscholarTimeline.setFillColor(BLUE);
