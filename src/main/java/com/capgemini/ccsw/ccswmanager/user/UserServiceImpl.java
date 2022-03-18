@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.user.model.UserDto;
 import com.capgemini.ccsw.ccswmanager.user.model.UserEntity;
 import com.capgemini.ccsw.ccswmanager.user.model.UserMapper;
@@ -27,6 +28,9 @@ public class UserServiceImpl implements UserService {
   @Autowired
   UserRepository userRepository;
   
+  @Autowired
+  BeanMapper bean;
+  
    /**
    * {@inheritDoc}
    */
@@ -41,9 +45,8 @@ public class UserServiceImpl implements UserService {
      List<UserDto> usersDto = new ArrayList<>();
      UserMapper userMapper = new UserMapper();
      
-     for(UserEntity user : entity)
-       usersDto.add(userMapper.userMapper(user));
-	   
+     entity.forEach(user -> usersDto.add(userMapper.userMapper(user)));
+     
      return usersDto;
    }
 
@@ -71,22 +74,25 @@ public class UserServiceImpl implements UserService {
    private void saveNewUser(UserDto data)
    {
      UserEntity user = new UserEntity();
+     
      BeanUtils.copyProperties(data, user);
      this.userRepository.save(user);
    }
    
    private void modifyUser(UserDto data)
    {
-     UserEntity user = this.userRepository.getById(data.getId());
-     user.setUsername(data.getUsername());
-     user.setRole(data.getRole());
-     this.userRepository.save(user);
+     UserEntity newUser = this.userRepository.getById(data.getId());
+     
+     newUser.setUsername(data.getUsername());
+     newUser.setRole(data.getRole());
+     
+     this.userRepository.save(newUser);
    }
    
    @Transactional(readOnly = false)
    @Override
    public void deleteUser(Long id) {
-     this.userRepository.deleteById(id);
+     if(this.userRepository.existsById(id))
+       this.userRepository.deleteById(id);
    }
-   	
 }

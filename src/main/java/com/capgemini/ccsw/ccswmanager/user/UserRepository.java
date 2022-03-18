@@ -23,8 +23,9 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
   
   UserEntity getById(Long id);
   
+  
   @Override
   @EntityGraph(attributePaths = "person")
   List<UserEntity> findAll();
-	
+  	
 }

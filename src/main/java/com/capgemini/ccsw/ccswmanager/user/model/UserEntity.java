@@ -1,7 +1,6 @@
 package com.capgemini.ccsw.ccswmanager.user.model;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,13 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 
 /**
  * @author pajimene
  *
  */
-
 @Entity
 @Table(name = "user")
 public class UserEntity implements Serializable{
@@ -69,5 +68,4 @@ public class UserEntity implements Serializable{
   public void setPerson(PersonEntity person) {
 	this.person = person;
   }
-
 }
