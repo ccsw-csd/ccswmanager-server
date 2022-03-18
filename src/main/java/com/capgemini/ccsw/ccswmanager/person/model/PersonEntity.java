@@ -20,297 +20,296 @@ import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
  */
 @Entity
 @Table(name = "person")
-public class PersonEntity implements Serializable{
+public class PersonEntity implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", nullable = false)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-  @Column(name = "saga")
-  private String saga;
+    @Column(name = "saga")
+    private String saga;
 
-  @Column(name = "username")
-  private String username;
+    @Column(name = "username")
+    private String username;
 
-  @Column(name = "email")
-  private String email;
+    @Column(name = "email")
+    private String email;
 
-  @Column(name = "name", nullable = false)
-  private String name;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-  @Column(name = "lastname", nullable = false)
-  private String lastname;
+    @Column(name = "lastname", nullable = false)
+    private String lastname;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "center_id")
-  private CenterEntity center;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "center_id")
+    private CenterEntity center;
 
-  @Column(name = "businesscode")
-  private String businesscode;
+    @Column(name = "businesscode")
+    private String businesscode;
 
-  @Column(name = "active", nullable = false)
-  private Integer active;
+    @Column(name = "active", nullable = false)
+    private Integer active;
 
-  @Column(name = "grade")
-  private String grade;
+    @Column(name = "grade")
+    private String grade;
 
-  @Column(name = "customer")
-  private String customer;
+    @Column(name = "customer")
+    private String customer;
 
-  @Column(name = "role")
-  private String role;
+    @Column(name = "role")
+    private String role;
 
-  @Column(name = "details")
-  private String details;
+    @Column(name = "details")
+    private String details;
 
-  @Column(name = "hours", nullable = false)
-  private Integer hours;
+    @Column(name = "hours", nullable = false)
+    private Integer hours;
 
-  @Column(name = "department")
-  private String department;
-  
-  
-/**
-   * @return id
-   */
-  public Long getId() {
+    @Column(name = "department")
+    private String department;
 
-    return this.id;
-  }
+    /**
+     * @return id
+     */
+    public Long getId() {
 
-  /**
-   * @param id new value of {@link #getid}.
-   */
-  public void setId(Long id) {
+        return this.id;
+    }
 
-    this.id = id;
-  }
+    /**
+     * @param id new value of {@link #getid}.
+     */
+    public void setId(Long id) {
 
-  /**
-   * @return saga
-   */
-  public String getSaga() {
+        this.id = id;
+    }
 
-    return this.saga;
-  }
+    /**
+     * @return saga
+     */
+    public String getSaga() {
 
-  /**
-   * @param saga new value of {@link #getsaga}.
-   */
-  public void setSaga(String saga) {
+        return this.saga;
+    }
 
-    this.saga = saga;
-  }
+    /**
+     * @param saga new value of {@link #getsaga}.
+     */
+    public void setSaga(String saga) {
 
-  /**
-   * @return username
-   */
-  public String getUsername() {
+        this.saga = saga;
+    }
 
-    return this.username;
-  }
+    /**
+     * @return username
+     */
+    public String getUsername() {
 
-  /**
-   * @param username new value of {@link #getusername}.
-   */
-  public void setUsername(String username) {
+        return this.username;
+    }
 
-    this.username = username;
-  }
+    /**
+     * @param username new value of {@link #getusername}.
+     */
+    public void setUsername(String username) {
 
-  /**
-   * @return email
-   */
-  public String getEmail() {
+        this.username = username;
+    }
 
-    return this.email;
-  }
+    /**
+     * @return email
+     */
+    public String getEmail() {
 
-  /**
-   * @param email new value of {@link #getemail}.
-   */
-  public void setEmail(String email) {
+        return this.email;
+    }
+
+    /**
+     * @param email new value of {@link #getemail}.
+     */
+    public void setEmail(String email) {
 
-    this.email = email;
-  }
+        this.email = email;
+    }
+
+    /**
+     * @return name
+     */
+    public String getName() {
 
-  /**
-   * @return name
-   */
-  public String getName() {
+        return this.name;
+    }
+
+    /**
+     * @param name new value of {@link #getname}.
+     */
+    public void setName(String name) {
 
-    return this.name;
-  }
+        this.name = name;
+    }
+
+    /**
+     * @return lastname
+     */
+    public String getLastname() {
 
-  /**
-   * @param name new value of {@link #getname}.
-   */
-  public void setName(String name) {
+        return this.lastname;
+    }
+
+    /**
+     * @param lastname new value of {@link #getlastname}.
+     */
+    public void setLastname(String lastname) {
 
-    this.name = name;
-  }
+        this.lastname = lastname;
+    }
+
+    /**
+     * @return centerId
+     */
+    public CenterEntity getCenter() {
 
-  /**
-   * @return lastname
-   */
-  public String getLastname() {
+        return this.center;
+    }
+
+    /**
+     * @param centeId new value of {@link #getcenter_id}.
+     */
+    public void setCenter(CenterEntity center) {
 
-    return this.lastname;
-  }
+        this.center = center;
+    }
+
+    /**
+     * @return businesscode
+     */
+    public String getBusinesscode() {
 
-  /**
-   * @param lastname new value of {@link #getlastname}.
-   */
-  public void setLastname(String lastname) {
+        return this.businesscode;
+    }
+
+    /**
+     * @param businesscode new value of {@link #getbusinesscode}.
+     */
+    public void setBusinesscode(String businesscode) {
 
-    this.lastname = lastname;
-  }
+        this.businesscode = businesscode;
+    }
+
+    /**
+     * @return active
+     */
+    public Integer getActive() {
 
-  /**
-   * @return centerId
-   */
-  public CenterEntity getCenter() {
-
-    return this.center;
-  }
-
-  /**
-   * @param centeId new value of {@link #getcenter_id}.
-   */
-  public void setCenter(CenterEntity center) {
-
-    this.center = center;
-  }
-
-  /**
-   * @return businesscode
-   */
-  public String getBusinesscode() {
-
-    return this.businesscode;
-  }
-
-  /**
-   * @param businesscode new value of {@link #getbusinesscode}.
-   */
-  public void setBusinesscode(String businesscode) {
-
-    this.businesscode = businesscode;
-  }
-
-  /**
-   * @return active
-   */
-  public Integer getActive() {
-
-    return this.active;
-  }
-
-  /**
-   * @param active new value of {@link #getactive}.
-   */
-  public void setActive(Integer active) {
-
-    this.active = active;
-  }
-
-  /**
-   * @return
-   */
-  public String getGrade() {
-
-    return this.grade;
-  }
-
-  /**
-   * @param grade
-   */
-  public void setGrade(String grade) {
-
-    this.grade = grade;
-  }
-
-  /**
-   * @return
-   */
-  public String getCustomer() {
-
-    return this.customer;
-  }
-
-  /**
-   * @param customer
-   */
-  public void setCustomer(String customer) {
-
-    this.customer = customer;
-  }
-
-  /**
-   * @return
-   */
-  public String getRole() {
-
-    return this.role;
-  }
-
-  /**
-   * @param role
-   */
-  public void setRole(String role) {
-
-    this.role = role;
-  }
-
-  /**
-   * @return
-   */
-  public String getDetails() {
-
-    return this.details;
-  }
-
-  /**
-   * @param details
-   */
-  public void setDetails(String details) {
-
-    this.details = details;
-  }
-
-  /**
-   * @return
-   */
-  public Integer getHours() {
-
-    return this.hours;
-  }
-
-  /**
-   * @param hours
-   */
-  public void setHours(Integer hours) {
-
-    this.hours = hours;
-  }
-
-  /**
-   * @return
-   */
-  public String getDepartment() {
-
-    return this.department;
-  }
-
-  /**
-   * @param department
-   */
-  public void setDepartment(String department) {
-
-    this.department = department;
-  }
+        return this.active;
+    }
+
+    /**
+     * @param active new value of {@link #getactive}.
+     */
+    public void setActive(Integer active) {
+
+        this.active = active;
+    }
+
+    /**
+     * @return
+     */
+    public String getGrade() {
+
+        return this.grade;
+    }
+
+    /**
+     * @param grade
+     */
+    public void setGrade(String grade) {
+
+        this.grade = grade;
+    }
+
+    /**
+     * @return
+     */
+    public String getCustomer() {
+
+        return this.customer;
+    }
+
+    /**
+     * @param customer
+     */
+    public void setCustomer(String customer) {
+
+        this.customer = customer;
+    }
+
+    /**
+     * @return
+     */
+    public String getRole() {
+
+        return this.role;
+    }
+
+    /**
+     * @param role
+     */
+    public void setRole(String role) {
+
+        this.role = role;
+    }
+
+    /**
+     * @return
+     */
+    public String getDetails() {
+
+        return this.details;
+    }
+
+    /**
+     * @param details
+     */
+    public void setDetails(String details) {
+
+        this.details = details;
+    }
+
+    /**
+     * @return
+     */
+    public Integer getHours() {
+
+        return this.hours;
+    }
+
+    /**
+     * @param hours
+     */
+    public void setHours(Integer hours) {
+
+        this.hours = hours;
+    }
+
+    /**
+     * @return
+     */
+    public String getDepartment() {
+
+        return this.department;
+    }
+
+    /**
+     * @param department
+     */
+    public void setDepartment(String department) {
+
+        this.department = department;
+    }
 
 }

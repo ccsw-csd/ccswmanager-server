@@ -15,44 +15,44 @@ import javax.persistence.Table;
 @Table(name = "center")
 public class CenterEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", nullable = false)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
-  @Column(name = "name")
-  private String name;
+    @Column(name = "name")
+    private String name;
 
-  /**
-   * @return id
-   */
-  public Integer getId() {
+    /**
+     * @return id
+     */
+    public Integer getId() {
 
-    return this.id;
-  }
+        return this.id;
+    }
 
-  /**
-   * @param id new value of {@link #getid}.
-   */
-  public void setId(Integer id) {
+    /**
+     * @param id new value of {@link #getid}.
+     */
+    public void setId(Integer id) {
 
-    this.id = id;
-  }
+        this.id = id;
+    }
 
-  /**
-   * @return name
-   */
-  public String getName() {
+    /**
+     * @return name
+     */
+    public String getName() {
 
-    return this.name;
-  }
+        return this.name;
+    }
 
-  /**
-   * @param name new value of {@link #getname}.
-   */
-  public void setName(String name) {
+    /**
+     * @param name new value of {@link #getname}.
+     */
+    public void setName(String name) {
 
-    this.name = name;
-  }
+        this.name = name;
+    }
 
 }

@@ -11,5 +11,6 @@ public interface LdapPerson {
   String getUsername();
 
   String getLastname();
+  
 
 }
