@@ -12,13 +12,9 @@ public interface LdapService {
 
     Boolean check();
 
-    List<LdapPersonDto> compareLdapToPersons();
+    List<LdapPersonDto> compareLdapToPersons(boolean contract);
 
-    List<LdapPersonDto> comparePersonsToLdap();
-
-    List<LdapPersonDto> compareLdapToPersonsScholars();
-
-    List<LdapPersonDto> comparePersonsToLdapScholars();
+    List<LdapPersonDto> comparePersonsToLdap(boolean contract);
 
     List<String> findUsernames(boolean contract);
 

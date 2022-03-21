@@ -59,8 +59,6 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<PersonDto> findByFilter(String filter) {
 
-        System.out.println("FILTER --> " + filter);
-
         TPersonEntity newPerson = new TPersonEntity();
         List<TPersonEntity> persons = new ArrayList<TPersonEntity>();
         String lastname = "";

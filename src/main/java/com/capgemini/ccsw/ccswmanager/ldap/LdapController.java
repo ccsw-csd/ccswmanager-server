@@ -28,24 +28,14 @@ public class LdapController {
         return this.ldapService.check();
     }
 
-    @RequestMapping(path = "/ldap/", method = RequestMethod.GET)
-    public List<LdapPersonDto> compareLdapToPersons() {
-        return this.ldapService.compareLdapToPersons();
+    @RequestMapping(path = "/ldap/{contract}", method = RequestMethod.GET)
+    public List<LdapPersonDto> compareLdapToPersons(@PathVariable boolean contract) {
+        return this.ldapService.compareLdapToPersons(contract);
     }
 
-    @RequestMapping(path = "/persons/", method = RequestMethod.GET)
-    public List<LdapPersonDto> comparePersonsToLdapBecarios() {
-        return this.ldapService.comparePersonsToLdap();
-    }
-
-    @RequestMapping(path = "/ldapScholars/", method = RequestMethod.GET)
-    public List<LdapPersonDto> compareLdapToPersonsBecarios() {
-        return this.ldapService.compareLdapToPersonsScholars();
-    }
-
-    @RequestMapping(path = "/personsScholars/", method = RequestMethod.GET)
-    public List<LdapPersonDto> comparePersonsToLdap() {
-        return this.ldapService.comparePersonsToLdapScholars();
+    @RequestMapping(path = "/persons/{contract}", method = RequestMethod.GET)
+    public List<LdapPersonDto> comparePersonsToLdap(@PathVariable boolean contract) {
+        return this.ldapService.comparePersonsToLdap(contract);
     }
 
     @RequestMapping(path = "/list/{contract}", method = RequestMethod.GET)
