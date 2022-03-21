@@ -1,6 +1,6 @@
 package com.capgemini.ccsw.ccswmanager.tperson.model;
 
-import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
+import com.capgemini.ccsw.ccswmanager.center.model.CenterDto;
 
 public class TPersonDto {
 
@@ -14,7 +14,7 @@ public class TPersonDto {
 
     private String lastname;
 
-    private CenterEntity center;
+    private CenterDto center;
 
     private String grade;
 
@@ -109,7 +109,7 @@ public class TPersonDto {
     /**
      * @return center
      */
-    public CenterEntity getCenter() {
+    public CenterDto getCenter() {
 
         return this.center;
     }
@@ -117,7 +117,7 @@ public class TPersonDto {
     /**
      * @param center new value of {@link #getcenter}.
      */
-    public void setCenter(CenterEntity center) {
+    public void setCenter(CenterDto center) {
 
         this.center = center;
     }

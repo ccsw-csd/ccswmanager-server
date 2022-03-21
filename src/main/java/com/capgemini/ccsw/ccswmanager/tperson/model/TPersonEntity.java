@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
 
 /**
- * TODO asolerpa This type ...
+ * @author dapalmie
  *
  */
 @Entity

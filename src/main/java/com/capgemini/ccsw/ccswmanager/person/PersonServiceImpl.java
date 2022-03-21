@@ -59,20 +59,16 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<PersonDto> findByFilter(String filter) {
 
-        TPersonEntity newPerson = new TPersonEntity();
         List<TPersonEntity> persons = new ArrayList<TPersonEntity>();
-        String lastname = "";
+        List<PersonDto> personsToReturn = new ArrayList<PersonDto>();
+
+        PersonDto newPerson = new PersonDto();
 
         newPerson.setName(filter.split(" ")[0]);
-
-        for (int i = 1; i < filter.split(" ").length; i++) {
-            lastname = lastname + filter.split(" ")[i] + " ";
+        newPerson.setLastname(" ");
+        if (filter.split(" ").length > 1) {
+            newPerson.setLastname(filter.split(" ")[1]);
         }
-
-        newPerson.setLastname(lastname);
-
-        persons.add(newPerson);
-
         List<TPersonEntity> personsLike = this.tpersonService.findFromFilters(filter);
 
         List<PersonEntity> allPersons = this.personService.findAll();
@@ -81,7 +77,10 @@ public class PersonServiceImpl implements PersonService {
         persons = personsLike.stream().filter(person -> !personsToRemove.contains(person.getUsername()))
                 .collect(Collectors.toList());
 
-        return this.beanMapper.mapList(persons, PersonDto.class);
+        personsToReturn = this.beanMapper.mapList(persons, PersonDto.class);
+        personsToReturn.add(newPerson);
+
+        return personsToReturn;
     }
 
     @Override

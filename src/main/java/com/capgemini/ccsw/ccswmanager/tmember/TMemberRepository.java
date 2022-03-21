@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import com.capgemini.ccsw.ccswmanager.tmember.model.TMemberEntity;
 
 /**
- * TODO asolerpa This type ...
+ * @author dapalmie
  *
  */
 public interface TMemberRepository extends CrudRepository<TMemberEntity, Long> {

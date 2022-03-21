@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.ccsw.ccswmanager.ldap.model.LdapPersonDto;
 
 /**
- * TODO asolerpa This type ...
+ * @author dapalmie
  *
  */
 

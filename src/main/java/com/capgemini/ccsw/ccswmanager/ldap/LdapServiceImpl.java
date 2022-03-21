@@ -17,7 +17,7 @@ import com.capgemini.ccsw.ccswmanager.tmember.model.TMemberEntity;
 import com.capgemini.ccsw.ccswmanager.tperson.TPersonService;
 
 /**
- * TODO asolerpa This type ...
+ * @author dapalmie
  *
  */
 @Service
@@ -77,11 +77,8 @@ public class LdapServiceImpl implements LdapService {
         personsCompared = tmembers.stream().filter(tmember -> !usersToRemove.contains(tmember.getUserCn()))
                 .collect(Collectors.toList());
 
-        for (int i = 0; i < personsCompared.size(); i++) {
-            ldapToPersons.add(new LdapPersonDto(personsCompared.get(i).getTperson().getName(),
-                    personsCompared.get(i).getTperson().getLastname(),
-                    personsCompared.get(i).getTperson().getUsername()));
-        }
+        personsCompared.stream().forEach(person -> ldapToPersons.add(new LdapPersonDto(person.getTperson().getName(),
+                person.getTperson().getLastname(), person.getTperson().getUsername())));
 
         return ldapToPersons;
 

@@ -16,7 +16,7 @@ public interface TPersonRepository extends CrudRepository<TPersonEntity, Long> {
 
     @EntityGraph(attributePaths = { "center" })
     @Query("select t from TPersonEntity t where concat(name, ' ', lastname, ' ', username) LIKE %:filter%")
-    List<TPersonEntity> findFirst15FromFilterOrderByUsernameAsc(String filter);
+    List<TPersonEntity> findFirst15ByOrderByUsernameAsc(String filter);
 
     @EntityGraph(attributePaths = { "center" })
     List<TPersonEntity> findAll();
