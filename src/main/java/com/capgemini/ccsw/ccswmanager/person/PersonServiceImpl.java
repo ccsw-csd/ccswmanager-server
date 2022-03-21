@@ -75,7 +75,7 @@ public class PersonServiceImpl implements PersonService {
 
         persons.add(newPerson);
 
-        List<TPersonEntity> personsLike = this.tpersonService.findFromFilters(filter, filter, filter);
+        List<TPersonEntity> personsLike = this.tpersonService.findFromFilters(filter);
 
         List<PersonEntity> allPersons = this.personService.findAll();
 
@@ -126,19 +126,20 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonEntity> findScholars(String department, String grade, int active) {
-        return this.personRepository.findByDepartmentAndGradeIsNullOrGradeIsAndActiveIs(department, grade, active);
+        return this.personRepository.findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(department,
+                grade, active);
 
     }
 
     @Override
     public List<PersonEntity> findContracts(String department, String grade, int active) {
-        return this.personRepository.findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIs(department, grade,
-                active);
+        return this.personRepository
+                .findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(department, grade, active);
 
     }
 
     @Override
     public List<PersonEntity> findAll() {
-        return this.personRepository.findAll();
+        return this.personRepository.findAllByOrderByUsernameAsc();
     }
 }

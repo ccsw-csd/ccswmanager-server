@@ -9,9 +9,7 @@ public interface TMemberService {
     /**
      * @return
      */
-    public List<TMemberEntity> findScholars();
 
-    public List<TMemberEntity> findContracts();
+    public List<TMemberEntity> findTMembers(String groupCn);
 
-    List<TMemberEntity> findAll();
 }

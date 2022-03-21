@@ -17,19 +17,8 @@ public class TMemberServiceImpl implements TMemberService {
     @Autowired
     TMemberRepository tmemberRepository;
 
-    @Override
-    public List<TMemberEntity> findScholars() {
-        return this.tmemberRepository.findByIdGroupCn("dlesccsw.becarios");
-    }
-
-    @Override
-    public List<TMemberEntity> findContracts() {
-        return this.tmemberRepository.findByIdGroupCn("dlesccsw");
-    }
-
-    @Override
-    public List<TMemberEntity> findAll() {
-        return this.tmemberRepository.findByIdUserCn("aalamino");
+    public List<TMemberEntity> findTMembers(String groupCn) {
+        return this.tmemberRepository.findByIdGroupCnOrderByIdUserCnAsc(groupCn);
     }
 
 }

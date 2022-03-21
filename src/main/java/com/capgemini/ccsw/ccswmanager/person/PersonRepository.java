@@ -2,6 +2,7 @@ package com.capgemini.ccsw.ccswmanager.person;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
@@ -15,9 +16,15 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     @Override
     List<PersonEntity> findAll();
 
-    List<PersonEntity> findByDepartmentAndGradeIsNullOrGradeIsAndActiveIs(String department, String grade, int active);
+    @EntityGraph(attributePaths = { "center" })
+    List<PersonEntity> findAllByOrderByUsernameAsc();
 
-    List<PersonEntity> findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIs(String department, String grade,
-            int active);
+    @EntityGraph(attributePaths = { "center" })
+    List<PersonEntity> findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(String department,
+            String grade, int active);
+
+    @EntityGraph(attributePaths = { "center" })
+    List<PersonEntity> findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(String department,
+            String grade, int active);
 
 }

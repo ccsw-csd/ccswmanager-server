@@ -23,9 +23,9 @@ public class TPersonServiceImpl implements TPersonService {
     }
 
     @Override
-    public List<TPersonEntity> findFromFilters(String filter1, String filter2, String filter3) {
-        return this.tpersonRepository.findFirst15ByNameContainingOrLastnameContainingOrUsernameContaining(filter1,
-                filter2, filter3);
+    public List<TPersonEntity> findFromFilters(String filter) {
+
+        return this.tpersonRepository.findFirst15FromFilterOrderByUsernameAsc(filter);
     }
 
 }

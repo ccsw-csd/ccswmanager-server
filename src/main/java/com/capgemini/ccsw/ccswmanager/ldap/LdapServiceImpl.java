@@ -27,6 +27,10 @@ public class LdapServiceImpl implements LdapService {
 
     private static final String DEPARTMENT_CODE = "CCSw";
 
+    private static final String SCHOLARS_GROUP = "dlesccsw.becarios";
+
+    private static final String CONTRACT_GROUP = "dlesccsw";
+
     @Autowired
     private BeanMapper beanMapper;
 
@@ -43,23 +47,24 @@ public class LdapServiceImpl implements LdapService {
     public Boolean check() {
 
         /*
-         * List<LdapPerson> persons = this.ldapRepository.comparePersonsToLdap();
-         * List<LdapPerson> ldap = this.ldapRepository.compareLdapToPersons();
+         * List<LdapPersonDto> persons = this.compareLdapToPersons();
          * 
-         * List<LdapPerson> personsScholars =
-         * this.ldapRepository.comparePersonsToLdapScholars(); List<LdapPerson>
-         * ldapScholars = this.ldapRepository.compareLdapToPersonsScholars();
+         * List<LdapPersonDto> ldap = this.compareLdapToPersons();
          * 
-         * if (ldap.size() > 0 || ldapScholars.size() > 0) { return false; } else {
-         * return true; }
+         * List<LdapPersonDto> personsScholars = this.comparePersonsToLdapScholars();
+         * List<LdapPersonDto> ldapScholars = this.compareLdapToPersonsScholars();
          */
-        return false;
+        if (this.compareLdapToPersons().size() > 0 || this.comparePersonsToLdapScholars().size() > 0
+                || this.compareLdapToPersons().size() > 0 || this.compareLdapToPersonsScholars().size() > 0)
+            return false;
+        else
+            return true;
     }
 
     @Override
     public List<LdapPersonDto> compareLdapToPersons() {
         List<LdapPersonDto> ldapToPersons = new ArrayList<LdapPersonDto>();
-        List<TMemberEntity> tmembers = this.tmemberService.findContracts();
+        List<TMemberEntity> tmembers = this.tmemberService.findTMembers(CONTRACT_GROUP);
 
         List<PersonEntity> persons = this.personService.findContracts(DEPARTMENT_CODE, "", ACTIVE_TRUE);
 
@@ -82,7 +87,7 @@ public class LdapServiceImpl implements LdapService {
     @Override
     public List<LdapPersonDto> comparePersonsToLdap() {
 
-        List<TMemberEntity> tmembers = this.tmemberService.findContracts();
+        List<TMemberEntity> tmembers = this.tmemberService.findTMembers(CONTRACT_GROUP);
         List<PersonEntity> persons = this.personService.findContracts(DEPARTMENT_CODE, "", ACTIVE_TRUE);
 
         List<LdapPersonDto> personsToLdap = new ArrayList<LdapPersonDto>();
@@ -103,11 +108,8 @@ public class LdapServiceImpl implements LdapService {
     @Override
     public List<LdapPersonDto> compareLdapToPersonsScholars() {
         List<LdapPersonDto> ldapToPersonsScholars = new ArrayList<LdapPersonDto>();
-        List<TMemberEntity> tmembers = this.tmemberService.findScholars();
-        /*
-         * List<TMemberEntity> dummys = this.tmemberService.findAll();
-         * dummys.stream().forEach(d -> System.out.println(d.getGroupCn()));
-         */
+        List<TMemberEntity> tmembers = this.tmemberService.findTMembers(SCHOLARS_GROUP);
+
         List<PersonEntity> persons = this.personService.findScholars(DEPARTMENT_CODE, "", ACTIVE_TRUE);
 
         List<TMemberEntity> personsCompared = new ArrayList<TMemberEntity>();
@@ -129,7 +131,7 @@ public class LdapServiceImpl implements LdapService {
     @Override
     public List<LdapPersonDto> comparePersonsToLdapScholars() {
 
-        List<TMemberEntity> tmembers = this.tmemberService.findScholars();
+        List<TMemberEntity> tmembers = this.tmemberService.findTMembers(SCHOLARS_GROUP);
         List<PersonEntity> persons = this.personService.findScholars(DEPARTMENT_CODE, "", ACTIVE_TRUE);
 
         List<LdapPersonDto> personsToLdapScholars = new ArrayList<LdapPersonDto>();

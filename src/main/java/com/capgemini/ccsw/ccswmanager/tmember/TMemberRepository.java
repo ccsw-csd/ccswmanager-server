@@ -14,8 +14,6 @@ import com.capgemini.ccsw.ccswmanager.tmember.model.TMemberEntity;
 public interface TMemberRepository extends CrudRepository<TMemberEntity, Long> {
 
     @EntityGraph(attributePaths = { "tperson" })
-    List<TMemberEntity> findByIdGroupCn(String groupCn);
-
-    List<TMemberEntity> findByIdUserCn(String user);
+    List<TMemberEntity> findByIdGroupCnOrderByIdUserCnAsc(String groupCn);
 
 }
