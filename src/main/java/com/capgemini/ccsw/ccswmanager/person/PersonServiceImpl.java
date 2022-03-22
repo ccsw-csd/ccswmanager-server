@@ -69,6 +69,7 @@ public class PersonServiceImpl implements PersonService {
         if (filter.split(" ").length > 1) {
             newPerson.setLastname(filter.split(" ")[1]);
         }
+
         List<TPersonEntity> personsLike = this.tpersonService.findFromFilters(filter);
 
         List<PersonEntity> allPersons = this.personService.findAll();

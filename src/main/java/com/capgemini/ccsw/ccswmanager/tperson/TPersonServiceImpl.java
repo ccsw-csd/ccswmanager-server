@@ -3,6 +3,7 @@ package com.capgemini.ccsw.ccswmanager.tperson;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
@@ -25,7 +26,7 @@ public class TPersonServiceImpl implements TPersonService {
     @Override
     public List<TPersonEntity> findFromFilters(String filter) {
 
-        return this.tpersonRepository.findFirst15ByOrderByUsernameAsc(filter);
+        return this.tpersonRepository.findFirst15ByOrderByUsernameAsc(filter, PageRequest.of(0, 15));
     }
 
 }
