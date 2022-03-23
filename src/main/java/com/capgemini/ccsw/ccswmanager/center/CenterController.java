@@ -11,7 +11,7 @@ import com.capgemini.ccsw.ccswmanager.center.model.CenterDto;
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 
 /**
- * TODO asolerpa This type ...
+ * @author asolerpa
  *
  */
 
@@ -19,17 +19,17 @@ import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 @RestController
 public class CenterController {
 
-  @Autowired
-  private BeanMapper beanMapper;
+    @Autowired
+    private BeanMapper beanMapper;
 
-  @Autowired
-  private CenterService centerService;
+    @Autowired
+    private CenterService centerService;
 
-  @RequestMapping(path = "/", method = RequestMethod.GET)
-  public List<CenterDto> findAllCenters() {
+    @RequestMapping(path = "/", method = RequestMethod.GET)
+    public List<CenterDto> findAllCenters() {
 
-    return this.beanMapper.mapList(this.centerService.findAll(), CenterDto.class);
+        return this.beanMapper.mapList(this.centerService.findAll(), CenterDto.class);
 
-  }
+    }
 
 }

@@ -3,6 +3,8 @@ package com.capgemini.ccsw.ccswmanager.person;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +14,10 @@ import com.capgemini.ccsw.ccswmanager.center.CenterService;
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonDto;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
-import com.capgemini.ccsw.ccswmanager.person.model.TPersonEntity;
 import com.capgemini.ccsw.ccswmanager.scholar.ScholarService;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
+import com.capgemini.ccsw.ccswmanager.tperson.TPersonService;
+import com.capgemini.ccsw.ccswmanager.tperson.model.TPersonEntity;
 
 /**
  * @author aolmosca
@@ -23,88 +26,116 @@ import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-  @Autowired
-  PersonRepository personRepository;
+    private static final String EMPTY_STRING = "";
 
-  @Autowired
-  TPersonRepository tpersonRepository;
+    @Autowired
+    PersonRepository personRepository;
 
-  @Autowired
-  ScholarService scholarService;
+    @Autowired
+    PersonService personService;
 
-  @Autowired
-  CenterService centerService;
+    @Autowired
+    TPersonService tpersonService;
 
-  @Autowired
-  private BeanMapper beanMapper;
+    @Autowired
+    ScholarService scholarService;
 
-  @Override
-  public List<PersonDto> findPersons() {
-    return this.beanMapper.mapList((List<PersonEntity>)this.personRepository.findAll(), PersonDto.class);
-  }
+    @Autowired
+    CenterService centerService;
 
-  @Override
-  public PersonEntity get(long id) {
+    @Autowired
+    private BeanMapper beanMapper;
 
-    return this.personRepository.findById(id).orElse(null);
-  }
+    @Override
+    public List<PersonDto> findPersons() {
 
-  @Override
-  public List<PersonDto> findByFilter(String filter) {
-
-    TPersonEntity newPerson = new TPersonEntity();
-    List<TPersonEntity> persons = new ArrayList<TPersonEntity>();
-    String lastname = "";
-
-    newPerson.setName(filter.split(" ")[0]);
-
-    for (int i = 1; i < filter.split(" ").length; i++) {
-      lastname = lastname + filter.split(" ")[i] + " ";
+        return this.beanMapper.mapList(this.personRepository.findAll(), PersonDto.class);
     }
 
-    newPerson.setLastname(lastname);
+    @Override
+    public PersonEntity get(long id) {
 
-    persons.add(newPerson);
-    persons.addAll(this.tpersonRepository.findByFilter(filter));
+        return this.personRepository.findById(id).orElse(null);
+    }
 
-    return this.beanMapper.mapList(persons, PersonDto.class);
-  }
+    @Override
+    public List<PersonDto> findByFilter(String filter) {
 
-  @Override
-  public List<PersonDto> saveOrUpdatePersons(List<PersonDto> personListTo) {
+        List<TPersonEntity> persons = new ArrayList<>();
+        List<PersonDto> personsToReturn = new ArrayList<>();
+        List<TPersonEntity> personsLike = this.tpersonService.findAllTpersonsFromFilters(filter);
+        List<PersonEntity> allPersons = this.personService.findAll();
 
-    personListTo.forEach(personTo -> {
+        Set<String> personsToRemove = allPersons.stream().map(PersonEntity::getUsername).collect(Collectors.toSet());
+        persons = personsLike.stream().filter(person -> !personsToRemove.contains(person.getUsername())).collect(Collectors.toList());
 
-      Objects.requireNonNull(personTo, "person");
+        personsToReturn = this.beanMapper.mapList(persons, PersonDto.class);
 
-      PersonEntity person = null;
+        PersonDto newPerson = new PersonDto();
 
-      if (personTo.getId() != null) {
-        person = get(personTo.getId());
-      }
-
-      if (person == null) {
-        person = new PersonEntity();
-      }
-
-      if (personTo.getDelete() != null && personTo.getDelete() == true) {
-
-        ScholarEntity scholarPerson = this.scholarService.get(personTo.getId());
-        if (scholarPerson != null) {
-          this.scholarService.deleteById(scholarPerson.getId());
+        String nameLastname[] = filter.split(" ");
+        StringBuilder lastname = new StringBuilder();
+        for (int i = 1; i < nameLastname.length; i++) {
+            lastname.append(nameLastname[i] + " ");
         }
+        newPerson.setName(nameLastname[0]);
+        newPerson.setLastname(EMPTY_STRING.equals(lastname.toString()) ? EMPTY_STRING : lastname.toString());
 
-        this.personRepository.deleteById(personTo.getId());
+        personsToReturn.add(0, newPerson);
 
-      } else {
-        BeanUtils.copyProperties(personTo, person, "id", "center");
+        return personsToReturn;
+    }
 
-        person.setCenter(this.centerService.getById(personTo.getCenter().getId()));
+    @Override
+    public List<PersonDto> saveOrUpdatePersons(List<PersonDto> personListTo) {
 
-        this.personRepository.save(person);
-      }
-    });
+        personListTo.forEach(personTo -> {
 
-    return findPersons();
-  }
+            Objects.requireNonNull(personTo, "person");
+
+            PersonEntity person = null;
+
+            if (personTo.getId() != null) {
+                person = get(personTo.getId());
+            }
+
+            if (person == null) {
+                person = new PersonEntity();
+            }
+
+            if (personTo.getDelete() != null && personTo.getDelete() == true) {
+
+                ScholarEntity scholarPerson = this.scholarService.get(personTo.getId());
+                if (scholarPerson != null) {
+                    this.scholarService.deleteById(scholarPerson.getId());
+                }
+
+                this.personRepository.deleteById(personTo.getId());
+
+            } else {
+                BeanUtils.copyProperties(personTo, person, "id", "center");
+
+                person.setCenter(this.centerService.getById(personTo.getCenter().getId()));
+
+                this.personRepository.save(person);
+            }
+        });
+
+        return findPersons();
+    }
+
+    @Override
+    public List<PersonEntity> findScholars(String department, String grade, int active) {
+        return this.personRepository.findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(department, grade, active);
+    }
+
+    @Override
+    public List<PersonEntity> findContracts(String department, String grade, int active) {
+        return this.personRepository.findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(department, grade, active);
+    }
+
+    @Override
+    public List<PersonEntity> findAll() {
+        return this.personRepository.findAllByOrderByUsernameAsc();
+    }
 }

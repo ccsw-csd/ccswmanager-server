@@ -13,7 +13,7 @@ import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonDto;
 
 /**
- * TODO asolerpa This type ...
+ * @author dapalmie
  *
  */
 
@@ -21,32 +21,32 @@ import com.capgemini.ccsw.ccswmanager.person.model.PersonDto;
 @RestController
 public class PersonController {
 
-  @Autowired
-  private BeanMapper beanMapper;
+    @Autowired
+    private BeanMapper beanMapper;
 
-  @Autowired
-  private PersonService personService;
+    @Autowired
+    private PersonService personService;
 
-  @RequestMapping(path = "/", method = RequestMethod.GET)
-  public List<PersonDto> findPersons() {
+    @RequestMapping(path = "/", method = RequestMethod.GET)
+    public List<PersonDto> findPersons() {
 
-    return this.personService.findPersons();
+        return this.personService.findPersons();
 
-  }
+    }
 
-  @RequestMapping(path = "/{filter}", method = RequestMethod.GET)
-  public List<PersonDto> findByFilter(@PathVariable String filter) {
+    @RequestMapping(path = "/{filter}", method = RequestMethod.GET)
+    public List<PersonDto> findByFilter(@PathVariable String filter) {
 
-    return this.personService.findByFilter(filter);
-  }
+        return this.personService.findByFilter(filter);
+    }
 
-  /**
-   * @param person
-   * @return
-   */
-  @RequestMapping(path = "/", method = RequestMethod.POST)
-  public List<PersonDto> saveOrUpdatePersons(@RequestBody List<PersonDto> persons) {
+    /**
+     * @param person
+     * @return
+     */
+    @RequestMapping(path = "/", method = RequestMethod.POST)
+    public List<PersonDto> saveOrUpdatePersons(@RequestBody List<PersonDto> persons) {
 
-    return this.personService.saveOrUpdatePersons(persons);
-  }
+        return this.personService.saveOrUpdatePersons(persons);
+    }
 }

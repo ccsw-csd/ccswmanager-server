@@ -2,24 +2,20 @@ package com.capgemini.ccsw.ccswmanager.ldap;
 
 import java.util.List;
 
-import com.capgemini.ccsw.ccswmanager.ldap.model.LdapPerson;
+import com.capgemini.ccsw.ccswmanager.ldap.model.LdapPersonDto;
 
 /**
- * TODO asolerpa This type ...
+ * @author dapalmie
  *
  */
 public interface LdapService {
 
-  Boolean check();
+    Boolean check();
 
-  List<LdapPerson> compareLdapToPersons();
+    List<LdapPersonDto> compareLdapToPersons(boolean contract);
 
-  List<LdapPerson> comparePersonsToLdap();
-  
-  List<LdapPerson> compareLdapToPersonsScholars();
+    List<LdapPersonDto> comparePersonsToLdap(boolean contract);
 
-  List<LdapPerson> comparePersonsToLdapScholars();
-
-  List<String> findUsernamesList(boolean contract);
+    List<String> findUsernames(boolean contract);
 
 }
