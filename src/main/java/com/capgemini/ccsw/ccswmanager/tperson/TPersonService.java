@@ -8,6 +8,6 @@ public interface TPersonService {
 
     List<TPersonEntity> findAll();
 
-    List<TPersonEntity> findFromFilters(String filter);
+    List<TPersonEntity> findAllTpersonsFromFilters(String filter);
 
 }

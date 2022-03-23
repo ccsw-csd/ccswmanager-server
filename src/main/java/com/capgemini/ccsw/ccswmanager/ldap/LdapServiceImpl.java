@@ -48,8 +48,7 @@ public class LdapServiceImpl implements LdapService {
     @Override
     public Boolean check() {
 
-        if (this.compareLdapToPersons(true).size() > 0 || this.compareLdapToPersons(false).size() > 0
-                || this.compareLdapToPersons(true).size() > 0 || this.compareLdapToPersons(false).size() > 0)
+        if (this.compareLdapToPersons(true).size() > 0 || this.compareLdapToPersons(false).size() > 0 || this.comparePersonsToLdap(true).size() > 0 || this.comparePersonsToLdap(false).size() > 0)
             return false;
         else
             return true;
@@ -58,9 +57,9 @@ public class LdapServiceImpl implements LdapService {
     @Override
     public List<LdapPersonDto> compareLdapToPersons(boolean contract) {
 
-        List<TMemberEntity> tmembers = new ArrayList<TMemberEntity>();
-        List<PersonEntity> persons = new ArrayList<PersonEntity>();
-        List<LdapPersonDto> ldapToPersons = new ArrayList<LdapPersonDto>();
+        List<TMemberEntity> tmembers = new ArrayList<>();
+        List<PersonEntity> persons = new ArrayList<>();
+        List<LdapPersonDto> ldapToPersons = new ArrayList<>();
 
         if (contract) {
             persons = this.personService.findContracts(DEPARTMENT_CODE, EMPTY_STRING, ACTIVE_TRUE);
@@ -70,15 +69,13 @@ public class LdapServiceImpl implements LdapService {
             tmembers = this.tmemberService.findTMembers(SCHOLARS_GROUP);
         }
 
-        List<TMemberEntity> personsCompared = new ArrayList<TMemberEntity>();
+        List<TMemberEntity> personsCompared = new ArrayList<>();
 
         Set<String> usersToRemove = persons.stream().map(PersonEntity::getUsername).collect(Collectors.toSet());
 
-        personsCompared = tmembers.stream().filter(tmember -> !usersToRemove.contains(tmember.getUserCn()))
-                .collect(Collectors.toList());
+        personsCompared = tmembers.stream().filter(tmember -> !usersToRemove.contains(tmember.getUserCn())).collect(Collectors.toList());
 
-        personsCompared.stream().forEach(person -> ldapToPersons.add(new LdapPersonDto(person.getTperson().getName(),
-                person.getTperson().getLastname(), person.getTperson().getUsername())));
+        personsCompared.stream().forEach(person -> ldapToPersons.add(new LdapPersonDto(person.getTperson().getName(), person.getTperson().getLastname(), person.getTperson().getUsername())));
 
         return ldapToPersons;
 
@@ -87,9 +84,9 @@ public class LdapServiceImpl implements LdapService {
     @Override
     public List<LdapPersonDto> comparePersonsToLdap(boolean contract) {
 
-        List<TMemberEntity> tmembers = new ArrayList<TMemberEntity>();
-        List<PersonEntity> persons = new ArrayList<PersonEntity>();
-        List<LdapPersonDto> personsToLdap = new ArrayList<LdapPersonDto>();
+        List<TMemberEntity> tmembers = new ArrayList<>();
+        List<PersonEntity> persons = new ArrayList<>();
+        List<LdapPersonDto> personsToLdap = new ArrayList<>();
         if (contract) {
             tmembers = this.tmemberService.findTMembers(CONTRACT_GROUP);
             persons = this.personService.findContracts(DEPARTMENT_CODE, EMPTY_STRING, ACTIVE_TRUE);
@@ -98,21 +95,19 @@ public class LdapServiceImpl implements LdapService {
             persons = this.personService.findScholars(DEPARTMENT_CODE, EMPTY_STRING, ACTIVE_TRUE);
         }
 
-        List<PersonEntity> personsCompared = new ArrayList<PersonEntity>();
+        List<PersonEntity> personsCompared = new ArrayList<>();
         Set<String> usersToRemove = tmembers.stream().map(TMemberEntity::getUserCn).collect(Collectors.toSet());
 
-        personsCompared = persons.stream().filter(person -> !usersToRemove.contains(person.getUsername()))
-                .collect(Collectors.toList());
+        personsCompared = persons.stream().filter(person -> !usersToRemove.contains(person.getUsername())).collect(Collectors.toList());
 
-        personsCompared.forEach(person -> personsToLdap
-                .add(new LdapPersonDto(person.getName(), person.getLastname(), person.getUsername())));
+        personsCompared.forEach(person -> personsToLdap.add(new LdapPersonDto(person.getName(), person.getLastname(), person.getUsername())));
 
         return personsToLdap;
 
     }
 
     public List<String> findUsernames(boolean contract) {
-        List<PersonEntity> persons = new ArrayList<PersonEntity>();
+        List<PersonEntity> persons = new ArrayList<>();
         if (contract)
             persons = this.personService.findContracts(DEPARTMENT_CODE, EMPTY_STRING, ACTIVE_TRUE);
         else

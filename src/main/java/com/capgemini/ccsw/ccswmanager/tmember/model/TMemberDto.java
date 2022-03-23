@@ -10,15 +10,15 @@ public class TMemberDto {
         return groupCn;
     }
 
-    public void setGroup_cn(String groupCn) {
+    public void setGroupCn(String groupCn) {
         this.groupCn = groupCn;
     }
 
-    public String getUser_cn() {
+    public String getUserCn() {
         return userCn;
     }
 
-    public void setUser_cn(String userCn) {
+    public void setUserCn(String userCn) {
         this.userCn = userCn;
     }
 

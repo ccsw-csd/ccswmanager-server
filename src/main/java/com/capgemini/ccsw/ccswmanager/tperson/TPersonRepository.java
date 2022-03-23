@@ -16,8 +16,8 @@ import com.capgemini.ccsw.ccswmanager.tperson.model.TPersonEntity;
 public interface TPersonRepository extends CrudRepository<TPersonEntity, Long> {
 
     @EntityGraph(attributePaths = { "center" })
-    @Query("select t from TPersonEntity t where concat(name, ' ', lastname, ' ', username) LIKE %:filter%")
-    List<TPersonEntity> findFirst15ByOrderByUsernameAsc(String filter, Pageable pageable);
+    @Query("select t from TPersonEntity t where concat(name, ' ', lastname, ' ', username) LIKE %:filter% order by name, lastname asc")
+    List<TPersonEntity> findTpersonsLikeFilter(String filter, Pageable pageable);
 
     @EntityGraph(attributePaths = { "center" })
     List<TPersonEntity> findAll();

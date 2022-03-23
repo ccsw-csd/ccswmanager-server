@@ -26,6 +26,8 @@ import com.capgemini.ccsw.ccswmanager.tperson.model.TPersonEntity;
 @Service
 public class PersonServiceImpl implements PersonService {
 
+    private static final String EMPTY_STRING = "";
+
     @Autowired
     PersonRepository personRepository;
 
@@ -59,27 +61,27 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<PersonDto> findByFilter(String filter) {
 
-        List<TPersonEntity> persons = new ArrayList<TPersonEntity>();
-        List<PersonDto> personsToReturn = new ArrayList<PersonDto>();
-
-        PersonDto newPerson = new PersonDto();
-
-        newPerson.setName(filter.split(" ")[0]);
-        newPerson.setLastname(" ");
-        if (filter.split(" ").length > 1) {
-            newPerson.setLastname(filter.split(" ")[1]);
-        }
-
-        List<TPersonEntity> personsLike = this.tpersonService.findFromFilters(filter);
-
+        List<TPersonEntity> persons = new ArrayList<>();
+        List<PersonDto> personsToReturn = new ArrayList<>();
+        List<TPersonEntity> personsLike = this.tpersonService.findAllTpersonsFromFilters(filter);
         List<PersonEntity> allPersons = this.personService.findAll();
 
         Set<String> personsToRemove = allPersons.stream().map(PersonEntity::getUsername).collect(Collectors.toSet());
-        persons = personsLike.stream().filter(person -> !personsToRemove.contains(person.getUsername()))
-                .collect(Collectors.toList());
+        persons = personsLike.stream().filter(person -> !personsToRemove.contains(person.getUsername())).collect(Collectors.toList());
 
         personsToReturn = this.beanMapper.mapList(persons, PersonDto.class);
-        personsToReturn.add(newPerson);
+
+        PersonDto newPerson = new PersonDto();
+
+        String nameLastname[] = filter.split(" ");
+        StringBuilder lastname = new StringBuilder();
+        for (int i = 1; i < nameLastname.length; i++) {
+            lastname.append(nameLastname[i] + " ");
+        }
+        newPerson.setName(nameLastname[0]);
+        newPerson.setLastname(EMPTY_STRING.equals(lastname.toString()) ? EMPTY_STRING : lastname.toString());
+
+        personsToReturn.add(0, newPerson);
 
         return personsToReturn;
     }
@@ -124,16 +126,12 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonEntity> findScholars(String department, String grade, int active) {
-        return this.personRepository.findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(department,
-                grade, active);
-
+        return this.personRepository.findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(department, grade, active);
     }
 
     @Override
     public List<PersonEntity> findContracts(String department, String grade, int active) {
-        return this.personRepository
-                .findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(department, grade, active);
-
+        return this.personRepository.findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(department, grade, active);
     }
 
     @Override
