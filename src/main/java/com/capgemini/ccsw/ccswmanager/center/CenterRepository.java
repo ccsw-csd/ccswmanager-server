@@ -9,5 +9,6 @@ import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
  *
  */
 public interface CenterRepository extends CrudRepository<CenterEntity, Long> {
-  CenterEntity findById(Integer id);
+
+    CenterEntity findById(Integer id);
 }
