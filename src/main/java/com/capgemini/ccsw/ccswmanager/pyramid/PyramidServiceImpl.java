@@ -58,16 +58,18 @@ public class PyramidServiceImpl implements PyramidService {
         cost.setValueD1(pyramidCostEntity.get(8).getCost());
         cost.setValueD2(pyramidCostEntity.get(9).getCost());
 
-        index.setValueA1((cost.getValueA1() * 100) / cost.getValueB2());
-        index.setValueA2((cost.getValueA2() * 100) / cost.getValueB2());
-        index.setValueB1((cost.getValueB1() * 100) / cost.getValueB2());
+        Double costValueB2 = cost.getValueB2();
+
+        index.setValueA1((cost.getValueA1() * 100) / costValueB2);
+        index.setValueA2((cost.getValueA2() * 100) / costValueB2);
+        index.setValueB1((cost.getValueB1() * 100) / costValueB2);
         index.setValueB2(VALUE_B2);
-        index.setValueB3((cost.getValueB3() * 100) / cost.getValueB2());
-        index.setValueC1((cost.getValueC1() * 100) / cost.getValueB2());
-        index.setValueC2((cost.getValueC2() * 100) / cost.getValueB2());
-        index.setValueC3((cost.getValueC3() * 100) / cost.getValueB2());
-        index.setValueD1((cost.getValueD1() * 100) / cost.getValueB2());
-        index.setValueD2((cost.getValueD2() * 100) / cost.getValueB2());
+        index.setValueB3((cost.getValueB3() * 100) / costValueB2);
+        index.setValueC1((cost.getValueC1() * 100) / costValueB2);
+        index.setValueC2((cost.getValueC2() * 100) / costValueB2);
+        index.setValueC3((cost.getValueC3() * 100) / costValueB2);
+        index.setValueD1((cost.getValueD1() * 100) / costValueB2);
+        index.setValueD2((cost.getValueD2() * 100) / costValueB2);
 
         pyramidIndexCostDto.add(index);
         pyramidIndexCostDto.add(cost);
