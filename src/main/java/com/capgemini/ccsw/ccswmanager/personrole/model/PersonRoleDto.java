@@ -1,4 +1,4 @@
-package com.capgemini.ccsw.ccswmanager.personRole.model;
+package com.capgemini.ccsw.ccswmanager.personrole.model;
 
 public class PersonRoleDto {
 

@@ -1,8 +1,8 @@
-package com.capgemini.ccsw.ccswmanager.personRole;
+package com.capgemini.ccsw.ccswmanager.personrole;
 
 import java.util.List;
 
-import com.capgemini.ccsw.ccswmanager.personRole.model.PersonRoleDto;
+import com.capgemini.ccsw.ccswmanager.personrole.model.PersonRoleDto;
 
 public interface PersonRoleService {
 

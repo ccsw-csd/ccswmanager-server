@@ -1,4 +1,4 @@
-package com.capgemini.ccsw.ccswmanager.personRole;
+package com.capgemini.ccsw.ccswmanager.personrole;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
-import com.capgemini.ccsw.ccswmanager.personRole.model.PersonRoleDto;
+import com.capgemini.ccsw.ccswmanager.personrole.model.PersonRoleDto;
 
 @Service
 public class PersonRoleServiceImpl implements PersonRoleService {
