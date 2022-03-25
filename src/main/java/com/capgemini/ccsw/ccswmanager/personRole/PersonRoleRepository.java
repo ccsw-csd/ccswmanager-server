@@ -1,10 +1,10 @@
-package com.capgemini.ccsw.ccswmanager.person_role;
+package com.capgemini.ccsw.ccswmanager.personRole;
 
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.capgemini.ccsw.ccswmanager.person_role.model.PersonRoleEntity;
+import com.capgemini.ccsw.ccswmanager.personRole.model.PersonRoleEntity;
 
 /**
  * @author dapalmie

@@ -1,15 +1,15 @@
-package com.capgemini.ccsw.ccswmanager.person_role.model;
+package com.capgemini.ccsw.ccswmanager.personRole.model;
 
 public class PersonRoleDto {
 
-    private long id;
+    private Long id;
     private String role;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
