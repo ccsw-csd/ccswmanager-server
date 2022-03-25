@@ -14,7 +14,7 @@ import com.capgemini.ccsw.ccswmanager.personrole.model.PersonRoleDto;
  *
  */
 
-@RequestMapping(value = "/personRoles/")
+@RequestMapping(value = "/person-roles/")
 @RestController
 public class PersonRoleController {
 
