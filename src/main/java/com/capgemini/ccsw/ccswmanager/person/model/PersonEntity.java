@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
+import com.capgemini.ccsw.ccswmanager.center_transcode.model.CenterTranscodeEntity;
 
 /**
  * @author aolmosca
@@ -44,7 +45,7 @@ public class PersonEntity implements Serializable {
     @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "center_id")
     private CenterEntity center;
 

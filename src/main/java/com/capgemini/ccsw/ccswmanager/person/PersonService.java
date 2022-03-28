@@ -39,5 +39,7 @@ public interface PersonService {
     List<PersonEntity> findContracts(String department, String grade, int active);
 
     List<PersonEntity> findAll();
+    
+    void scheduledTask();
 
 }
