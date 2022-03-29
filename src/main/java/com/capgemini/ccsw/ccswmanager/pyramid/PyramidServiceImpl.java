@@ -72,8 +72,6 @@ public class PyramidServiceImpl implements PyramidService {
 
         this.pyramidRepository.saveAll(pyramidCostEntityList);
 
-        return
-
-        getPyramidIndexCost();
+        return getPyramidIndexCost();
     }
 }
