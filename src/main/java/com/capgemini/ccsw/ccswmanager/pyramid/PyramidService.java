@@ -1,7 +1,7 @@
 package com.capgemini.ccsw.ccswmanager.pyramid;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author jchengli
@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface PyramidService {
 
-    List<HashMap<String, Double>> getPyramidIndexCost();
+    List<Map<String, Double>> getPyramidIndexCost();
 
-    List<HashMap<String, Double>> saveOrUpdatePyramidCosts(List<HashMap<String, Double>> dto);
+    List<Map<String, Double>> saveOrUpdatePyramidCosts(List<Map<String, Double>> gradeIndexCostMapList);
 }

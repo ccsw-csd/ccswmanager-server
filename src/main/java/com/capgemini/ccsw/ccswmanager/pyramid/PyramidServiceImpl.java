@@ -3,12 +3,11 @@ package com.capgemini.ccsw.ccswmanager.pyramid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.pyramid.model.PyramidCostEntity;
 
 /**
@@ -18,6 +17,8 @@ import com.capgemini.ccsw.ccswmanager.pyramid.model.PyramidCostEntity;
 
 @Service
 public class PyramidServiceImpl implements PyramidService {
+    static final String ROWNAME = "rowName";
+    static final Double INDEX_ROWNAME = 0.0;
     static final Double COST_ROWNAME = 1.0;
     static final String COLUMN_B2 = "B2";
     static final Double VALUE_B2 = 100.00;
@@ -25,27 +26,22 @@ public class PyramidServiceImpl implements PyramidService {
     @Autowired
     PyramidRepository pyramidRepository;
 
-    @Autowired
-    private BeanMapper beanMapper;
-
     @Override
-    public List<HashMap<String, Double>> getPyramidIndexCost() {
+    public List<Map<String, Double>> getPyramidIndexCost() {
 
-        List<PyramidCostEntity> pyramidCostEntity = this.pyramidRepository.findAll();
-        HashMap<String, Double> gradeIndexMap = new HashMap<String, Double>();
-        HashMap<String, Double> gradeCostMap = new HashMap<String, Double>();
-        List<HashMap<String, Double>> gradeIndexCostMapList = new ArrayList<HashMap<String, Double>>();
+        List<PyramidCostEntity> pyramidCostEntityList = this.pyramidRepository.findAll();
+        Map<String, Double> gradeIndexMap = new HashMap<>();
+        Map<String, Double> gradeCostMap = new HashMap<>();
+        List<Map<String, Double>> gradeIndexCostMapList = new ArrayList<>();
 
-        gradeIndexMap.put("rowName", 0.0);
-        gradeCostMap.put("rowName", 1.0);
-        Double costValueB2 = null;
+        gradeIndexMap.put(ROWNAME, INDEX_ROWNAME);
+        gradeCostMap.put(ROWNAME, COST_ROWNAME);
 
-        for (PyramidCostEntity pyramidEntity : pyramidCostEntity) {
-            if (COLUMN_B2.equals(pyramidEntity.getGrade()))
-                costValueB2 = pyramidEntity.getCost();
-        }
+        PyramidCostEntity pyramidCostB2Entity = pyramidCostEntityList.stream()
+                .filter(cost -> COLUMN_B2.equals(cost.getGrade())).findAny().orElse(null);
+        Double costValueB2 = pyramidCostB2Entity.getCost();
 
-        for (PyramidCostEntity pyramidEntity : pyramidCostEntity) {
+        for (PyramidCostEntity pyramidEntity : pyramidCostEntityList) {
 
             gradeCostMap.put(pyramidEntity.getGrade(), pyramidEntity.getCost());
 
@@ -62,22 +58,22 @@ public class PyramidServiceImpl implements PyramidService {
     }
 
     @Override
-    public List<HashMap<String, Double>> saveOrUpdatePyramidCosts(List<HashMap<String, Double>> dtoList) {
+    public List<Map<String, Double>> saveOrUpdatePyramidCosts(List<Map<String, Double>> gradeIndexCostMapList) {
 
-        List<PyramidCostEntity> pyramidCostEntity = this.pyramidRepository.findAll();
+        List<PyramidCostEntity> pyramidCostEntityList = this.pyramidRepository.findAll();
 
-        dtoList.forEach(dto -> {
-            Objects.requireNonNull(dto, "pyramid");
+        gradeIndexCostMapList.forEach(gradeIndexCostMap -> {
 
-            if (COST_ROWNAME.equals(dto.get("rowName"))) {
+            if (COST_ROWNAME.equals(gradeIndexCostMap.get(ROWNAME))) {
 
-                for (PyramidCostEntity pyramid : pyramidCostEntity) {
-                    pyramid.setCost(dto.get(pyramid.getGrade()));
+                for (PyramidCostEntity pyramidCostEntity : pyramidCostEntityList) {
+                    pyramidCostEntity.setCost(gradeIndexCostMap.get(pyramidCostEntity.getGrade()));
                 }
-
-                this.pyramidRepository.saveAll(pyramidCostEntity);
             }
         });
+
+        this.pyramidRepository.saveAll(pyramidCostEntityList);
+
         return getPyramidIndexCost();
     }
 }

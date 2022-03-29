@@ -1,7 +1,7 @@
 package com.capgemini.ccsw.ccswmanager.pyramid;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,12 +21,13 @@ public class PyramidController {
     private PyramidService pyramidService;
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public List<HashMap<String, Double>> getPyramidIndexCost() {
+    public List<Map<String, Double>> getPyramidIndexCost() {
         return this.pyramidService.getPyramidIndexCost();
     }
 
     @RequestMapping(path = "/", method = RequestMethod.POST)
-    public List<HashMap<String, Double>> saveOrUpdatePyramidCosts(@RequestBody List<HashMap<String, Double>> dto) {
-        return this.pyramidService.saveOrUpdatePyramidCosts(dto);
+    public List<Map<String, Double>> saveOrUpdatePyramidCosts(
+            @RequestBody List<Map<String, Double>> gradeIndexCostMapList) {
+        return this.pyramidService.saveOrUpdatePyramidCosts(gradeIndexCostMapList);
     }
 }
