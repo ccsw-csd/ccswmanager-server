@@ -22,5 +22,5 @@ public interface TPersonRepository extends CrudRepository<TPersonEntity, Long> {
     @EntityGraph(attributePaths = { "center" })
     List<TPersonEntity> findAll();
 
-    List<TPersonEntity> findByUsernameOrSaga(String username, String saga);
+    List<TPersonEntity> findByUsernameInOrSagaIn(List<String> username, List<String> saga);
 }

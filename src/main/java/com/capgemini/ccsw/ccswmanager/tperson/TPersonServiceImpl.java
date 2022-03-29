@@ -31,8 +31,13 @@ public class TPersonServiceImpl implements TPersonService {
     }
 
 	@Override
-	public List<TPersonEntity> matchedTPersonWithPersonUsernameAndSaga(String username, String sagaCode) {
-		return tpersonRepository.findByUsernameOrSaga(username, sagaCode);
+	public List<TPersonEntity> matchedTPersonWithPersonUsernameAndSaga(List<String> username, List<String> sagaCode) {
+		return tpersonRepository.findByUsernameInOrSagaIn(username, sagaCode);
+	}
+
+	@Override
+	public void save(TPersonEntity tperson) {
+		tpersonRepository.save(tperson);
 	}
 
 }

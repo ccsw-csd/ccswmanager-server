@@ -29,4 +29,5 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
             String grade, int active);
     @Query(value = "SELECT * FROM Person p WHERE p.active = 1", nativeQuery = true)
     List<PersonEntity> findByActiveTrue();
+   
 }

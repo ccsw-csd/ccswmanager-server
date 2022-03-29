@@ -25,17 +25,16 @@ public class CenterServiceImpl implements CenterService {
    @Override
    public List<CenterEntity> findAll() {
 
-      Iterable<CenterEntity> centersEntities = this.centerRepository.findAll();
-      List<CenterEntity> centerEntityList = new ArrayList<CenterEntity>();
-      centersEntities.forEach(centerEntityList::add);
-
-      return centerEntityList;
+      return (List<CenterEntity>) centerRepository.findAll();
    }
 
    @Override
    public CenterEntity getById(Integer id) {
 
       return this.centerRepository.findById(id);
+   }
+   public void save(CenterEntity center) {
+	   centerRepository.save(center);
    }
 
 }

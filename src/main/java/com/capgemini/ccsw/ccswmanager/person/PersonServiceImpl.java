@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -47,8 +49,6 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     CenterService centerService;
 
-    @Autowired
-    CenterTranscodeServiceImpl centerTranscodeServiceImpl;
     
     @Autowired
     private BeanMapper beanMapper;
@@ -145,46 +145,4 @@ public class PersonServiceImpl implements PersonService {
     public List<PersonEntity> findAll() {
         return this.personRepository.findAllByOrderByUsernameAsc();
     }
-    @Override
-	@Scheduled(cron = "0 0/10 * * * *")
-	public void scheduledTask() {
-		List<PersonEntity> activePersons = personRepository.findByActiveTrue();
-		try {
-		for (PersonEntity personEntity : activePersons) {
-			List<TPersonEntity> list = tpersonService.matchedTPersonWithPersonUsernameAndSaga(personEntity.getUsername(), personEntity.getSaga());
-			if (!list.isEmpty()) {
-				TPersonEntity entityTmp = list.get(0);
-				if(!entityTmp.getName().isEmpty()) {
-					if (!entityTmp.getName().equals(personEntity.getName())) {
-						personEntity.setName(entityTmp.getName());
-					}
-				}
-				if (!entityTmp.getLastname().isEmpty()) {
-					if(!entityTmp.getLastname().equals(personEntity.getLastname())){
-						personEntity.setLastname(entityTmp.getLastname());
-					}
-				}
-				if(!entityTmp.getCenterTranscode().isEmpty()) {
-					if(!centerTranscodeServiceImpl.findByName(entityTmp.getCenterTranscode()).getCenter().getName().equals(personEntity.getCenter().getName())){
-						personEntity.setCenter(centerTranscodeServiceImpl.findByName(entityTmp.getCenterTranscode()).getCenter());
-					}
-				}
-				if(!entityTmp.getSaga().isEmpty()) {
-					if(!entityTmp.getSaga().equals(personEntity.getSaga())){
-						personEntity.setSaga(entityTmp.getSaga());
-					}
-				}
-				if(!entityTmp.getGrade().isEmpty() && !personEntity.getGrade().isEmpty()) {
-					if(!(entityTmp.getGrade().charAt(0) == personEntity.getGrade().charAt(0))){
-						personEntity.setGrade(entityTmp.getGrade());
-					}
-				}
-				personRepository.save(personEntity);
-			}
-		}}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-			
-	}
 }

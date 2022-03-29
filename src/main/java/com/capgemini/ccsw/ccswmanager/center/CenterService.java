@@ -13,4 +13,5 @@ public interface CenterService {
 
    CenterEntity getById(Integer id);
 
+   void save(CenterEntity center);
 }
