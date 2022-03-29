@@ -1,11 +1,11 @@
-package com.capgemini.ccsw.ccswmanager.center_transcode;
+package com.capgemini.ccsw.ccswmanager.centertranscode;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capgemini.ccsw.ccswmanager.center_transcode.model.CenterTranscodeEntity;
+import com.capgemini.ccsw.ccswmanager.centertranscode.model.CenterTranscodeEntity;
 
 @Service
 public class CenterTranscodeServiceImpl implements CenterTranscodeService{

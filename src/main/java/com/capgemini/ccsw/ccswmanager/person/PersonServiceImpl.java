@@ -6,17 +6,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.ccsw.ccswmanager.center.CenterService;
-import com.capgemini.ccsw.ccswmanager.center_transcode.CenterTranscodeService;
-import com.capgemini.ccsw.ccswmanager.center_transcode.CenterTranscodeServiceImpl;
-import com.capgemini.ccsw.ccswmanager.center_transcode.model.CenterTranscodeEntity;
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonDto;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
@@ -49,7 +43,6 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     CenterService centerService;
 
-    
     @Autowired
     private BeanMapper beanMapper;
 
@@ -74,7 +67,8 @@ public class PersonServiceImpl implements PersonService {
         List<PersonEntity> allPersons = this.personService.findAll();
 
         Set<String> personsToRemove = allPersons.stream().map(PersonEntity::getUsername).collect(Collectors.toSet());
-        persons = personsLike.stream().filter(person -> !personsToRemove.contains(person.getUsername())).collect(Collectors.toList());
+        persons = personsLike.stream().filter(person -> !personsToRemove.contains(person.getUsername()))
+                .collect(Collectors.toList());
 
         personsToReturn = this.beanMapper.mapList(persons, PersonDto.class);
 
@@ -133,12 +127,14 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonEntity> findScholars(String department, String grade, int active) {
-        return this.personRepository.findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(department, grade, active);
+        return this.personRepository.findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(department,
+                grade, active);
     }
 
     @Override
     public List<PersonEntity> findContracts(String department, String grade, int active) {
-        return this.personRepository.findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(department, grade, active);
+        return this.personRepository
+                .findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(department, grade, active);
     }
 
     @Override

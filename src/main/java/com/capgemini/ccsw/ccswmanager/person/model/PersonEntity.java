@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
-import com.capgemini.ccsw.ccswmanager.center_transcode.model.CenterTranscodeEntity;
+import com.capgemini.ccsw.ccswmanager.centertranscode.model.CenterTranscodeEntity;
 
 /**
  * @author aolmosca

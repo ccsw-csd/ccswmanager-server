@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.tperson.model.TPersonEntity;
 
@@ -30,14 +29,8 @@ public class TPersonServiceImpl implements TPersonService {
         return this.tpersonRepository.findTpersonsLikeFilter(filter, PageRequest.of(0, 15));
     }
 
-	@Override
-	public List<TPersonEntity> matchedTPersonWithPersonUsernameAndSaga(List<String> username, List<String> sagaCode) {
-		return tpersonRepository.findByUsernameInOrSagaIn(username, sagaCode);
-	}
-
-	@Override
-	public void save(TPersonEntity tperson) {
-		tpersonRepository.save(tperson);
-	}
-
+    @Override
+    public List<TPersonEntity> matchedTPersonWithPersonUsernameAndSaga(List<String> username, List<String> sagaCode) {
+        return tpersonRepository.findByUsernameInOrSagaIn(username, sagaCode);
+    }
 }

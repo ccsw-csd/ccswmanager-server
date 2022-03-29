@@ -1,6 +1,5 @@
 package com.capgemini.ccsw.ccswmanager.center;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,24 +16,21 @@ import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
 @Service
 public class CenterServiceImpl implements CenterService {
 
-   @Autowired
-   CenterRepository centerRepository;
+    @Autowired
+    CenterRepository centerRepository;
 
-   private static final Logger LOG = LoggerFactory.getLogger(CenterServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CenterServiceImpl.class);
 
-   @Override
-   public List<CenterEntity> findAll() {
+    @Override
+    public List<CenterEntity> findAll() {
 
-      return (List<CenterEntity>) centerRepository.findAll();
-   }
+        return (List<CenterEntity>) centerRepository.findAll();
+    }
 
-   @Override
-   public CenterEntity getById(Integer id) {
+    @Override
+    public CenterEntity getById(Integer id) {
 
-      return this.centerRepository.findById(id);
-   }
-   public void save(CenterEntity center) {
-	   centerRepository.save(center);
-   }
+        return this.centerRepository.findById(id);
+    }
 
 }

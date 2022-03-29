@@ -1,8 +1,8 @@
-package com.capgemini.ccsw.ccswmanager.center_transcode;
+package com.capgemini.ccsw.ccswmanager.centertranscode;
 
 import java.util.List;
 
-import com.capgemini.ccsw.ccswmanager.center_transcode.model.CenterTranscodeEntity;
+import com.capgemini.ccsw.ccswmanager.centertranscode.model.CenterTranscodeEntity;
 
 public interface CenterTranscodeService {
 

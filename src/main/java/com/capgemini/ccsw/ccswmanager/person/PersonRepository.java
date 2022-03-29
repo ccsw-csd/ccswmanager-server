@@ -27,7 +27,8 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     @EntityGraph(attributePaths = { "center" })
     List<PersonEntity> findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(String department,
             String grade, int active);
+
     @Query(value = "SELECT * FROM Person p WHERE p.active = 1", nativeQuery = true)
     List<PersonEntity> findByActiveTrue();
-   
+
 }
