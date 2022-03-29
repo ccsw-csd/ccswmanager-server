@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,9 +38,9 @@ public class PyramidServiceImpl implements PyramidService {
         gradeIndexMap.put(ROWNAME, INDEX_ROWNAME);
         gradeCostMap.put(ROWNAME, COST_ROWNAME);
 
-        PyramidCostEntity pyramidCostB2Entity = pyramidCostEntityList.stream()
-                .filter(cost -> COLUMN_B2.equals(cost.getGrade())).findAny().orElse(null);
-        Double costValueB2 = pyramidCostB2Entity.getCost();
+        Optional<PyramidCostEntity> pyramidCostB2Entity = pyramidCostEntityList.stream()
+                .filter(cost -> COLUMN_B2.equals(cost.getGrade())).findFirst();
+        Double costValueB2 = pyramidCostB2Entity.get().getCost();
 
         for (PyramidCostEntity pyramidEntity : pyramidCostEntityList) {
 
@@ -49,8 +50,8 @@ public class PyramidServiceImpl implements PyramidService {
                 gradeIndexMap.put(pyramidEntity.getGrade(), VALUE_B2);
             else
                 gradeIndexMap.put(pyramidEntity.getGrade(), (pyramidEntity.getCost() * 100) / costValueB2);
-
         }
+
         gradeIndexCostMapList.add(gradeIndexMap);
         gradeIndexCostMapList.add(gradeCostMap);
 
@@ -62,18 +63,17 @@ public class PyramidServiceImpl implements PyramidService {
 
         List<PyramidCostEntity> pyramidCostEntityList = this.pyramidRepository.findAll();
 
-        gradeIndexCostMapList.forEach(gradeIndexCostMap -> {
+        Optional<Map<String, Double>> gradeIndexCostMap = gradeIndexCostMapList.stream()
+                .filter(cost -> COST_ROWNAME.equals(cost.get(ROWNAME))).findAny();
 
-            if (COST_ROWNAME.equals(gradeIndexCostMap.get(ROWNAME))) {
-
-                for (PyramidCostEntity pyramidCostEntity : pyramidCostEntityList) {
-                    pyramidCostEntity.setCost(gradeIndexCostMap.get(pyramidCostEntity.getGrade()));
-                }
-            }
-        });
+        for (PyramidCostEntity pyramidCostEntity : pyramidCostEntityList) {
+            pyramidCostEntity.setCost(gradeIndexCostMap.get().get(pyramidCostEntity.getGrade()));
+        }
 
         this.pyramidRepository.saveAll(pyramidCostEntityList);
 
-        return getPyramidIndexCost();
+        return
+
+        getPyramidIndexCost();
     }
 }
