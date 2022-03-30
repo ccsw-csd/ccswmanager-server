@@ -17,6 +17,8 @@ import com.capgemini.ccsw.ccswmanager.tperson.model.TPersonEntity;
 @Component
 public class PersonScheduler {
 
+    private static final int ACTIVE_STATUS = 1;
+
     @Autowired
     PersonRepository personRepository;
 
@@ -26,9 +28,9 @@ public class PersonScheduler {
     @Autowired
     CenterTranscodeService centerTranscodeService;
 
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "${personScheduler.cron}")
     public void scheduledTask() {
-        List<PersonEntity> activePersons = personRepository.findByActiveTrue();
+        List<PersonEntity> activePersons = personRepository.findByActive(ACTIVE_STATUS);
         List<CenterTranscodeEntity> centerTranscodeEntityList = centerTranscodeService.findAll();
 
         List<String> usernames = new ArrayList<String>();
@@ -38,6 +40,7 @@ public class PersonScheduler {
             sagaCodes.add(personEntity.getSaga());
         }
         List<TPersonEntity> list = tpersonService.matchedTPersonWithPersonUsernameAndSaga(usernames, sagaCodes);
+
         List<PersonEntity> filteredList = activePersons.stream()
                 .filter(two -> list.stream().anyMatch(one -> (checkUsernameOrSagaAreSame(two, one)
                         && checkChangedParametersComparingPersonAndTperson(two, one, centerTranscodeEntityList))))
@@ -55,7 +58,7 @@ public class PersonScheduler {
                     return true;
                 }
             }
-            if (one.getSaga() != null) {
+            if (one.getSaga() != null && !two.getSaga().isEmpty()) {
                 if (one.getSaga().equals(two.getSaga())) {
                     return true;
                 }
@@ -90,7 +93,7 @@ public class PersonScheduler {
                 tmp = true;
             }
             if (!entityTmp.getGrade().isEmpty() && !personEntity.getGrade().isEmpty()) {
-                if (!(entityTmp.getGrade().substring(0, 0) == personEntity.getGrade().substring(0, 0))) {
+                if (!(entityTmp.getGrade().substring(0, 1).equals(personEntity.getGrade().substring(0, 1)))) {
                     personEntity.setGrade(entityTmp.getGrade());
                     tmp = true;
                 }

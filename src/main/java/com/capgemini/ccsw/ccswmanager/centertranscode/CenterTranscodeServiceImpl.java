@@ -8,23 +8,26 @@ import org.springframework.stereotype.Service;
 import com.capgemini.ccsw.ccswmanager.centertranscode.model.CenterTranscodeEntity;
 
 @Service
-public class CenterTranscodeServiceImpl implements CenterTranscodeService{
+public class CenterTranscodeServiceImpl implements CenterTranscodeService {
 
-	@Autowired
-	private CenterTranscodeRepository centerTranscodeRepository;
-	
-	@Override
-	public CenterTranscodeEntity getById(Integer id) {
-		return centerTranscodeRepository.findById(id);
-	}
-	public CenterTranscodeEntity findByName(String name) {
-		return centerTranscodeRepository.findByName(name);
-	}
-	public List<CenterTranscodeEntity> findAll(){
-		return (List<CenterTranscodeEntity>) centerTranscodeRepository.findAll();
-	}
-	public void save(CenterTranscodeEntity center) {
-		centerTranscodeRepository.save(center);
-	}
+    @Autowired
+    private CenterTranscodeRepository centerTranscodeRepository;
+
+    @Override
+    public CenterTranscodeEntity getById(Integer id) {
+        return centerTranscodeRepository.findById(id);
+    }
+
+    public CenterTranscodeEntity findByName(String name) {
+        return centerTranscodeRepository.findByName(name);
+    }
+
+    public List<CenterTranscodeEntity> findAll() {
+        return centerTranscodeRepository.findAll();
+    }
+
+    public void save(CenterTranscodeEntity center) {
+        centerTranscodeRepository.save(center);
+    }
 
 }

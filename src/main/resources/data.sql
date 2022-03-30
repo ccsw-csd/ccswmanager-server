@@ -1,4 +1,6 @@
 INSERT INTO CENTER(id,name) VALUES (1, 'Barcelona');
+INSERT INTO CENTER(id,name) VALUES (2, 'Madrid');
+
 
 INSERT INTO CENTER_TRANSCODE(id,name,center_id) VALUES (1, 'BCN', 1);
 

@@ -30,7 +30,7 @@ public class TPersonEntity {
     private String lastname;
 
     @Column(name = "center")
-    private String center_transcode;
+    private String centerTranscode;
 
     @Column(name = "grade")
     private String grade;
@@ -132,15 +132,15 @@ public class TPersonEntity {
      */
     public String getCenterTranscode() {
 
-        return this.center_transcode;
+        return this.centerTranscode;
     }
 
     /**
      * @param center new value of {@link #getcenter}.
      */
-    public void setCenterTranscode(String center_transcode) {
+    public void setCenterTranscode(String centerTranscode) {
 
-        this.center_transcode = center_transcode;
+        this.centerTranscode = centerTranscode;
     }
 
     /**

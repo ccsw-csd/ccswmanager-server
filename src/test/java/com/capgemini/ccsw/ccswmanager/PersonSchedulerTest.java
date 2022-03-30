@@ -45,6 +45,9 @@ public class PersonSchedulerTest {
         assertNotNull(tpersonService);
         assertNotNull(centerService);
 
+        assertTrue(personService.findAll().stream().filter(item -> item.getUsername().equals("TEMPUSERNAME"))
+                .findFirst().orElse(null).getGrade().equals("C"));
+
         personScheduler.scheduledTask();
 
         assertTrue(personService.findAll().stream().filter(item -> item.getUsername().equals("TEMPUSERNAME"))
