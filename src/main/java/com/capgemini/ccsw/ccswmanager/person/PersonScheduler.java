@@ -71,7 +71,7 @@ public class PersonScheduler {
         }
 
         if (entityTmp.getCenterTranscode() != null
-                && !entityTmp.getCenterTranscode().getCenter().getName().equals(personEntity.getCenter().getName())) {
+                && entityTmp.getCenterTranscode().getCenter().getId() != personEntity.getCenter().getId()) {
             personEntity.setCenter(entityTmp.getCenterTranscode().getCenter());
             tmp = true;
         }
