@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.capgemini.ccsw.ccswmanager.centertranscode.CenterTranscodeService;
-import com.capgemini.ccsw.ccswmanager.centertranscode.model.CenterTranscodeEntity;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 import com.capgemini.ccsw.ccswmanager.tperson.TPersonService;
 import com.capgemini.ccsw.ccswmanager.tperson.model.TPersonEntity;
@@ -31,7 +30,6 @@ public class PersonScheduler {
     @Scheduled(cron = "${personScheduler.cron}")
     public void scheduledTask() {
         List<PersonEntity> activePersons = personRepository.findByActive(ACTIVE_STATUS);
-        List<CenterTranscodeEntity> centerTranscodeEntityList = centerTranscodeService.findAll();
 
         List<String> usernames = new ArrayList<String>();
         List<String> sagaCodes = new ArrayList<String>();
@@ -42,8 +40,9 @@ public class PersonScheduler {
         List<TPersonEntity> list = tpersonService.matchedTPersonWithPersonUsernameAndSaga(usernames, sagaCodes);
 
         List<PersonEntity> filteredList = activePersons.stream()
-                .filter(two -> list.stream().anyMatch(one -> (checkUsernameOrSagaAreSame(two, one)
-                        && checkChangedParametersComparingPersonAndTperson(two, one, centerTranscodeEntityList))))
+                .filter(two -> list.stream()
+                        .anyMatch(one -> (checkUsernameOrSagaAreSame(two, one)
+                                && checkChangedParametersComparingPersonAndTperson(two, one))))
                 .collect(Collectors.toList());
         personRepository.saveAll(filteredList);
 
@@ -51,24 +50,15 @@ public class PersonScheduler {
 
     private boolean checkUsernameOrSagaAreSame(PersonEntity one, TPersonEntity two) {
         boolean tmp = false;
-
-        if (one != null && two != null) {
-            if (one.getUsername() != null) {
-                if (one.getUsername().equals(two.getUsername())) {
-                    return true;
-                }
-            }
-            if (one.getSaga() != null && !two.getSaga().isEmpty()) {
-                if (one.getSaga().equals(two.getSaga())) {
-                    return true;
-                }
-            }
+        if ((one != null && two != null && one.getUsername() != null && one.getUsername().equals(two.getUsername()))
+                || (one.getSaga() != null && !two.getSaga().isEmpty() && one.getSaga().equals(two.getSaga()))) {
+            return true;
         }
         return tmp;
     }
 
-    private boolean checkChangedParametersComparingPersonAndTperson(PersonEntity personEntity, TPersonEntity entityTmp,
-            List<CenterTranscodeEntity> centerTranscodeEntityList) {
+    private boolean checkChangedParametersComparingPersonAndTperson(PersonEntity personEntity,
+            TPersonEntity entityTmp) {
         boolean tmp = false;
         if (entityTmp != null) {
             if (!entityTmp.getName().isEmpty() && !entityTmp.getName().equals(personEntity.getName())) {
@@ -80,12 +70,9 @@ public class PersonScheduler {
                 tmp = true;
             }
 
-            if (!entityTmp.getCenterTranscode().isEmpty() && !centerTranscodeEntityList.stream()
-                    .filter(item -> item.getName().equals(entityTmp.getCenterTranscode())).findFirst().get().getCenter()
-                    .getName().equals(personEntity.getCenter().getName())) {
-                personEntity.setCenter(centerTranscodeEntityList.stream()
-                        .filter(item -> item.getName().equals(entityTmp.getCenterTranscode())).findFirst().get()
-                        .getCenter());
+            if (entityTmp.getCenterTranscode() != null && !entityTmp.getCenterTranscode().getCenter().getName()
+                    .equals(personEntity.getCenter().getName())) {
+                personEntity.setCenter(entityTmp.getCenterTranscode().getCenter());
                 tmp = true;
             }
             if (!entityTmp.getSaga().isEmpty() && !entityTmp.getSaga().equals(personEntity.getSaga())) {

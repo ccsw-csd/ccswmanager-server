@@ -1,8 +1,9 @@
 package com.capgemini.ccsw.ccswmanager.centertranscode.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,7 +13,7 @@ import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
 
 @Entity
 @Table(name = "center_transcode")
-public class CenterTranscodeEntity {
+public class CenterTranscodeEntity implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -21,7 +22,7 @@ public class CenterTranscodeEntity {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "center_id")
     private CenterEntity center;
 
