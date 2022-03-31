@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.capgemini.ccsw.ccswmanager.centertranscode.CenterTranscodeService;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 import com.capgemini.ccsw.ccswmanager.tperson.TPersonService;
 import com.capgemini.ccsw.ccswmanager.tperson.model.TPersonEntity;
@@ -23,9 +22,6 @@ public class PersonScheduler {
 
     @Autowired
     TPersonService tpersonService;
-
-    @Autowired
-    CenterTranscodeService centerTranscodeService;
 
     @Scheduled(cron = "${personScheduler.cron}")
     public void scheduledTask() {
