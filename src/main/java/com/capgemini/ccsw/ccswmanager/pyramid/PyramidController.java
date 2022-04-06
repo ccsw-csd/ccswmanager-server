@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.ccsw.ccswmanager.pyramid.model.PyramidCountDto;
+import com.capgemini.ccsw.ccswmanager.pyramid.model.PyramidDto;
+
 /**
  * @author jchengli
  *
@@ -30,4 +33,15 @@ public class PyramidController {
             @RequestBody List<Map<String, Double>> gradeIndexCostMapList) {
         return this.pyramidService.saveOrUpdatePyramidCosts(gradeIndexCostMapList);
     }
+
+    @RequestMapping(path = "/leftGraph", method = RequestMethod.GET)
+    public List<PyramidDto> getPyramidsProfileCountIndex() {
+        return this.pyramidService.getPyramidsProfileCountIndex();
+    }
+
+    @RequestMapping(path = "/rightGraph", method = RequestMethod.GET)
+    public List<PyramidCountDto> getPyramidsProfileCount() {
+        return this.pyramidService.getPyramidsProfileCount();
+    }
+
 }

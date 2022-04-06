@@ -27,4 +27,6 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     List<PersonEntity> findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(String department,
             String grade, int active);
 
+    List<PersonEntity> findByDepartment(String department);
+
 }
