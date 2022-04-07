@@ -10,4 +10,6 @@ public interface TPersonService {
 
     List<TPersonEntity> findAllTpersonsFromFilters(String filter);
 
+    List<TPersonEntity> matchedTPersonWithPersonUsernameAndSaga(List<String> username, List<String> sagaCode);
+
 }

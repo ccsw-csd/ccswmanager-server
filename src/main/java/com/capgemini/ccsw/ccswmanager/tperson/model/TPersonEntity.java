@@ -2,13 +2,12 @@ package com.capgemini.ccsw.ccswmanager.tperson.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
+import com.capgemini.ccsw.ccswmanager.centertranscode.model.CenterTranscodeEntity;
 
 /**
  * @author dapalmie
@@ -34,9 +33,9 @@ public class TPersonEntity {
     @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "center_id")
-    private CenterEntity center;
+    @ManyToOne
+    @JoinColumn(name = "center", referencedColumnName = "name", nullable = false, updatable = false)
+    private CenterTranscodeEntity centerTranscode;
 
     @Column(name = "grade")
     private String grade;
@@ -136,17 +135,17 @@ public class TPersonEntity {
     /**
      * @return center
      */
-    public CenterEntity getCenter() {
+    public CenterTranscodeEntity getCenterTranscode() {
 
-        return this.center;
+        return this.centerTranscode;
     }
 
     /**
      * @param center new value of {@link #getcenter}.
      */
-    public void setCenter(CenterEntity center) {
+    public void setCenterTranscode(CenterTranscodeEntity centerTranscode) {
 
-        this.center = center;
+        this.centerTranscode = centerTranscode;
     }
 
     /**

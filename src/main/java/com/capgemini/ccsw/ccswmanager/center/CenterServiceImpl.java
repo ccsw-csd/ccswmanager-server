@@ -1,10 +1,7 @@
 package com.capgemini.ccsw.ccswmanager.center;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,25 +14,19 @@ import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
 @Service
 public class CenterServiceImpl implements CenterService {
 
-   @Autowired
-   CenterRepository centerRepository;
+    @Autowired
+    CenterRepository centerRepository;
 
-   private static final Logger LOG = LoggerFactory.getLogger(CenterServiceImpl.class);
+    @Override
+    public List<CenterEntity> findAll() {
 
-   @Override
-   public List<CenterEntity> findAll() {
+        return (List<CenterEntity>) centerRepository.findAll();
+    }
 
-      Iterable<CenterEntity> centersEntities = this.centerRepository.findAll();
-      List<CenterEntity> centerEntityList = new ArrayList<CenterEntity>();
-      centersEntities.forEach(centerEntityList::add);
+    @Override
+    public CenterEntity getById(Integer id) {
 
-      return centerEntityList;
-   }
-
-   @Override
-   public CenterEntity getById(Integer id) {
-
-      return this.centerRepository.findById(id);
-   }
+        return this.centerRepository.findById(id);
+    }
 
 }

@@ -67,7 +67,8 @@ public class PersonServiceImpl implements PersonService {
         List<PersonEntity> allPersons = this.personService.findAll();
 
         Set<String> personsToRemove = allPersons.stream().map(PersonEntity::getUsername).collect(Collectors.toSet());
-        persons = personsLike.stream().filter(person -> !personsToRemove.contains(person.getUsername())).collect(Collectors.toList());
+        persons = personsLike.stream().filter(person -> !personsToRemove.contains(person.getUsername()))
+                .collect(Collectors.toList());
 
         personsToReturn = this.beanMapper.mapList(persons, PersonDto.class);
 
@@ -126,12 +127,14 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonEntity> findScholars(String department, String grade, int active) {
-        return this.personRepository.findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(department, grade, active);
+        return this.personRepository.findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(department,
+                grade, active);
     }
 
     @Override
     public List<PersonEntity> findContracts(String department, String grade, int active) {
-        return this.personRepository.findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(department, grade, active);
+        return this.personRepository
+                .findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(department, grade, active);
     }
 
     @Override
