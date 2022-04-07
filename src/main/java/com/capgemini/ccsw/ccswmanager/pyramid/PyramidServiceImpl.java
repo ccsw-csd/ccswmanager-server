@@ -89,21 +89,6 @@ public class PyramidServiceImpl implements PyramidService {
         return getPyramidIndexCost();
     }
 
-    /*
-     * Primera funcion, consigues el count para cada index con la consulta y luego
-     * ya añades el index
-     * 
-     * Segunda funcion, misma consulta que arriba para conseguir el count, pero
-     * luego se suma
-     * 
-     * D = D1 + D2
-     * 
-     * 
-     * for(....) map(pyramid.grade) ++; segun el grado que sea del que recoja de la
-     * BD se sumara 1
-     * 
-     */
-
     @Override
     public List<PyramidDto> getPyramidsProfileCountIndex() {
         List<Map<String, Double>> gradeIndexCostMapList = this.getPyramidIndexCost();
@@ -113,12 +98,10 @@ public class PyramidServiceImpl implements PyramidService {
         int countTotal = 0;
         Double indexTotal = 0.0;
 
-        // con esto obtengo el index
         Optional<Map<String, Double>> gradeIndexMap = gradeIndexCostMapList.stream()
                 .filter(cost -> INDEX_ROWNAME.equals(cost.get(ROWNAME))).findAny();
         gradeIndexMap.get().remove("rowName");
 
-        // con esto obtengo el count de cada grade
         for (PersonEntity personEntity : personEntityList) {
             int count = 1;
 
@@ -128,16 +111,12 @@ public class PyramidServiceImpl implements PyramidService {
             countMap.put(personEntity.getGrade(), count);
         }
 
-        // con esto obtengo el count total
-        // EL NUMERO DE PERSONAS DE personEntityList ES EL COUNT TOTAL, PERO NO TIENE EN
-        // CUENTA LOS QUE NO COINCIDA
         for (Map.Entry<String, Double> entry : gradeIndexMap.get().entrySet()) {
             if (countMap.get(entry.getKey()) != null) {
                 countTotal += countMap.get(entry.getKey());
             }
         }
 
-        // con esto obtengo cada fila de la tabla
         for (Map.Entry<String, Double> entry : gradeIndexMap.get().entrySet()) {
             PyramidDto pyramidGraphDto = new PyramidDto();
 
