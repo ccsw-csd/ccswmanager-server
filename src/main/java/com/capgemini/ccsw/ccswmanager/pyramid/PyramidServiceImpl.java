@@ -232,7 +232,7 @@ public class PyramidServiceImpl implements PyramidService {
         List<String> gradeList = new ArrayList<>();
         Map<String, Double> gradeMap = gradeIndexCostMapList;
         gradeMap.remove("rowName");
-        gradeMap.entrySet().stream().forEach(action -> gradeList.add(action.getKey()));
+        gradeMap.entrySet().stream().forEach(keyEntry -> gradeList.add(keyEntry.getKey()));
 
         gradeList.sort(Comparator.comparing(String::toString).reversed());
 
