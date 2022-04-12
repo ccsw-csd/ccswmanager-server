@@ -29,4 +29,8 @@ public class TPersonServiceImpl implements TPersonService {
         return this.tpersonRepository.findTpersonsLikeFilter(filter, PageRequest.of(0, 15));
     }
 
+    @Override
+    public List<TPersonEntity> matchedTPersonWithPersonUsernameAndSaga(List<String> username, List<String> sagaCode) {
+        return tpersonRepository.findByUsernameInOrSagaIn(username, sagaCode);
+    }
 }

@@ -138,4 +138,10 @@ public class PersonServiceImpl implements PersonService {
     public List<PersonEntity> findAll() {
         return this.personRepository.findAllByOrderByUsernameAsc();
     }
+
+    @Override
+    public List<PersonEntity> findAllContracts() {
+        return this.personRepository.findByGradeIsNotNullAndGradeIsNot(EMPTY_STRING);
+    }
+
 }

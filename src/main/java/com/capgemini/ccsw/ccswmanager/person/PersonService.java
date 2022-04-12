@@ -40,4 +40,6 @@ public interface PersonService {
 
     List<PersonEntity> findAll();
 
+    List<PersonEntity> findAllContracts();
+
 }

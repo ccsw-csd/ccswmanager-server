@@ -9,8 +9,7 @@ import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
  *
  */
 public interface CenterService {
-   List<CenterEntity> findAll();
+    List<CenterEntity> findAll();
 
-   CenterEntity getById(Integer id);
-
+    CenterEntity getById(Integer id);
 }
