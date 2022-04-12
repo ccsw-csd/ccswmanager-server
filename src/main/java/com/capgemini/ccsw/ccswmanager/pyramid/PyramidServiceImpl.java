@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class PyramidServiceImpl implements PyramidService {
     static final Double VALUE_B2 = 100.00;
     static final String DEPARTMENT = "CCSw";
     static final String SCHOLAR = "";
+    static final String TOTAL = "TOTAL";
 
     @Autowired
     PyramidRepository pyramidRepository;
@@ -60,10 +62,11 @@ public class PyramidServiceImpl implements PyramidService {
 
             gradeCostMap.put(pyramidEntity.getGrade(), pyramidEntity.getCost());
 
-            if (COLUMN_B2.equals(pyramidEntity.getGrade()))
+            if (COLUMN_B2.equals(pyramidEntity.getGrade())) {
                 gradeIndexMap.put(pyramidEntity.getGrade(), VALUE_B2);
-            else
+            } else {
                 gradeIndexMap.put(pyramidEntity.getGrade(), (pyramidEntity.getCost() * 100) / costValueB2);
+            }
         }
 
         gradeIndexCostMapList.add(gradeIndexMap);
@@ -91,41 +94,31 @@ public class PyramidServiceImpl implements PyramidService {
 
     @Override
     public List<PyramidDto> getPyramidsProfileCountIndex() {
-        List<Map<String, Double>> gradeIndexCostMapList = this.getPyramidIndexCost();
+
         List<PersonEntity> personEntityList = this.personRepository.findByDepartment(DEPARTMENT);
         List<PyramidDto> pyramidDtoList = new ArrayList<>();
-        Map<String, Integer> countMap = new HashMap<>();
-        int countTotal = 0;
+        long countTotal = 0;
         Double indexTotal = 0.0;
 
-        Optional<Map<String, Double>> gradeIndexMap = gradeIndexCostMapList.stream()
-                .filter(cost -> INDEX_ROWNAME.equals(cost.get(ROWNAME))).findAny();
-        gradeIndexMap.get().remove("rowName");
+        Optional<Map<String, Double>> gradeIndexMap = this.getGradeIndexMap();
 
-        for (PersonEntity personEntity : personEntityList) {
-            int count = 1;
+        Map<String, Long> countMap = personEntityList.stream()
+                .filter(person -> person.getGrade().matches("[a-zA-z][1-9]+"))
+                .collect(Collectors.groupingBy(person -> person.getGrade(), Collectors.counting()));
 
-            if (countMap.get(personEntity.getGrade()) != null)
-                count = countMap.get(personEntity.getGrade()) + 1;
-
-            countMap.put(personEntity.getGrade(), count);
-        }
-
-        for (Map.Entry<String, Double> entry : gradeIndexMap.get().entrySet()) {
-            if (countMap.get(entry.getKey()) != null) {
-                countTotal += countMap.get(entry.getKey());
-            }
-        }
+        countTotal = gradeIndexMap.get().entrySet().stream().filter(grade -> countMap.get(grade.getKey()) != null)
+                .mapToLong(grade -> countMap.get(grade.getKey())).sum();
 
         for (Map.Entry<String, Double> entry : gradeIndexMap.get().entrySet()) {
             PyramidDto pyramidGraphDto = new PyramidDto();
 
             pyramidGraphDto.setProfile(entry.getKey());
 
-            if (countMap.get(entry.getKey()) != null)
+            if (countMap.get(entry.getKey()) != null) {
                 pyramidGraphDto.setCount(countMap.get(entry.getKey()));
-            else
+            } else {
                 pyramidGraphDto.setCount(0);
+            }
 
             pyramidGraphDto.setIndex((pyramidGraphDto.getCount() / Double.valueOf(countTotal)) * entry.getValue());
             indexTotal += pyramidGraphDto.getIndex();
@@ -133,10 +126,11 @@ public class PyramidServiceImpl implements PyramidService {
             pyramidDtoList.add(pyramidGraphDto);
         }
 
-        Collections.sort(pyramidDtoList, (o1, o2) -> o2.getProfile().compareTo(o1.getProfile()));
+        Collections.sort(pyramidDtoList,
+                (sortBottom, sortTop) -> sortTop.getProfile().compareTo(sortBottom.getProfile()));
 
         PyramidDto pyramidTotalGraphDto = new PyramidDto();
-        pyramidTotalGraphDto.setProfile("TOTAL");
+        pyramidTotalGraphDto.setProfile(TOTAL);
         pyramidTotalGraphDto.setCount(countTotal);
         pyramidTotalGraphDto.setIndex(indexTotal);
         pyramidDtoList.add(pyramidTotalGraphDto);
@@ -145,67 +139,60 @@ public class PyramidServiceImpl implements PyramidService {
     }
 
     public List<PyramidCountDto> getPyramidsProfileCount() {
-        List<Map<String, Double>> gradeIndexCostMapList = this.getPyramidIndexCost();
+
         List<PyramidCountDto> pyramidCountDtoList = new ArrayList<>();
         List<PersonEntity> personEntityList = this.personRepository.findByDepartment(DEPARTMENT);
-        Map<String, Integer> countMap = new HashMap<>();
-        int countTotal = 0;
+        long countTotal = 0;
+
+        Optional<Map<String, Double>> gradeIndexMap = this.getGradeIndexMap();
+
+        Map<String, Long> countMap = personEntityList.stream()
+                .filter(person -> person.getGrade().matches("[a-zA-z][1-9]+")).collect(Collectors
+                        .groupingBy(person -> String.valueOf(person.getGrade().charAt(0)), Collectors.counting()));
+
+        long countScholars = personEntityList.stream().filter(person -> person.getGrade().equals(SCHOLAR))
+                .collect(Collectors.counting());
+
+        countTotal = personEntityList.stream()
+                .filter(person -> person.getGrade().matches("[a-zA-z][1-9]+") || person.getGrade().equals(SCHOLAR))
+                .collect(Collectors.counting());
+
+        gradeIndexMap.get().entrySet().stream()
+                .filter(grade -> countMap.get(String.valueOf(grade.getKey().charAt(0))) == null)
+                .forEach(grade -> countMap.put(String.valueOf(grade.getKey().charAt(0)), (long) 0));
+
+        for (Map.Entry<String, Long> entry : countMap.entrySet()) {
+            PyramidCountDto pyramidCountDto = new PyramidCountDto();
+            pyramidCountDto.setProfile(entry.getKey());
+            pyramidCountDto.setCount(entry.getValue());
+            pyramidCountDtoList.add(pyramidCountDto);
+        }
+
+        Collections.sort(pyramidCountDtoList,
+                (sortBottom, sortTop) -> sortTop.getProfile().compareTo(sortBottom.getProfile()));
+
+        PyramidCountDto pyramidCountDtoScholar = new PyramidCountDto();
+        pyramidCountDtoScholar.setProfile("BEC");
+        pyramidCountDtoScholar.setCount(countScholars);
+        pyramidCountDtoList.add(pyramidCountDtoScholar);
+
+        PyramidCountDto pyramidCountDtoTotal = new PyramidCountDto();
+        pyramidCountDtoTotal.setProfile(TOTAL);
+        pyramidCountDtoTotal.setCount(countTotal);
+        pyramidCountDtoList.add(pyramidCountDtoTotal);
+
+        return this.beanMapper.mapList(pyramidCountDtoList, PyramidCountDto.class);
+    }
+
+    Optional<Map<String, Double>> getGradeIndexMap() {
+
+        List<Map<String, Double>> gradeIndexCostMapList = this.getPyramidIndexCost();
 
         Optional<Map<String, Double>> gradeIndexMap = gradeIndexCostMapList.stream()
                 .filter(cost -> INDEX_ROWNAME.equals(cost.get(ROWNAME))).findAny();
         gradeIndexMap.get().remove("rowName");
 
-        for (PersonEntity personEntity : personEntityList) {
-            int count = 1;
-
-            if (countMap.get(personEntity.getGrade()) != null)
-                count = countMap.get(personEntity.getGrade()) + 1;
-
-            countMap.put(personEntity.getGrade(), count);
-        }
-
-        for (Map.Entry<String, Double> entry : gradeIndexMap.get().entrySet()) {
-            if (countMap.get(entry.getKey()) != null) {
-                countTotal += countMap.get(entry.getKey());
-            } else
-                countMap.put(entry.getKey(), 0);
-        }
-        if (countMap.get(SCHOLAR) != null)
-            countTotal += countMap.get(SCHOLAR);
-        else
-            countMap.put(SCHOLAR, 0);
-
-        PyramidCountDto pyramidCountDtoD = new PyramidCountDto();
-        pyramidCountDtoD.setProfile("D");
-        pyramidCountDtoD.setCount(countMap.get("D1") + countMap.get("D2"));
-        pyramidCountDtoList.add(pyramidCountDtoD);
-
-        PyramidCountDto pyramidCountDtoC = new PyramidCountDto();
-        pyramidCountDtoC.setProfile("C");
-        pyramidCountDtoC.setCount(countMap.get("C1") + countMap.get("C2") + countMap.get("C3"));
-        pyramidCountDtoList.add(pyramidCountDtoC);
-
-        PyramidCountDto pyramidCountDtoB = new PyramidCountDto();
-        pyramidCountDtoB.setProfile("B");
-        pyramidCountDtoB.setCount(countMap.get("B1") + countMap.get("B2") + countMap.get("B3"));
-        pyramidCountDtoList.add(pyramidCountDtoB);
-
-        PyramidCountDto pyramidCountDtoA = new PyramidCountDto();
-        pyramidCountDtoA.setProfile("A");
-        pyramidCountDtoA.setCount(countMap.get("A1") + countMap.get("A2"));
-        pyramidCountDtoList.add(pyramidCountDtoA);
-
-        PyramidCountDto pyramidCountDtoScholar = new PyramidCountDto();
-        pyramidCountDtoScholar.setProfile("BEC");
-        pyramidCountDtoScholar.setCount(countMap.get(SCHOLAR));
-        pyramidCountDtoList.add(pyramidCountDtoScholar);
-
-        PyramidCountDto pyramidCountDtoTotal = new PyramidCountDto();
-        pyramidCountDtoTotal.setProfile("TOTAL");
-        pyramidCountDtoTotal.setCount(countTotal);
-        pyramidCountDtoList.add(pyramidCountDtoTotal);
-
-        return this.beanMapper.mapList(pyramidCountDtoList, PyramidCountDto.class);
+        return gradeIndexMap;
     }
 
 }

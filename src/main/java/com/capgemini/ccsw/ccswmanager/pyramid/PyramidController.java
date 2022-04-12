@@ -34,12 +34,12 @@ public class PyramidController {
         return this.pyramidService.saveOrUpdatePyramidCosts(gradeIndexCostMapList);
     }
 
-    @RequestMapping(path = "/leftGraph", method = RequestMethod.GET)
+    @RequestMapping(path = "/profileCountIndexGraph", method = RequestMethod.GET)
     public List<PyramidDto> getPyramidsProfileCountIndex() {
         return this.pyramidService.getPyramidsProfileCountIndex();
     }
 
-    @RequestMapping(path = "/rightGraph", method = RequestMethod.GET)
+    @RequestMapping(path = "/profileCountGraph", method = RequestMethod.GET)
     public List<PyramidCountDto> getPyramidsProfileCount() {
         return this.pyramidService.getPyramidsProfileCount();
     }
