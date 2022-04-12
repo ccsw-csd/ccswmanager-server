@@ -9,9 +9,18 @@ public class PyramidDto {
 
     private String profile;
 
-    private long count;
+    private Long count;
 
     private Double index;
+
+    public PyramidDto(String profile, Long count, Double index) {
+        this.profile = profile;
+        this.count = count;
+        this.index = index;
+    }
+
+    public PyramidDto() {
+    }
 
     /**
      * @return the profile
@@ -30,14 +39,14 @@ public class PyramidDto {
     /**
      * @return the count
      */
-    public long getCount() {
+    public Long getCount() {
         return count;
     }
 
     /**
      * @param count the count to set
      */
-    public void setCount(long count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 

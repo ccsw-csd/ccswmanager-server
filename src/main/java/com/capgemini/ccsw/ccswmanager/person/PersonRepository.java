@@ -20,17 +20,18 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     List<PersonEntity> findAllByOrderByUsernameAsc();
 
     @EntityGraph(attributePaths = { "center" })
-    List<PersonEntity> findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(String department,
-            String grade, int active);
+    List<PersonEntity> findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(String department, String grade, int active);
 
     @EntityGraph(attributePaths = { "center" })
-    List<PersonEntity> findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(String department,
-            String grade, int active);
+    List<PersonEntity> findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(String department, String grade, int active);
 
     @EntityGraph(attributePaths = { "center" })
     List<PersonEntity> findByDepartment(String department);
 
     @EntityGraph(attributePaths = { "center" })
     List<PersonEntity> findByActive(Integer active);
+
+    @EntityGraph(attributePaths = { "center" })
+    List<PersonEntity> findByGradeIsNotNullAndGradeIsNot(String grade);
 
 }

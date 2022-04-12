@@ -9,7 +9,7 @@ public class PyramidCountDto {
 
     private String profile;
 
-    private long count;
+    private Long count;
 
     /**
      * @return the profile
@@ -28,14 +28,14 @@ public class PyramidCountDto {
     /**
      * @return the count
      */
-    public long getCount() {
+    public Long getCount() {
         return count;
     }
 
     /**
      * @param count the count to set
      */
-    public void setCount(long count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 
