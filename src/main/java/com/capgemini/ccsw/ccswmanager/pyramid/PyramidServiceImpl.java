@@ -33,6 +33,7 @@ public class PyramidServiceImpl implements PyramidService {
     static final String DEPARTMENT = "CCSw";
     static final String SCHOLAR = "";
     static final String TOTAL = "TOTAL";
+    static final String SCHOLAR_PROFILE = "BEC";
 
     @Autowired
     PyramidRepository pyramidRepository;
@@ -172,7 +173,7 @@ public class PyramidServiceImpl implements PyramidService {
                 (sortBottom, sortTop) -> sortTop.getProfile().compareTo(sortBottom.getProfile()));
 
         PyramidCountDto pyramidCountDtoScholar = new PyramidCountDto();
-        pyramidCountDtoScholar.setProfile("BEC");
+        pyramidCountDtoScholar.setProfile(SCHOLAR_PROFILE);
         pyramidCountDtoScholar.setCount(countScholars);
         pyramidCountDtoList.add(pyramidCountDtoScholar);
 
