@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.ccsw.ccswmanager.pyramid.model.PyramidCountDto;
 import com.capgemini.ccsw.ccswmanager.pyramid.model.PyramidDto;
+import com.capgemini.ccsw.ccswmanager.pyramid.model.PyramidTeamsListDto;
 
 /**
  * @author jchengli
@@ -29,8 +30,7 @@ public class PyramidController {
     }
 
     @RequestMapping(path = "/", method = RequestMethod.POST)
-    public List<Map<String, Double>> saveOrUpdatePyramidCosts(
-            @RequestBody List<Map<String, Double>> gradeIndexCostMapList) {
+    public List<Map<String, Double>> saveOrUpdatePyramidCosts(@RequestBody List<Map<String, Double>> gradeIndexCostMapList) {
         return this.pyramidService.saveOrUpdatePyramidCosts(gradeIndexCostMapList);
     }
 
@@ -42,6 +42,11 @@ public class PyramidController {
     @RequestMapping(path = "/profileCountGraph", method = RequestMethod.GET)
     public List<PyramidCountDto> getPyramidsProfileCount() {
         return this.pyramidService.getPyramidsProfileCount();
+    }
+
+    @RequestMapping(path = "/team", method = RequestMethod.GET)
+    public List<PyramidTeamsListDto> getPyramidTeamCost() {
+        return this.pyramidService.getPyramidTeamCost();
     }
 
 }
