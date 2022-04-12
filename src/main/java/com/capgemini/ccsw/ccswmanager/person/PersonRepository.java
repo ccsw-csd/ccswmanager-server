@@ -28,6 +28,9 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
             String grade, int active);
 
     @EntityGraph(attributePaths = { "center" })
+    List<PersonEntity> findByDepartment(String department);
+
+    @EntityGraph(attributePaths = { "center" })
     List<PersonEntity> findByActive(Integer active);
 
 }
