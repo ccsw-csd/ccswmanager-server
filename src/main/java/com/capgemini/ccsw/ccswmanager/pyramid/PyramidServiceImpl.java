@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
-import com.capgemini.ccsw.ccswmanager.person.PersonRepository;
 import com.capgemini.ccsw.ccswmanager.person.PersonService;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 import com.capgemini.ccsw.ccswmanager.pyramid.model.PyramidCostEntity;
@@ -26,25 +25,24 @@ import com.capgemini.ccsw.ccswmanager.pyramid.model.PyramidTeamsListDto;
  * @author jchengli
  *
  */
-
 @Service
 public class PyramidServiceImpl implements PyramidService {
-    static final String ROWNAME = "rowName";
-    static final Double INDEX_ROWNAME = 0.0;
-    static final Double COST_ROWNAME = 1.0;
-    static final String COLUMN_B2 = "B2";
-    static final Double VALUE_B2 = 100.00;
-    static final String DEPARTMENT = "CCSw";
-    static final String SCHOLAR = "";
-    static final String TOTAL = "TOTAL";
-    static final String SCHOLAR_PROFILE = "BEC";
+
+    private  static final String ROW_NAME = "rowName";
+    private static final Double INDEX_ROW_NAME = 0.0;
+    private static final Double COST_ROW_NAME = 1.0;
+    private static final String COLUMN_B2 = "B2";
+    private static final Double VALUE_B2 = 100.00;
+    private static final String DEPARTMENT = "CCSw";
+    private static final String SCHOLAR = "";
+    private static final String TOTAL = "TOTAL";
+    private static final String SCHOLAR_PROFILE = "BEC";
     private static final Double DEFAULT_VALUE = 0.0;
+
+    public static final String GRADE_REGEX = "[a-zA-z][1-9]+";
 
     @Autowired
     PyramidRepository pyramidRepository;
-
-    @Autowired
-    PersonRepository personRepository;
 
     @Autowired
     PersonService personService;
@@ -60,8 +58,8 @@ public class PyramidServiceImpl implements PyramidService {
         Map<String, Double> gradeCostMap = new HashMap<>();
         List<Map<String, Double>> gradeIndexCostMapList = new ArrayList<>();
 
-        gradeIndexMap.put(ROWNAME, INDEX_ROWNAME);
-        gradeCostMap.put(ROWNAME, COST_ROWNAME);
+        gradeIndexMap.put(ROW_NAME, INDEX_ROW_NAME);
+        gradeCostMap.put(ROW_NAME, COST_ROW_NAME);
 
         Optional<PyramidCostEntity> pyramidCostB2Entity = pyramidCostEntityList.stream().filter(cost -> COLUMN_B2.equals(cost.getGrade())).findFirst();
         Double costValueB2 = pyramidCostB2Entity.get().getCost();
@@ -88,7 +86,7 @@ public class PyramidServiceImpl implements PyramidService {
 
         List<PyramidCostEntity> pyramidCostEntityList = this.pyramidRepository.findAll();
 
-        Optional<Map<String, Double>> gradeIndexCostMap = gradeIndexCostMapList.stream().filter(cost -> COST_ROWNAME.equals(cost.get(ROWNAME))).findAny();
+        Optional<Map<String, Double>> gradeIndexCostMap = gradeIndexCostMapList.stream().filter(cost -> COST_ROW_NAME.equals(cost.get(ROW_NAME))).findAny();
 
         for (PyramidCostEntity pyramidCostEntity : pyramidCostEntityList) {
             pyramidCostEntity.setCost(gradeIndexCostMap.get().get(pyramidCostEntity.getGrade()));
@@ -102,14 +100,14 @@ public class PyramidServiceImpl implements PyramidService {
     @Override
     public List<PyramidDto> getPyramidsProfileCountIndex() {
 
-        List<PersonEntity> personEntityList = this.personRepository.findByDepartment(DEPARTMENT);
+        List<PersonEntity> personEntityList = this.personService.findByDepartmentActives(DEPARTMENT);
         List<PyramidDto> pyramidDtoList = new ArrayList<>();
         long countTotal = 0;
         Double indexTotal = 0.0;
 
         Optional<Map<String, Double>> gradeIndexMap = this.getGradeIndexMap();
 
-        Map<String, Long> countMap = personEntityList.stream().filter(person -> person.getGrade().matches("[a-zA-z][1-9]+")).collect(Collectors.groupingBy(person -> person.getGrade(), Collectors.counting()));
+        Map<String, Long> countMap = personEntityList.stream().filter(person -> person.getGrade().matches(GRADE_REGEX)).collect(Collectors.groupingBy(person -> person.getGrade(), Collectors.counting()));
 
         countTotal = gradeIndexMap.get().entrySet().stream().filter(grade -> countMap.get(grade.getKey()) != null).mapToLong(grade -> countMap.get(grade.getKey())).sum();
 
@@ -144,16 +142,16 @@ public class PyramidServiceImpl implements PyramidService {
     public List<PyramidCountDto> getPyramidsProfileCount() {
 
         List<PyramidCountDto> pyramidCountDtoList = new ArrayList<>();
-        List<PersonEntity> personEntityList = this.personRepository.findByDepartment(DEPARTMENT);
+        List<PersonEntity> personEntityList = this.personService.findByDepartmentActives(DEPARTMENT);
         long countTotal = 0;
 
         Optional<Map<String, Double>> gradeIndexMap = this.getGradeIndexMap();
 
-        Map<String, Long> countMap = personEntityList.stream().filter(person -> person.getGrade().matches("[a-zA-z][1-9]+")).collect(Collectors.groupingBy(person -> String.valueOf(person.getGrade().charAt(0)), Collectors.counting()));
+        Map<String, Long> countMap = personEntityList.stream().filter(person -> person.getGrade().matches(GRADE_REGEX)).collect(Collectors.groupingBy(person -> String.valueOf(person.getGrade().charAt(0)), Collectors.counting()));
 
         long countScholars = personEntityList.stream().filter(person -> person.getGrade().equals(SCHOLAR)).collect(Collectors.counting());
 
-        countTotal = personEntityList.stream().filter(person -> person.getGrade().matches("[a-zA-z][1-9]+") || person.getGrade().equals(SCHOLAR)).collect(Collectors.counting());
+        countTotal = personEntityList.stream().filter(person -> person.getGrade().matches(GRADE_REGEX) || person.getGrade().equals(SCHOLAR)).collect(Collectors.counting());
 
         gradeIndexMap.get().entrySet().stream().filter(grade -> countMap.get(String.valueOf(grade.getKey().charAt(0))) == null).forEach(grade -> countMap.put(String.valueOf(grade.getKey().charAt(0)), (long) 0));
 
@@ -183,8 +181,8 @@ public class PyramidServiceImpl implements PyramidService {
 
         List<Map<String, Double>> gradeIndexCostMapList = this.getPyramidIndexCost();
 
-        Optional<Map<String, Double>> gradeIndexMap = gradeIndexCostMapList.stream().filter(cost -> INDEX_ROWNAME.equals(cost.get(ROWNAME))).findAny();
-        gradeIndexMap.get().remove("rowName");
+        Optional<Map<String, Double>> gradeIndexMap = gradeIndexCostMapList.stream().filter(cost -> INDEX_ROW_NAME.equals(cost.get(ROW_NAME))).findAny();
+        gradeIndexMap.get().remove(ROW_NAME);
 
         return gradeIndexMap;
     }
@@ -194,7 +192,7 @@ public class PyramidServiceImpl implements PyramidService {
 
         List<PyramidTeamsListDto> customerCosts = new ArrayList<>();
 
-        List<PersonEntity> personList = personService.findAllContracts();
+        List<PersonEntity> personList = personService.findAllContractsActives();
         Set<String> customers = personList.stream().filter(person -> person.getCustomer() != null && !person.getCustomer().isEmpty()).map(PersonEntity::getCustomer).collect(Collectors.toSet());
 
         List<Map<String, Double>> gradeIndexCostMapList = getPyramidIndexCost();
@@ -231,7 +229,7 @@ public class PyramidServiceImpl implements PyramidService {
     private List<String> getGradesFromIndexCostMapSorted(Map<String, Double> gradeIndexCostMapList) {
         List<String> gradeList = new ArrayList<>();
         Map<String, Double> gradeMap = gradeIndexCostMapList;
-        gradeMap.remove("rowName");
+        gradeMap.remove(ROW_NAME);
         gradeMap.entrySet().stream().forEach(keyEntry -> gradeList.add(keyEntry.getKey()));
 
         gradeList.sort(Comparator.comparing(String::toString).reversed());

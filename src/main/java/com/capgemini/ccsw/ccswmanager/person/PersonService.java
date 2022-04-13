@@ -12,34 +12,36 @@ import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
 public interface PersonService {
 
     /**
-     * @return
+     * @return {@link List} of {@link PersonDto}
      */
     List<PersonDto> findPersons();
 
     /**
-     * @param person
-     * @return
+     * @param persons
+     * @return {@link List} of {@link PersonDto}
      */
     List<PersonDto> saveOrUpdatePersons(List<PersonDto> persons);
 
     /**
      * @param id
-     * @return
+     * @return a {@link PersonDto}
      */
     PersonEntity get(long id);
 
     /**
      * @param filter
-     * @return
+     * @return {@link List} of {@link PersonDto}
      */
     List<PersonDto> findByFilter(String filter);
 
-    List<PersonEntity> findScholars(String department, String grade, int active);
+    List<PersonEntity> findScholars(String department, String grade, Integer active);
 
-    List<PersonEntity> findContracts(String department, String grade, int active);
+    List<PersonEntity> findContracts(String department, String grade, Integer active);
 
     List<PersonEntity> findAll();
 
-    List<PersonEntity> findAllContracts();
+    List<PersonEntity> findByDepartmentActives(String department);
+
+    List<PersonEntity> findAllContractsActives();
 
 }

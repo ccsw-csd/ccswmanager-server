@@ -23,7 +23,7 @@ import com.capgemini.ccsw.ccswmanager.tperson.TPersonService;
 @Service
 public class LdapServiceImpl implements LdapService {
 
-    private static final int ACTIVE_TRUE = 1;
+    private static final Integer ACTIVE_TRUE = 1;
 
     private static final String DEPARTMENT_CODE = "CCSw";
 

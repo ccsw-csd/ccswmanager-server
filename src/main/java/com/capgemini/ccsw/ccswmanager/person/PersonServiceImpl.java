@@ -27,6 +27,7 @@ import com.capgemini.ccsw.ccswmanager.tperson.model.TPersonEntity;
 public class PersonServiceImpl implements PersonService {
 
     private static final String EMPTY_STRING = "";
+    private static final Integer ACTIVE_TRUE = 1;
 
     @Autowired
     PersonRepository personRepository;
@@ -125,12 +126,12 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PersonEntity> findScholars(String department, String grade, int active) {
+    public List<PersonEntity> findScholars(String department, String grade, Integer active) {
         return this.personRepository.findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(department, grade, active);
     }
 
     @Override
-    public List<PersonEntity> findContracts(String department, String grade, int active) {
+    public List<PersonEntity> findContracts(String department, String grade, Integer active) {
         return this.personRepository.findByDepartmentAndGradeIsNotNullAndGradeIsNotAndActiveIsOrderByUsernameAsc(department, grade, active);
     }
 
@@ -140,8 +141,13 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PersonEntity> findAllContracts() {
-        return this.personRepository.findByGradeIsNotNullAndGradeIsNot(EMPTY_STRING);
+    public List<PersonEntity> findByDepartmentActives(String department) {
+        return this.personRepository.findByDepartmentAndActive(department, ACTIVE_TRUE);
+    }
+
+    @Override
+    public List<PersonEntity> findAllContractsActives() {
+        return this.personRepository.findByGradeIsNotNullAndGradeIsNotAndActive(EMPTY_STRING, ACTIVE_TRUE);
     }
 
 }
