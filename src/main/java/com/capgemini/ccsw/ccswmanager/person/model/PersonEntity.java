@@ -63,6 +63,9 @@ public class PersonEntity implements Serializable {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "province")
+    private String province;
+
     @Column(name = "details")
     private String details;
 
@@ -310,6 +313,14 @@ public class PersonEntity implements Serializable {
     public void setDepartment(String department) {
 
         this.department = department;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 
 }
