@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.province.model.ProvinceDto;
+import com.capgemini.ccsw.ccswmanager.province.model.ProvinceEntity;
 
 @Service
 public class ProvinceServiceImpl implements ProvinceService {
@@ -19,7 +20,13 @@ public class ProvinceServiceImpl implements ProvinceService {
 
     @Override
     public List<ProvinceDto> findProvinces() {
-        return this.beanMapper.mapList(this.provinceRepository.findAll(), ProvinceDto.class);
+        return this.beanMapper.mapList(this.provinceRepository.findByOrderByProvinceAsc(), ProvinceDto.class);
+    }
+
+    @Override
+    public ProvinceEntity getById(Integer id) {
+
+        return this.provinceRepository.findById(id);
     }
 
 }

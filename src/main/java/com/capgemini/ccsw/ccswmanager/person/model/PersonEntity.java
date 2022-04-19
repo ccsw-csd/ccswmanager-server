@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
+import com.capgemini.ccsw.ccswmanager.province.model.ProvinceEntity;
 
 /**
  * @author aolmosca
@@ -63,8 +64,9 @@ public class PersonEntity implements Serializable {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "province")
-    private String province;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "province_id")
+    private ProvinceEntity province;
 
     @Column(name = "details")
     private String details;
@@ -185,6 +187,14 @@ public class PersonEntity implements Serializable {
     public void setCenter(CenterEntity center) {
 
         this.center = center;
+    }
+
+    public ProvinceEntity getProvince() {
+        return this.province;
+    }
+
+    public void setProvince(ProvinceEntity province) {
+        this.province = province;
     }
 
     /**
@@ -313,14 +323,6 @@ public class PersonEntity implements Serializable {
     public void setDepartment(String department) {
 
         this.department = department;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
     }
 
 }

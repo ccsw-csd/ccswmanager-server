@@ -7,6 +7,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.capgemini.ccsw.ccswmanager.center.model.CenterEntity;
 import com.capgemini.ccsw.ccswmanager.centertranscode.model.CenterTranscodeEntity;
 
 /**
@@ -34,8 +35,15 @@ public class TPersonEntity {
     private String lastname;
 
     @ManyToOne
-    @JoinColumn(name = "center", referencedColumnName = "name", nullable = false, updatable = false)
+    @JoinColumn(name = "center", referencedColumnName = "name", updatable = false)
     private CenterTranscodeEntity centerTranscode;
+
+    public CenterEntity getCenter() {
+        if (this.centerTranscode == null)
+            return null;
+        else
+            return this.centerTranscode.getCenter();
+    }
 
     @Column(name = "grade")
     private String grade;

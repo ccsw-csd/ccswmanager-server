@@ -14,6 +14,7 @@ import com.capgemini.ccsw.ccswmanager.center.CenterService;
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonDto;
 import com.capgemini.ccsw.ccswmanager.person.model.PersonEntity;
+import com.capgemini.ccsw.ccswmanager.province.ProvinceService;
 import com.capgemini.ccsw.ccswmanager.scholar.ScholarService;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
 import com.capgemini.ccsw.ccswmanager.tperson.TPersonService;
@@ -43,6 +44,9 @@ public class PersonServiceImpl implements PersonService {
 
     @Autowired
     CenterService centerService;
+
+    @Autowired
+    ProvinceService provinceService;
 
     @Autowired
     private BeanMapper beanMapper;
@@ -115,8 +119,14 @@ public class PersonServiceImpl implements PersonService {
 
             } else {
                 BeanUtils.copyProperties(personTo, person, "id", "center");
+                BeanUtils.copyProperties(personTo, person, "id", "province");
 
                 person.setCenter(this.centerService.getById(personTo.getCenter().getId()));
+                if (personTo.getProvince() == null) {
+                    person.setProvince(null);
+                } else {
+                    person.setProvince(this.provinceService.getById(personTo.getProvince().getId()));
+                }
 
                 this.personRepository.save(person);
             }

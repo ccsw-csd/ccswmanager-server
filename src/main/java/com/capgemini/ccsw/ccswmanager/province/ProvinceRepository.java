@@ -12,6 +12,8 @@ import com.capgemini.ccsw.ccswmanager.province.model.ProvinceEntity;
  */
 public interface ProvinceRepository extends CrudRepository<ProvinceEntity, Long> {
 
-    List<ProvinceEntity> findAll();
+    List<ProvinceEntity> findByOrderByProvinceAsc();
+
+    ProvinceEntity findById(Integer id);
 
 }

@@ -1,6 +1,7 @@
 package com.capgemini.ccsw.ccswmanager.person.model;
 
 import com.capgemini.ccsw.ccswmanager.center.model.CenterDto;
+import com.capgemini.ccsw.ccswmanager.province.model.ProvinceDto;
 
 /**
  * @author aolmosca
@@ -21,7 +22,7 @@ public class PersonDto {
 
     private CenterDto center;
 
-    private String province;
+    private ProvinceDto province;
 
     private String businesscode;
 
@@ -151,6 +152,14 @@ public class PersonDto {
     public void setCenter(CenterDto center) {
 
         this.center = center;
+    }
+
+    public ProvinceDto getProvince() {
+        return this.province;
+    }
+
+    public void setProvince(ProvinceDto province) {
+        this.province = province;
     }
 
     /**
@@ -295,14 +304,6 @@ public class PersonDto {
     public void setDelete(Boolean delete) {
 
         this.delete = delete;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
     }
 
 }
