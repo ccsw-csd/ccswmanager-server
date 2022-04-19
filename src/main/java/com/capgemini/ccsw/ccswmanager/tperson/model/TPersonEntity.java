@@ -38,13 +38,6 @@ public class TPersonEntity {
     @JoinColumn(name = "center", referencedColumnName = "name", updatable = false)
     private CenterTranscodeEntity centerTranscode;
 
-    public CenterEntity getCenter() {
-        if (this.centerTranscode == null)
-            return null;
-        else
-            return this.centerTranscode.getCenter();
-    }
-
     @Column(name = "grade")
     private String grade;
 
@@ -154,6 +147,10 @@ public class TPersonEntity {
     public void setCenterTranscode(CenterTranscodeEntity centerTranscode) {
 
         this.centerTranscode = centerTranscode;
+    }
+
+    public CenterEntity getCenter() {
+        return this.centerTranscode != null ? this.centerTranscode.getCenter() : null;
     }
 
     /**
