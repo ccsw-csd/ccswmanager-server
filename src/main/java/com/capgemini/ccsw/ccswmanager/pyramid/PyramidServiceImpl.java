@@ -28,7 +28,7 @@ import com.capgemini.ccsw.ccswmanager.pyramid.model.PyramidTeamsListDto;
 @Service
 public class PyramidServiceImpl implements PyramidService {
 
-    private  static final String ROW_NAME = "rowName";
+    private static final String ROW_NAME = "rowName";
     private static final Double INDEX_ROW_NAME = 0.0;
     private static final Double COST_ROW_NAME = 1.0;
     private static final String COLUMN_B2 = "B2";
@@ -218,11 +218,11 @@ public class PyramidServiceImpl implements PyramidService {
             }
             Double indexTotal = gradeIndexMap.values().stream().mapToDouble(Double::doubleValue).sum();
             customerList.add(new PyramidDto(TOTAL, mapSize, indexTotal));
-            customerCosts.add(new PyramidTeamsListDto(customer, customerList));
+
+            customerCosts.add(new PyramidTeamsListDto(customer, customerList, mapSize));
         }
 
-        customerCosts.sort(Comparator.comparing(PyramidTeamsListDto::getCustomerName));
-
+        customerCosts.sort(Comparator.comparing(PyramidTeamsListDto::getCustomerSize).reversed());
         return customerCosts;
     }
 
