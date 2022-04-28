@@ -4,17 +4,20 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.capgemini.ccsw.ccswmanager.person.PersonService;
 import com.capgemini.ccsw.ccswmanager.scholar.model.ScholarEntity;
+import com.capgemini.ccsw.ccswmanager.scholar.model.SearchCriteria;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarDto;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarEntity;
 import com.capgemini.ccsw.ccswmanager.scholar.model.VScholarTimeLineDto;
@@ -78,10 +81,8 @@ public class ScholarServiceImpl implements ScholarService {
     @Override
     public List<VScholarTimeLineDto> findScholarsTimelineByDate(VScholarTimeLineSearchDto date) {
 
-        List<VScholarEntity> vscholars = vScholarRepository
-                .findByStartDateGreaterThanEqualAndEndDateLessThanEqualOrStartDateLessThanEqualAndEndDateGreaterThanEqualOrStartDateBetweenOrEndDateBetweenOrderByStartDateAsc(
-                        date.getStartDate(), date.getEndDate(), date.getStartDate(), date.getEndDate(),
-                        date.getStartDate(), date.getEndDate(), date.getStartDate(), date.getEndDate());
+        List<VScholarEntity> vscholars = getAllByDates(date.getStartDate(), date.getEndDate());
+
         List<VScholarTimeLineDto> vscholarsTimeLine = new ArrayList<VScholarTimeLineDto>();
 
         for (VScholarEntity vscholar : vscholars) {
@@ -123,4 +124,29 @@ public class ScholarServiceImpl implements ScholarService {
 
         this.scholarRepository.deleteById(id);
     }
+
+    public List<VScholarEntity> getAllByDates(Date startDate, Date endDate) {
+
+        VScholarSpecification startDateGrThEq = new VScholarSpecification(
+                new SearchCriteria("startDate", ">=", startDate, null));
+        VScholarSpecification endDateLsThEq = new VScholarSpecification(
+                new SearchCriteria("endDate", "<=", endDate, null));
+        VScholarSpecification startDateLsThEq = new VScholarSpecification(
+                new SearchCriteria("startDate", "<=", startDate, null));
+        VScholarSpecification endDateGrThEq = new VScholarSpecification(
+                new SearchCriteria("endDate", ">=", endDate, null));
+        VScholarSpecification startDateBtw = new VScholarSpecification(
+                new SearchCriteria("startDate", "<>", startDate, endDate));
+        VScholarSpecification endDateBtw = new VScholarSpecification(
+                new SearchCriteria("endDate", "<>", startDate, endDate));
+
+        List<VScholarEntity> vscholars = vScholarRepository.findAll(Specification.where(startDateGrThEq)
+                .and(endDateLsThEq).or(startDateLsThEq).and(endDateGrThEq).or(startDateBtw).or(endDateBtw));
+
+        Collections.sort(vscholars,
+                (sortBottom, sortTop) -> sortBottom.getStartDate().compareTo(sortTop.getStartDate()));
+
+        return vscholars;
+    }
+
 }
