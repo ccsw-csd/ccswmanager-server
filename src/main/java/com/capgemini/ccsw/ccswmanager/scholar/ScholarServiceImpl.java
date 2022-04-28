@@ -4,13 +4,13 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -141,10 +141,8 @@ public class ScholarServiceImpl implements ScholarService {
                 new SearchCriteria("endDate", "<>", startDate, endDate));
 
         List<VScholarEntity> vscholars = vScholarRepository.findAll(Specification.where(startDateGrThEq)
-                .and(endDateLsThEq).or(startDateLsThEq).and(endDateGrThEq).or(startDateBtw).or(endDateBtw));
-
-        Collections.sort(vscholars,
-                (sortBottom, sortTop) -> sortBottom.getStartDate().compareTo(sortTop.getStartDate()));
+                .and(endDateLsThEq).or(startDateLsThEq).and(endDateGrThEq).or(startDateBtw).or(endDateBtw),
+                Sort.by("startDate"));
 
         return vscholars;
     }
