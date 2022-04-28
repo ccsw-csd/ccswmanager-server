@@ -28,12 +28,14 @@ public class VScholarSpecification implements Specification<VScholarEntity> {
     public Predicate toPredicate(Root<VScholarEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 
         if (criteria.getOperation().equalsIgnoreCase("<=")) {
-            return builder.greaterThanOrEqualTo(root.get(criteria.getKey()).as(Date.class), (Date) criteria.getValue());
+            return builder.greaterThanOrEqualTo(root.get(criteria.getKey()).as(Date.class),
+                    (Date) criteria.getFirstValue());
         } else if (criteria.getOperation().equalsIgnoreCase(">=")) {
-            return builder.lessThanOrEqualTo(root.get(criteria.getKey()).as(Date.class), (Date) criteria.getValue());
+            return builder.lessThanOrEqualTo(root.get(criteria.getKey()).as(Date.class),
+                    (Date) criteria.getFirstValue());
         } else if (criteria.getOperation().equalsIgnoreCase("<>")) {
-            return builder.between(root.get(criteria.getKey()).as(Date.class), (Date) criteria.getValue(),
-                    (Date) criteria.getValue());
+            return builder.between(root.get(criteria.getKey()).as(Date.class), (Date) criteria.getFirstValue(),
+                    (Date) criteria.getSecondValue());
         }
 
         return null;

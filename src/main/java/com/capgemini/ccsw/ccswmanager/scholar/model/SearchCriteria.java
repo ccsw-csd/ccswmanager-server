@@ -8,14 +8,14 @@ package com.capgemini.ccsw.ccswmanager.scholar.model;
 public class SearchCriteria {
     private String key;
     private String operation;
-    private Object value;
-    private Object value2;
+    private Object firstValue;
+    private Object secondValue;
 
-    public SearchCriteria(String key, String operation, Object value, Object value2) {
+    public SearchCriteria(String key, String operation, Object firstValue, Object secondValue) {
         this.key = key;
         this.operation = operation;
-        this.value = value;
-        this.value2 = value2;
+        this.firstValue = firstValue;
+        this.secondValue = secondValue;
     }
 
     /**
@@ -47,31 +47,31 @@ public class SearchCriteria {
     }
 
     /**
-     * @return the value
+     * @return the firstValue
      */
-    public Object getValue() {
-        return value;
+    public Object getFirstValue() {
+        return firstValue;
     }
 
     /**
-     * @param value the value to set
+     * @param firstValue the firstValue to set
      */
-    public void setValue(Object value) {
-        this.value = value;
+    public void setFirstValue(Object firstValue) {
+        this.firstValue = firstValue;
     }
 
     /**
-     * @return the value2
+     * @return the secondValue
      */
-    public Object getValue2() {
-        return value2;
+    public Object getSecondValue() {
+        return secondValue;
     }
 
     /**
-     * @param value2 the value2 to set
+     * @param secondValue the secondValue to set
      */
-    public void setValue2(Object value2) {
-        this.value2 = value2;
+    public void setSecondValue(Object secondValue) {
+        this.secondValue = secondValue;
     }
 
 }
