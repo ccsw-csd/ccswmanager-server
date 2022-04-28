@@ -1,6 +1,5 @@
 package com.capgemini.ccsw.ccswmanager.scholar;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -18,9 +17,5 @@ public interface VScholarRepository
 
     @Override
     List<VScholarEntity> findAll();
-
-    List<VScholarEntity> findByStartDateGreaterThanEqualAndEndDateLessThanEqualOrStartDateLessThanEqualAndEndDateGreaterThanEqualOrStartDateBetweenOrEndDateBetweenOrderByStartDateAsc(
-            Date startDateGrThEq, Date endDateLsThEq, Date startDateLsThEq, Date endDateGrThEq, Date startDateStartBtw,
-            Date endDateStartBtw, Date startDateEndBtw, Date endDateEndBtw);
 
 }
