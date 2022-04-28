@@ -128,21 +128,21 @@ public class ScholarServiceImpl implements ScholarService {
     public List<VScholarEntity> getAllByDates(Date startDate, Date endDate) {
 
         VScholarSpecification startDateGrThEq = new VScholarSpecification(
-                new SearchCriteria("startDate", ">=", startDate, null));
+                new SearchCriteria(VScholarEntity.ATT_START_DATE, ">=", startDate, null));
         VScholarSpecification endDateLsThEq = new VScholarSpecification(
-                new SearchCriteria("endDate", "<=", endDate, null));
+                new SearchCriteria(VScholarEntity.ATT_END_DATE, "<=", endDate, null));
         VScholarSpecification startDateLsThEq = new VScholarSpecification(
-                new SearchCriteria("startDate", "<=", startDate, null));
+                new SearchCriteria(VScholarEntity.ATT_START_DATE, "<=", startDate, null));
         VScholarSpecification endDateGrThEq = new VScholarSpecification(
-                new SearchCriteria("endDate", ">=", endDate, null));
+                new SearchCriteria(VScholarEntity.ATT_END_DATE, ">=", endDate, null));
         VScholarSpecification startDateBtw = new VScholarSpecification(
-                new SearchCriteria("startDate", "<>", startDate, endDate));
+                new SearchCriteria(VScholarEntity.ATT_START_DATE, "<>", startDate, endDate));
         VScholarSpecification endDateBtw = new VScholarSpecification(
-                new SearchCriteria("endDate", "<>", startDate, endDate));
+                new SearchCriteria(VScholarEntity.ATT_END_DATE, "<>", startDate, endDate));
 
         List<VScholarEntity> vscholars = vScholarRepository.findAll(Specification.where(startDateGrThEq)
                 .and(endDateLsThEq).or(startDateLsThEq).and(endDateGrThEq).or(startDateBtw).or(endDateBtw),
-                Sort.by("startDate"));
+                Sort.by(VScholarEntity.ATT_START_DATE));
 
         return vscholars;
     }
