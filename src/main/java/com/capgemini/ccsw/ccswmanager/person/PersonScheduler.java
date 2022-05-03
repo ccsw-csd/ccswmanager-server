@@ -36,26 +36,22 @@ public class PersonScheduler {
         List<TPersonEntity> list = tpersonService.matchedTPersonWithPersonUsernameAndSaga(usernames, sagaCodes);
 
         List<PersonEntity> filteredList = activePersons.stream()
-                .filter(personEntity -> list.stream()
-                        .anyMatch(tpersonEntity -> (checkUsernameOrSagaAreSame(personEntity, tpersonEntity)
-                                && checkChangedParametersComparingPersonAndTperson(personEntity, tpersonEntity))))
+                .filter(personEntity -> list.stream().anyMatch(tpersonEntity -> (checkUsernameOrSagaAreSame(personEntity, tpersonEntity) && checkChangedParametersComparingPersonAndTperson(personEntity, tpersonEntity))))
                 .collect(Collectors.toList());
+
         personRepository.saveAll(filteredList);
 
     }
 
     private boolean checkUsernameOrSagaAreSame(PersonEntity personEntity, TPersonEntity tpersonEntity) {
-        if ((personEntity != null && tpersonEntity != null) && ((personEntity.getUsername() != null
-                && personEntity.getUsername().equals(tpersonEntity.getUsername()))
-                || (personEntity.getSaga() != null && !tpersonEntity.getSaga().isEmpty()
-                        && personEntity.getSaga().equals(tpersonEntity.getSaga())))) {
+        if ((personEntity != null && tpersonEntity != null) && ((personEntity.getUsername() != null && personEntity.getUsername().equals(tpersonEntity.getUsername()))
+                || (personEntity.getSaga() != null && !tpersonEntity.getSaga().isEmpty() && personEntity.getSaga().equals(tpersonEntity.getSaga())))) {
             return true;
         }
         return false;
     }
 
-    private boolean checkChangedParametersComparingPersonAndTperson(PersonEntity personEntity,
-            TPersonEntity entityTmp) {
+    private boolean checkChangedParametersComparingPersonAndTperson(PersonEntity personEntity, TPersonEntity entityTmp) {
         boolean tmp = false;
         if (!entityTmp.getName().isEmpty() && !entityTmp.getName().equals(personEntity.getName())) {
             personEntity.setName(entityTmp.getName());
@@ -66,8 +62,7 @@ public class PersonScheduler {
             tmp = true;
         }
 
-        if (entityTmp.getCenterTranscode() != null
-                && entityTmp.getCenterTranscode().getCenter().getId() != personEntity.getCenter().getId()) {
+        if (entityTmp.getCenterTranscode() != null && entityTmp.getCenterTranscode().getCenter().getId() != personEntity.getCenter().getId()) {
             personEntity.setCenter(entityTmp.getCenterTranscode().getCenter());
             tmp = true;
         }
@@ -77,7 +72,7 @@ public class PersonScheduler {
         }
         if (!entityTmp.getGrade().isEmpty() && !personEntity.getGrade().isEmpty()) {
             if (!(entityTmp.getGrade().substring(0, 1).equals(personEntity.getGrade().substring(0, 1)))) {
-                personEntity.setGrade(entityTmp.getGrade());
+                personEntity.setGrade(entityTmp.getGrade().substring(0, 1) + "1");
                 tmp = true;
             }
         }
