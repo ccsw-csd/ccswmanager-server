@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import com.ccsw.ccswmanager.center.CenterController;
 import com.ccsw.ccswmanager.center.CenterService;
@@ -16,6 +17,7 @@ import com.ccsw.ccswmanager.person.PersonScheduler;
 import com.ccsw.ccswmanager.person.PersonService;
 import com.ccsw.ccswmanager.tperson.TPersonService;
 
+@TestPropertySource(locations = { "classpath:application.properties", "classpath:application-test.properties" })
 @SpringBootTest
 @Transactional
 public class PersonSchedulerTest {
@@ -45,12 +47,10 @@ public class PersonSchedulerTest {
         assertNotNull(tpersonService);
         assertNotNull(centerService);
 
-        assertTrue(personService.findAll().stream().filter(item -> item.getUsername().equals("TEMPUSERNAME"))
-                .findFirst().orElse(null).getGrade().equals("C"));
+        assertTrue(personService.findAll().stream().filter(item -> item.getUsername().equals("TEMPUSERNAME")).findFirst().orElse(null).getGrade().equals("C"));
 
         personScheduler.scheduledTask();
 
-        assertTrue(personService.findAll().stream().filter(item -> item.getUsername().equals("TEMPUSERNAME"))
-                .findFirst().orElse(null).getGrade().equals("D"));
+        assertTrue(personService.findAll().stream().filter(item -> item.getUsername().equals("TEMPUSERNAME")).findFirst().orElse(null).getGrade().equals("D"));
     }
 }

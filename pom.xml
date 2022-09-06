@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.ccsw</groupId>
 	<artifactId>ccsw-manager</artifactId>
-	<version>1.4.2</version>
+	<version>1.5.0</version>
 	<name>ccswManager</name>
 	<description>ccswManager - CCSW</description>
 

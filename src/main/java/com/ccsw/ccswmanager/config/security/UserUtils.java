@@ -3,17 +3,17 @@ package com.ccsw.ccswmanager.config.security;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * @author mvallsal
+ * @author ccsw
  *
  */
 public class UserUtils {
 
-  /**
-   * @return UserDetailsJWTDto
-   */
-  public static UserInfoAppDto getUserDetails() {
+    /**
+     * @return UserDetailsJWTDto
+     */
+    public static UserInfoDto getUserDetails() {
 
-    return (UserInfoAppDto) SecurityContextHolder.getContext().getAuthentication().getDetails();
-  }
+        return (UserInfoDto) SecurityContextHolder.getContext().getAuthentication().getDetails();
+    }
 
 }

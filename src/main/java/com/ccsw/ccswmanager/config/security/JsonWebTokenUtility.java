@@ -1,64 +1,23 @@
 package com.ccsw.ccswmanager.config.security;
 
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import com.ccsw.ccswmanager.user.UserService;
-import com.ccsw.ccswmanager.user.model.UserEntity;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.web.client.RestTemplate;
 
 /**
- * @author jhcore
- * @author rroigped
+ * @author ccsw
  */
 @Component
 public class JsonWebTokenUtility {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JsonWebTokenUtility.class);
+    private Map<String, CacheData> userCache = new HashMap<>();
 
-    private static final String CLAIM_FIRST_NAME = "firstName";
-
-    private static final String CLAIM_LAST_NAME = "lastName";
-
-    private static final String CLAIM_DISPLAY_NAME = "displayName";
-
-    private static final String CLAIM_EMPLOYEE_NUMBER = "employeeNumber";
-
-    private static final String CLAIM_GLOBAL_ID = "globalID";
-
-    private static final String CLAIM_EMPLOYEE_GRADE = "employeeGrade";
-
-    private static final String CLAIM_EMAIL = "email";
-
-    private static final String CLAIM_OFFICE_NAME = "officeName";
-
-    private static final String CLAIM_REFRESH = "refresh";
-
-    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
-
-    private static final Long EXPIRATION_TIME = 1 * 60 * 60 * 1000L;
-
-    private Key secretKey;
-
-    @Autowired
-    private UserService userService;
-
-    private Map<String, UserInfoAppDto> userCache = new HashMap<>();
+    @Value("${app.sso.url}")
+    private String ssoUrl;
 
     /**
     * Create UserDetails from JWT
@@ -66,134 +25,84 @@ public class JsonWebTokenUtility {
     * @param jwtToken The json web token
     * @return userDetails
     */
-    public final UserInfoAppDto createUserDetails(String jwtToken) {
+    public final UserInfoDto createUserDetails(String jwtToken) {
+
+        CacheData data = userCache.get(jwtToken);
+
+        if (data == null) {
+            data = getUserFromCacheOrServer(jwtToken);
+        }
+
+        return data.getUser();
+    }
+
+    private CacheData getUserFromCacheOrServer(String jwtToken) {
+
+        CacheData data;
+        UserInfoDto userDetails = getUserFromSSOServer(jwtToken);
+
+        if (userDetails == null)
+            data = new CacheData();
+        else
+            data = new CacheData(userDetails, userDetails.getExpiredDate());
+
+        userCache.put(jwtToken, data);
+        return data;
+    }
+
+    private UserInfoDto getUserFromSSOServer(String jwtToken) {
+
+        RestTemplate restTemplate = new RestTemplate();
 
         try {
-            Claims claims = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(jwtToken).getBody();
-
-            if (isExpired(claims.getExpiration()))
-                return null;
-
-            String username = claims.getSubject();
-
-            UserInfoAppDto userDetails = this.userCache.get(username);
-
-            if (userDetails == null || isExpired(userDetails.getExpiration()) || jwtToken.equals(userDetails.getJwt()) == false) {
-                userDetails = createNewUserDetails(username, jwtToken);
-                addCustomPropertiesJwtToUserDetails(claims, userDetails);
-                this.userCache.put(username, userDetails);
-            }
-
-            return userDetails;
-
-        } catch (ExpiredJwtException ex) {
+            return restTemplate.postForObject(ssoUrl + "validate", new ValidateRequestDto(jwtToken), UserInfoDto.class);
+        } catch (Exception e) {
             return null;
         }
-
     }
 
-    private UserInfoAppDto createNewUserDetails(String username, String jwtToken) {
+    private class ValidateRequestDto {
+        private String token;
 
-        UserInfoAppDto userDetails = new UserInfoAppDto();
-        userDetails.setUsername(username);
-        userDetails.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME));
-        userDetails.setJwt(jwtToken);
-
-        UserEntity user = this.userService.getByUsername(username);
-
-        if (user != null) {
-            userDetails.setRole(user.getRole());
+        public ValidateRequestDto(String token) {
+            super();
+            this.token = token;
         }
 
-        return userDetails;
+        public String getToken() {
+            return token;
+        }
     }
 
-    /**
-    *
-    * @param jwtToken
-    * @return
-    */
-    public final boolean tokensAreInvalid(String accessToken, String refreshToken) {
+    private class CacheData {
+        private static final long ONE_DAY = 24 * 60 * 60 * 1000L;
 
-        Claims claimsAccessToken = null;
-        Claims claimsRefreshToken = null;
+        private UserInfoDto user;
+        private Date expiredDate;
 
-        try {
-            claimsAccessToken = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(accessToken).getBody();
-
-            if (isExpired(claimsAccessToken.getExpiration()))
-                return true;
-
-        } catch (ExpiredJwtException ex) {
-            LOG.info("User token expired " + accessToken);
-            return true;
+        public CacheData() {
+            this.user = null;
+            this.expiredDate = new Date(System.currentTimeMillis() + ONE_DAY);
         }
 
-        try {
-            claimsRefreshToken = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(refreshToken).getBody();
-
-            if (isExpired(claimsRefreshToken.getExpiration()))
-                return true;
-
-        } catch (ExpiredJwtException ex) {
-            LOG.info("User token expired " + refreshToken);
-            return true;
+        public CacheData(UserInfoDto user, Date expiredDate) {
+            this.user = user;
+            this.expiredDate = expiredDate;
         }
 
-        Boolean isRefreshClaim = (Boolean) claimsRefreshToken.get(CLAIM_REFRESH);
-        if (isRefreshClaim == false)
-            return true;
+        /**
+         * @return the user
+         */
+        public UserInfoDto getUser() {
+            return user;
+        }
 
-        Date expirationDateAccessToken = claimsAccessToken.getExpiration();
-        Date expirationDateRefreshToken = claimsRefreshToken.getExpiration();
-
-        return expirationDateAccessToken.getTime() != expirationDateRefreshToken.getTime();
-    }
-
-    /**
-    * @param userDetails
-    */
-    private boolean isExpired(Date expirationDate) {
-
-        Date now = new Date();
-
-        // check if jwt is valid
-        if (now.after(expirationDate))
-            return true;
-
-        return false;
-    }
-
-    /**
-    * Add a custom properties from JWT to UserDetails
-    *
-    * @param claims
-    * @param userDetails
-    */
-    private void addCustomPropertiesJwtToUserDetails(Claims claims, UserInfoDto userDetails) {
-
-        userDetails.setFirstNameValue((String) claims.get(CLAIM_FIRST_NAME));
-        userDetails.setLastNameValue((String) claims.get(CLAIM_LAST_NAME));
-        userDetails.setDisplayNameValue((String) claims.get(CLAIM_DISPLAY_NAME));
-        userDetails.setMailValue((String) claims.get(CLAIM_EMAIL));
-        userDetails.setEmployeeNumberValue((String) claims.get(CLAIM_EMPLOYEE_NUMBER));
-        userDetails.setGlobalIDValue((String) claims.get(CLAIM_GLOBAL_ID));
-        userDetails.setGradeValue((String) claims.get(CLAIM_EMPLOYEE_GRADE));
-        userDetails.setPhysicalDeliveryOfficeNameValue((String) claims.get(CLAIM_OFFICE_NAME));
+        /**
+         * @return the expiredDate
+         */
+        public Date getExpiredDate() {
+            return expiredDate;
+        }
 
     }
-
-    /**
-    * Set the encodedKey from properties
-    *
-    * @param encodedKey new value of encoded key
-    */
-    @Value("${jwt.encodedKey}")
-    public final void setEncodedKey(String encodedKey) {
-
-        byte[] decodedKey = DatatypeConverter.parseBase64Binary(encodedKey);
-        this.secretKey = new SecretKeySpec(decodedKey, SIGNATURE_ALGORITHM.getJcaName());
-
-    }
-
 }
