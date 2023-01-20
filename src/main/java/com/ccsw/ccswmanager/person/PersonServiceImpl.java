@@ -1,11 +1,13 @@
 package com.ccsw.ccswmanager.person;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.ccsw.ccswmanager.config.security.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -128,6 +130,8 @@ public class PersonServiceImpl implements PersonService {
                     person.setProvince(this.provinceService.getById(personTo.getProvince().getId()));
                 }
 
+                person.setUpdatedAt(LocalDateTime.now());
+                person.setUpdatedBy(UserUtils.getUserDetails().getUsername());
                 this.personRepository.save(person);
             }
         });

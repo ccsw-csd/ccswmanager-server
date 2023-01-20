@@ -1,6 +1,7 @@
 package com.ccsw.ccswmanager.person.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -77,6 +78,12 @@ public class PersonEntity implements Serializable {
     @Column(name = "department")
     private String department;
 
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "updated_by")
+    private String updatedBy;
+
     /**
      * @return id
      */
@@ -86,7 +93,7 @@ public class PersonEntity implements Serializable {
     }
 
     /**
-     * @param id new value of {@link #getid}.
+     * @param id new value of {@link #getId}.
      */
     public void setId(Long id) {
 
@@ -102,7 +109,7 @@ public class PersonEntity implements Serializable {
     }
 
     /**
-     * @param saga new value of {@link #getsaga}.
+     * @param saga new value of {@link #getSaga}.
      */
     public void setSaga(String saga) {
 
@@ -118,7 +125,7 @@ public class PersonEntity implements Serializable {
     }
 
     /**
-     * @param username new value of {@link #getusername}.
+     * @param username new value of {@link #getUsername}.
      */
     public void setUsername(String username) {
 
@@ -134,7 +141,7 @@ public class PersonEntity implements Serializable {
     }
 
     /**
-     * @param email new value of {@link #getemail}.
+     * @param email new value of {@link #getEmail}.
      */
     public void setEmail(String email) {
 
@@ -150,7 +157,7 @@ public class PersonEntity implements Serializable {
     }
 
     /**
-     * @param name new value of {@link #getname}.
+     * @param name new value of {@link #getName}.
      */
     public void setName(String name) {
 
@@ -166,7 +173,7 @@ public class PersonEntity implements Serializable {
     }
 
     /**
-     * @param lastname new value of {@link #getlastname}.
+     * @param lastname new value of {@link #getLastname}.
      */
     public void setLastname(String lastname) {
 
@@ -182,7 +189,7 @@ public class PersonEntity implements Serializable {
     }
 
     /**
-     * @param centeId new value of {@link #getcenter_id}.
+     * @param center new value of {@link #getCenter}.
      */
     public void setCenter(CenterEntity center) {
 
@@ -206,7 +213,7 @@ public class PersonEntity implements Serializable {
     }
 
     /**
-     * @param businesscode new value of {@link #getbusinesscode}.
+     * @param businesscode new value of {@link #getBusinesscode}.
      */
     public void setBusinesscode(String businesscode) {
 
@@ -222,7 +229,7 @@ public class PersonEntity implements Serializable {
     }
 
     /**
-     * @param active new value of {@link #getactive}.
+     * @param active new value of {@link #getActive}.
      */
     public void setActive(Integer active) {
 
@@ -325,4 +332,19 @@ public class PersonEntity implements Serializable {
         this.department = department;
     }
 
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
 }

@@ -40,10 +40,6 @@ public class PersonController {
         return this.personService.findByFilter(filter);
     }
 
-    /**
-     * @param person
-     * @return
-     */
     @RequestMapping(path = "/", method = RequestMethod.POST)
     public List<PersonDto> saveOrUpdatePersons(@RequestBody List<PersonDto> persons) {
 
