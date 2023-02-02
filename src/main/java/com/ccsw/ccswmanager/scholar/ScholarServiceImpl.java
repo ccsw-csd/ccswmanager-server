@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import com.ccsw.ccswmanager.person.model.PersonEntity;
+import com.ccsw.ccswmanager.province.ProvinceService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -30,9 +32,11 @@ import com.ccsw.ccswmanager.scholar.model.VScholarTimeLineSearchDto;
 
 @Service
 public class ScholarServiceImpl implements ScholarService {
+
     static final Integer ACTION_CONTINUE = 2;
     static final Integer ACTION_CONTRACT = 1;
     static final Integer ACTION_OUT = 0;
+
     static final String GREEN = "#00E396";
     static final String RED = "#FF4560";
     static final String BLUE = "#008FFB";
@@ -43,6 +47,8 @@ public class ScholarServiceImpl implements ScholarService {
     VScholarRepository vScholarRepository;
     @Autowired
     PersonService personService;
+    @Autowired
+    ProvinceService provinceService;
 
     @Autowired
     private BeanMapper beanMapper;
@@ -71,7 +77,16 @@ public class ScholarServiceImpl implements ScholarService {
                 scholar = new ScholarEntity();
 
             BeanUtils.copyProperties(dto, scholar, "id", "person");
-            scholar.setPerson(this.personService.get(dto.getId()));
+
+            PersonEntity person = this.personService.get(dto.getId());
+            person.setManager(dto.getManager());
+            if (dto.getProvince() == null) {
+                person.setProvince(null);
+            } else {
+                person.setProvince(this.provinceService.getById(dto.getProvince().getId()));
+            }
+
+            scholar.setPerson(person);
 
             this.scholarRepository.save(scholar);
         });
@@ -83,14 +98,13 @@ public class ScholarServiceImpl implements ScholarService {
 
         List<VScholarEntity> vscholars = getAllByDates(date.getStartDate(), date.getEndDate());
 
-        List<VScholarTimeLineDto> vscholarsTimeLine = new ArrayList<VScholarTimeLineDto>();
+        List<VScholarTimeLineDto> vscholarsTimeLine = new ArrayList<>();
 
         for (VScholarEntity vscholar : vscholars) {
             VScholarTimeLineDto vscholarTimeline = new VScholarTimeLineDto();
-            List<Long> axisY = new ArrayList<Long>();
+            List<Long> axisY = new ArrayList<>();
 
-            vscholarTimeline
-                    .setAxisX(vscholar.getName() + " " + vscholar.getLastname() + "(" + vscholar.getUsername() + ")");
+            vscholarTimeline.setAxisX(vscholar.getName() + " " + vscholar.getLastname() + "(" + vscholar.getUsername() + ")");
             if (vscholar.getStartDate() != null) {
                 axisY.add(getParsedTimestamp(vscholar.getStartDate()));
             }

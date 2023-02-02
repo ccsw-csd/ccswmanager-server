@@ -20,6 +20,7 @@ public class TPersonServiceImpl implements TPersonService {
 
     @Override
     public List<TPersonEntity> findAll() {
+
         return this.tpersonRepository.findAll();
     }
 
@@ -31,6 +32,7 @@ public class TPersonServiceImpl implements TPersonService {
 
     @Override
     public List<TPersonEntity> matchedTPersonWithPersonUsernameAndSaga(List<String> username, List<String> sagaCode) {
+
         return tpersonRepository.findByUsernameInOrSagaIn(username, sagaCode);
     }
 }

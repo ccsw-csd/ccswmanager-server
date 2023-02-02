@@ -3,6 +3,8 @@ package com.ccsw.ccswmanager.person.model;
 import com.ccsw.ccswmanager.center.model.CenterDto;
 import com.ccsw.ccswmanager.province.model.ProvinceDto;
 
+import javax.persistence.Column;
+
 /**
  * @author aolmosca
  *
@@ -40,6 +42,8 @@ public class PersonDto {
 
     private String department;
 
+    private String manager;
+
     private Boolean delete;
 
     /**
@@ -51,7 +55,7 @@ public class PersonDto {
     }
 
     /**
-     * @param id new value of {@link #getid}.
+     * @param id new value of {@link #getId}.
      */
     public void setId(Long id) {
 
@@ -67,7 +71,7 @@ public class PersonDto {
     }
 
     /**
-     * @param saga new value of {@link #getsaga}.
+     * @param saga new value of {@link #getSaga}.
      */
     public void setSaga(String saga) {
 
@@ -83,7 +87,7 @@ public class PersonDto {
     }
 
     /**
-     * @param username new value of {@link #getusername}.
+     * @param username new value of {@link #getUsername}.
      */
     public void setUsername(String username) {
 
@@ -99,7 +103,7 @@ public class PersonDto {
     }
 
     /**
-     * @param email new value of {@link #getemail}.
+     * @param email new value of {@link #getEmail}.
      */
     public void setEmail(String email) {
 
@@ -115,7 +119,7 @@ public class PersonDto {
     }
 
     /**
-     * @param name new value of {@link #getname}.
+     * @param name new value of {@link #getName}.
      */
     public void setName(String name) {
 
@@ -131,7 +135,7 @@ public class PersonDto {
     }
 
     /**
-     * @param lastname new value of {@link #getlastname}.
+     * @param lastname new value of {@link #getLastname}.
      */
     public void setLastname(String lastname) {
 
@@ -147,7 +151,7 @@ public class PersonDto {
     }
 
     /**
-     * @param center_id new value of {@link #getcenter_id}.
+     * @param center new value of {@link #getCenter}.
      */
     public void setCenter(CenterDto center) {
 
@@ -171,7 +175,7 @@ public class PersonDto {
     }
 
     /**
-     * @param businesscode new value of {@link #getbusinesscode}.
+     * @param businesscode new value of {@link #getBusinesscode}.
      */
     public void setBusinesscode(String businesscode) {
 
@@ -187,7 +191,7 @@ public class PersonDto {
     }
 
     /**
-     * @param active new value of {@link #getactive}.
+     * @param active new value of {@link #getActive}.
      */
     public void setActive(Integer active) {
 
@@ -219,7 +223,7 @@ public class PersonDto {
     }
 
     /**
-     * @param customer new value of {@link #getcustomer}.
+     * @param customer new value of {@link #getCustomer}.
      */
     public void setCustomer(String customer) {
 
@@ -235,7 +239,7 @@ public class PersonDto {
     }
 
     /**
-     * @param role new value of {@link #getrole}.
+     * @param role new value of {@link #getRole}.
      */
     public void setRole(String role) {
 
@@ -251,7 +255,7 @@ public class PersonDto {
     }
 
     /**
-     * @param details new value of {@link #getdetails}.
+     * @param details new value of {@link #getDetails}.
      */
     public void setDetails(String details) {
 
@@ -267,7 +271,7 @@ public class PersonDto {
     }
 
     /**
-     * @param hours new value of {@link #gethours}.
+     * @param hours new value of {@link #getHours}.
      */
     public void setHours(Integer hours) {
 
@@ -283,11 +287,21 @@ public class PersonDto {
     }
 
     /**
-     * @param department new value of {@link #getdepartment}.
+     * @param department new value of {@link #getDepartment}.
      */
     public void setDepartment(String department) {
 
         this.department = department;
+    }
+
+    public String getManager() {
+
+        return manager;
+    }
+
+    public void setManager(String manager) {
+
+        this.manager = manager;
     }
 
     /**
@@ -299,7 +313,7 @@ public class PersonDto {
     }
 
     /**
-     * @param delete new value of {@link #getdelete}.
+     * @param delete new value of {@link #getDelete}.
      */
     public void setDelete(Boolean delete) {
 

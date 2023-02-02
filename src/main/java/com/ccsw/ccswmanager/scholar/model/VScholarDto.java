@@ -1,5 +1,7 @@
 package com.ccsw.ccswmanager.scholar.model;
 
+import com.ccsw.ccswmanager.province.model.ProvinceDto;
+
 import java.util.Date;
 
 public class VScholarDto {
@@ -32,6 +34,10 @@ public class VScholarDto {
     private String details;
 
     private Integer hours;
+
+    private ProvinceDto province;
+
+    private String manager;
 
     private Long scholarId;
 
@@ -251,6 +257,26 @@ public class VScholarDto {
      */
     public void setHours(Integer hours) {
         this.hours = hours;
+    }
+
+    public ProvinceDto getProvince() {
+
+        return province;
+    }
+
+    public void setProvince(ProvinceDto province) {
+
+        this.province = province;
+    }
+
+    public String getManager() {
+
+        return manager;
+    }
+
+    public void setManager(String manager) {
+
+        this.manager = manager;
     }
 
     /**

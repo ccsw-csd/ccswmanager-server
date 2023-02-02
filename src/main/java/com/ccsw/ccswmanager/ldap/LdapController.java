@@ -14,8 +14,7 @@ import com.ccsw.ccswmanager.ldap.model.LdapPersonDto;
  * @author dapalmie
  *
  */
-
-@RequestMapping(value = "/ldap/")
+@RequestMapping(value = "/ldap")
 @RestController
 public class LdapController {
 
@@ -30,11 +29,13 @@ public class LdapController {
 
     @RequestMapping(path = "/ldap/{contract}", method = RequestMethod.GET)
     public List<LdapPersonDto> compareLdapToPersons(@PathVariable boolean contract) {
+
         return this.ldapService.compareLdapToPersons(contract);
     }
 
     @RequestMapping(path = "/persons/{contract}", method = RequestMethod.GET)
     public List<LdapPersonDto> comparePersonsToLdap(@PathVariable boolean contract) {
+
         return this.ldapService.comparePersonsToLdap(contract);
     }
 

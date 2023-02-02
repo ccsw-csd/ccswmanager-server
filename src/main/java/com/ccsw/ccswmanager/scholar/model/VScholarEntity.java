@@ -1,22 +1,19 @@
 package com.ccsw.ccswmanager.scholar.model;
 
+import com.ccsw.ccswmanager.province.model.ProvinceEntity;
+
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author jchengli
  *
  */
-
 @Entity
 @Table(name = "v_scholar")
 public class VScholarEntity {
+
     public static final String ATT_START_DATE = "startDate";
     public static final String ATT_END_DATE = "endDate";
 
@@ -66,6 +63,13 @@ public class VScholarEntity {
 
     @Column(name = "hours", nullable = false)
     private Integer hours;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "province_id")
+    private ProvinceEntity province;
+
+    @Column(name = "manager")
+    private String manager;
 
     @Column(name = "scholar_id")
     private Long scholarId;
@@ -290,6 +294,26 @@ public class VScholarEntity {
      */
     public void setHours(Integer hours) {
         this.hours = hours;
+    }
+
+    public ProvinceEntity getProvince() {
+
+        return province;
+    }
+
+    public void setProvince(ProvinceEntity province) {
+
+        this.province = province;
+    }
+
+    public String getManager() {
+
+        return manager;
+    }
+
+    public void setManager(String manager) {
+
+        this.manager = manager;
     }
 
     /**

@@ -84,267 +84,197 @@ public class PersonEntity implements Serializable {
     @Column(name = "updated_by")
     private String updatedBy;
 
-    /**
-     * @return id
-     */
+    @Column(name = "manager")
+    private String manager;
+
     public Long getId() {
 
         return this.id;
     }
 
-    /**
-     * @param id new value of {@link #getId}.
-     */
     public void setId(Long id) {
 
         this.id = id;
     }
 
-    /**
-     * @return saga
-     */
     public String getSaga() {
 
         return this.saga;
     }
 
-    /**
-     * @param saga new value of {@link #getSaga}.
-     */
     public void setSaga(String saga) {
 
         this.saga = saga;
     }
 
-    /**
-     * @return username
-     */
     public String getUsername() {
 
         return this.username;
     }
 
-    /**
-     * @param username new value of {@link #getUsername}.
-     */
     public void setUsername(String username) {
 
         this.username = username;
     }
 
-    /**
-     * @return email
-     */
     public String getEmail() {
 
         return this.email;
     }
 
-    /**
-     * @param email new value of {@link #getEmail}.
-     */
     public void setEmail(String email) {
 
         this.email = email;
     }
 
-    /**
-     * @return name
-     */
     public String getName() {
 
         return this.name;
     }
 
-    /**
-     * @param name new value of {@link #getName}.
-     */
     public void setName(String name) {
 
         this.name = name;
     }
 
-    /**
-     * @return lastname
-     */
     public String getLastname() {
 
         return this.lastname;
     }
 
-    /**
-     * @param lastname new value of {@link #getLastname}.
-     */
     public void setLastname(String lastname) {
 
         this.lastname = lastname;
     }
 
-    /**
-     * @return centerId
-     */
     public CenterEntity getCenter() {
 
         return this.center;
     }
 
-    /**
-     * @param center new value of {@link #getCenter}.
-     */
     public void setCenter(CenterEntity center) {
 
         this.center = center;
     }
 
     public ProvinceEntity getProvince() {
+
+
         return this.province;
     }
 
     public void setProvince(ProvinceEntity province) {
+
         this.province = province;
     }
 
-    /**
-     * @return businesscode
-     */
     public String getBusinesscode() {
 
         return this.businesscode;
     }
 
-    /**
-     * @param businesscode new value of {@link #getBusinesscode}.
-     */
     public void setBusinesscode(String businesscode) {
 
         this.businesscode = businesscode;
     }
 
-    /**
-     * @return active
-     */
     public Integer getActive() {
 
         return this.active;
     }
 
-    /**
-     * @param active new value of {@link #getActive}.
-     */
     public void setActive(Integer active) {
 
         this.active = active;
     }
 
-    /**
-     * @return
-     */
     public String getGrade() {
 
         return this.grade;
     }
 
-    /**
-     * @param grade
-     */
     public void setGrade(String grade) {
 
         this.grade = grade;
     }
 
-    /**
-     * @return
-     */
     public String getCustomer() {
 
         return this.customer;
     }
 
-    /**
-     * @param customer
-     */
     public void setCustomer(String customer) {
 
         this.customer = customer;
     }
 
-    /**
-     * @return
-     */
     public String getRole() {
 
         return this.role;
     }
 
-    /**
-     * @param role
-     */
     public void setRole(String role) {
 
         this.role = role;
     }
 
-    /**
-     * @return
-     */
     public String getDetails() {
 
         return this.details;
     }
 
-    /**
-     * @param details
-     */
     public void setDetails(String details) {
 
         this.details = details;
     }
 
-    /**
-     * @return
-     */
     public Integer getHours() {
 
         return this.hours;
     }
 
-    /**
-     * @param hours
-     */
     public void setHours(Integer hours) {
 
         this.hours = hours;
     }
 
-    /**
-     * @return
-     */
     public String getDepartment() {
 
         return this.department;
     }
 
-    /**
-     * @param department
-     */
     public void setDepartment(String department) {
 
         this.department = department;
     }
 
     public LocalDateTime getUpdatedAt() {
+
         return updatedAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
+
         this.updatedAt = updatedAt;
     }
 
     public String getUpdatedBy() {
+
         return updatedBy;
     }
 
     public void setUpdatedBy(String updatedBy) {
+
         this.updatedBy = updatedBy;
+    }
+
+    public String getManager() {
+
+        return manager;
+    }
+
+    public void setManager(String manager) {
+
+        this.manager = manager;
     }
 }

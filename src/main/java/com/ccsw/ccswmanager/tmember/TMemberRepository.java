@@ -13,7 +13,7 @@ import com.ccsw.ccswmanager.tmember.model.TMemberEntity;
  */
 public interface TMemberRepository extends CrudRepository<TMemberEntity, Long> {
 
-    @EntityGraph(attributePaths = { "tperson" })
+    @EntityGraph(attributePaths = { "tperson", "tperson.centerTranscode", "tperson.centerTranscode.center" })
     List<TMemberEntity> findByIdGroupCnOrderByIdUserCnAsc(String groupCn);
 
 }

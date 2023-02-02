@@ -18,6 +18,7 @@ public class TMemberServiceImpl implements TMemberService {
     TMemberRepository tmemberRepository;
 
     public List<TMemberEntity> findTMembers(String groupCn) {
+
         return this.tmemberRepository.findByIdGroupCnOrderByIdUserCnAsc(groupCn);
     }
 

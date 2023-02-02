@@ -15,6 +15,7 @@ import com.ccsw.ccswmanager.person.model.PersonEntity;
 public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     @Override
+    @EntityGraph(attributePaths = { "center", "province" })
     List<PersonEntity> findAll();
 
     @EntityGraph(attributePaths = { "center" })
