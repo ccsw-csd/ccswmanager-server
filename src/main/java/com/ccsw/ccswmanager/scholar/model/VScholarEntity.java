@@ -84,6 +84,9 @@ public class VScholarEntity {
 
     @Column(name = "title")
     private String title;
+    
+    @Column(name = "pon")
+    private String pon;
 
     @Column(name = "action")
     private Integer action;
@@ -255,6 +258,14 @@ public class VScholarEntity {
     public void setTitle(String title) {
         this.title = title;
     }
+    
+    public String getPon() {
+        return pon;
+    }
+
+    public void setPon(String pon) {
+        this.pon = pon;
+   }
 
     public Integer getAction() {
         return action;

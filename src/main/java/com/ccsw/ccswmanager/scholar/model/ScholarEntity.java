@@ -40,7 +40,11 @@ public class ScholarEntity {
 
     @Column(name = "action")
     private Integer action;
-
+    
+    @Column(name = "pon")
+    private String pon;
+    
+    
     public Long getId() {
         return id;
     }
@@ -87,6 +91,14 @@ public class ScholarEntity {
 
     public void setAction(Integer action) {
         this.action = action;
+    }
+    
+    public String getPon() {
+        return pon;
+    }
+
+    public void setPon(String pon) {
+        this.pon = pon;
     }
 
 

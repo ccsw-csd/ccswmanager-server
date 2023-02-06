@@ -21,6 +21,8 @@ public class ScholarDto {
     private String title;
 
     private Integer action;
+    
+    private String pon;
 
     public Long getId() {
         return id;
@@ -68,5 +70,13 @@ public class ScholarDto {
 
     public void setAction(Integer action) {
         this.action = action;
+    }
+    
+    public String getPon() {
+        return pon;
+    }
+
+    public void setPon(String pon) {
+        this.pon = pon;
     }
 }
