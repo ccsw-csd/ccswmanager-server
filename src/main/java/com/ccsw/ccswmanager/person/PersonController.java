@@ -16,8 +16,7 @@ import com.ccsw.ccswmanager.person.model.PersonDto;
  * @author dapalmie
  *
  */
-
-@RequestMapping(value = "/person/")
+@RequestMapping(value = "/person")
 @RestController
 public class PersonController {
 
@@ -31,13 +30,18 @@ public class PersonController {
     public List<PersonDto> findPersons() {
 
         return this.personService.findPersons();
-
     }
 
     @RequestMapping(path = "/{filter}", method = RequestMethod.GET)
     public List<PersonDto> findByFilter(@PathVariable String filter) {
 
         return this.personService.findByFilter(filter);
+    }
+
+    @RequestMapping(path = "/scholar/{filter}", method = RequestMethod.GET)
+    public List<PersonDto> findByFilterWithoutGrade(@PathVariable String filter) {
+
+        return this.personService.findByFilterWithoutGrade(filter);
     }
 
     @RequestMapping(path = "/", method = RequestMethod.POST)

@@ -17,8 +17,7 @@ import com.ccsw.ccswmanager.scholar.model.VScholarTimeLineSearchDto;
  * @author jchengli
  *
  */
-
-@RequestMapping(value = "/scholar/")
+@RequestMapping(value = "/scholar")
 @RestController
 public class ScholarController {
     @Autowired

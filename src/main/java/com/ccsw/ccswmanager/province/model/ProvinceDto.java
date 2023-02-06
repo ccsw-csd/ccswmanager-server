@@ -3,6 +3,7 @@ package com.ccsw.ccswmanager.province.model;
 public class ProvinceDto {
 
     private Integer id;
+
     private String province;
 
     public Integer getId() {

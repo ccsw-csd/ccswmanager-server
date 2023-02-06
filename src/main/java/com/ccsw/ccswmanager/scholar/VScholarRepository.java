@@ -15,7 +15,7 @@ import com.ccsw.ccswmanager.scholar.model.VScholarEntity;
 public interface VScholarRepository extends CrudRepository<VScholarEntity, Long>, JpaSpecificationExecutor<VScholarEntity> {
 
     @Override
-    @EntityGraph(attributePaths = { "province" })
+    @EntityGraph(attributePaths = { "center", "province" })
     List<VScholarEntity> findAll();
 
 }

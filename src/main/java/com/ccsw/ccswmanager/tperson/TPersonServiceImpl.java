@@ -25,9 +25,15 @@ public class TPersonServiceImpl implements TPersonService {
     }
 
     @Override
-    public List<TPersonEntity> findAllTpersonsFromFilters(String filter) {
+    public List<TPersonEntity> findAllTPersonsFromFilters(String filter) {
 
-        return this.tpersonRepository.findTpersonsLikeFilter(filter, PageRequest.of(0, 15));
+        return this.tpersonRepository.findTPersonsLikeFilter(filter, PageRequest.of(0, 15));
+    }
+
+    @Override
+    public List<TPersonEntity> findAllTPersonsFromFiltersWithoutGrade(String filter) {
+
+        return this.tpersonRepository.findTPersonsLikeFilterWithoutGarde(filter, PageRequest.of(0, 15));
     }
 
     @Override

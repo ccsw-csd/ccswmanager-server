@@ -17,7 +17,11 @@ public interface TPersonRepository extends CrudRepository<TPersonEntity, Long> {
 
     @EntityGraph(attributePaths = { "centerTranscode", "centerTranscode.center" })
     @Query("select t from TPersonEntity t where concat(name, ' ', lastname, ' ', username) LIKE %:filter% order by name, lastname asc")
-    List<TPersonEntity> findTpersonsLikeFilter(String filter, Pageable pageable);
+    List<TPersonEntity> findTPersonsLikeFilter(String filter, Pageable pageable);
+
+    @EntityGraph(attributePaths = { "centerTranscode", "centerTranscode.center" })
+    @Query("select t from TPersonEntity t where concat(name, ' ', lastname, ' ', username) LIKE %:filter% AND grade = '' order by name, lastname asc")
+    List<TPersonEntity> findTPersonsLikeFilterWithoutGarde(String filter, Pageable pageable);
 
     @EntityGraph(attributePaths = { "centerTranscode", "centerTranscode.center" })
     List<TPersonEntity> findAll();

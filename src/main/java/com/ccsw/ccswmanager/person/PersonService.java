@@ -1,6 +1,7 @@
 package com.ccsw.ccswmanager.person;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ccsw.ccswmanager.person.model.PersonDto;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
@@ -11,28 +12,17 @@ import com.ccsw.ccswmanager.person.model.PersonEntity;
  */
 public interface PersonService {
 
-    /**
-     * @return {@link List} of {@link PersonDto}
-     */
     List<PersonDto> findPersons();
 
-    /**
-     * @param persons
-     * @return {@link List} of {@link PersonDto}
-     */
     List<PersonDto> saveOrUpdatePersons(List<PersonDto> persons);
 
-    /**
-     * @param id
-     * @return a {@link PersonDto}
-     */
-    PersonEntity get(long id);
+    Optional<PersonEntity> saveOrUpdatePerson(PersonDto personTo);
 
-    /**
-     * @param filter
-     * @return {@link List} of {@link PersonDto}
-     */
+    PersonEntity get(Long id);
+
     List<PersonDto> findByFilter(String filter);
+
+    List<PersonDto> findByFilterWithoutGrade(String filter);
 
     List<PersonEntity> findScholars(String department, String grade, Integer active);
 

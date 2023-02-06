@@ -11,10 +11,11 @@ import com.ccsw.ccswmanager.scholar.model.VScholarTimeLineSearchDto;
  * @author jchengli
  *
  */
-
 public interface ScholarService {
 
-    ScholarEntity get(long id);
+    ScholarEntity get(Long id);
+
+    ScholarEntity getByPersonId(Long id);
 
     List<VScholarDto> findScholars();
 
@@ -22,6 +23,6 @@ public interface ScholarService {
 
     List<VScholarTimeLineDto> findScholarsTimelineByDate(VScholarTimeLineSearchDto date);
 
-    void deleteById(long id);
+    void deleteById(Long id);
 
 }

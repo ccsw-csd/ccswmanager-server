@@ -50,6 +50,10 @@ public class PersonEntity implements Serializable {
     @JoinColumn(name = "center_id")
     private CenterEntity center;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "province_id")
+    private ProvinceEntity province;
+
     @Column(name = "businesscode")
     private String businesscode;
 
@@ -65,10 +69,6 @@ public class PersonEntity implements Serializable {
     @Column(name = "role")
     private String role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "province_id")
-    private ProvinceEntity province;
-
     @Column(name = "details")
     private String details;
 
@@ -78,203 +78,165 @@ public class PersonEntity implements Serializable {
     @Column(name = "department")
     private String department;
 
+    @Column(name = "manager")
+    private String manager;
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Column(name = "updated_by")
     private String updatedBy;
 
-    @Column(name = "manager")
-    private String manager;
-
     public Long getId() {
-
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
-
         this.id = id;
     }
 
     public String getSaga() {
-
-        return this.saga;
+        return saga;
     }
 
     public void setSaga(String saga) {
-
         this.saga = saga;
     }
 
     public String getUsername() {
-
-        return this.username;
+        return username;
     }
 
     public void setUsername(String username) {
-
         this.username = username;
     }
 
     public String getEmail() {
-
-        return this.email;
+        return email;
     }
 
     public void setEmail(String email) {
-
         this.email = email;
     }
 
     public String getName() {
-
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
-
         this.name = name;
     }
 
     public String getLastname() {
-
-        return this.lastname;
+        return lastname;
     }
 
     public void setLastname(String lastname) {
-
         this.lastname = lastname;
     }
 
     public CenterEntity getCenter() {
-
-        return this.center;
+        return center;
     }
 
     public void setCenter(CenterEntity center) {
-
         this.center = center;
     }
 
     public ProvinceEntity getProvince() {
-
-
-        return this.province;
+        return province;
     }
 
     public void setProvince(ProvinceEntity province) {
-
         this.province = province;
     }
 
     public String getBusinesscode() {
-
-        return this.businesscode;
+        return businesscode;
     }
 
     public void setBusinesscode(String businesscode) {
-
         this.businesscode = businesscode;
     }
 
     public Integer getActive() {
-
-        return this.active;
+        return active;
     }
 
     public void setActive(Integer active) {
-
         this.active = active;
     }
 
     public String getGrade() {
-
-        return this.grade;
+        return grade;
     }
 
     public void setGrade(String grade) {
-
         this.grade = grade;
     }
 
     public String getCustomer() {
-
-        return this.customer;
+        return customer;
     }
 
     public void setCustomer(String customer) {
-
         this.customer = customer;
     }
 
     public String getRole() {
-
-        return this.role;
+        return role;
     }
 
     public void setRole(String role) {
-
         this.role = role;
     }
 
     public String getDetails() {
-
-        return this.details;
+        return details;
     }
 
     public void setDetails(String details) {
-
         this.details = details;
     }
 
     public Integer getHours() {
-
-        return this.hours;
+        return hours;
     }
 
     public void setHours(Integer hours) {
-
         this.hours = hours;
     }
 
     public String getDepartment() {
-
-        return this.department;
+        return department;
     }
 
     public void setDepartment(String department) {
-
         this.department = department;
     }
 
-    public LocalDateTime getUpdatedAt() {
-
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-
-        this.updatedAt = updatedAt;
-    }
-
-    public String getUpdatedBy() {
-
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-
-        this.updatedBy = updatedBy;
-    }
-
     public String getManager() {
-
         return manager;
     }
 
     public void setManager(String manager) {
-
         this.manager = manager;
     }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
 }

@@ -8,7 +8,9 @@ public interface TPersonService {
 
     List<TPersonEntity> findAll();
 
-    List<TPersonEntity> findAllTpersonsFromFilters(String filter);
+    List<TPersonEntity> findAllTPersonsFromFilters(String filter);
+
+    List<TPersonEntity> findAllTPersonsFromFiltersWithoutGrade(String filter);
 
     List<TPersonEntity> matchedTPersonWithPersonUsernameAndSaga(List<String> username, List<String> sagaCode);
 

@@ -48,10 +48,7 @@ public class LdapServiceImpl implements LdapService {
     @Override
     public Boolean check() {
 
-        if (this.compareLdapToPersons(true).size() > 0 || this.compareLdapToPersons(false).size() > 0 || this.comparePersonsToLdap(true).size() > 0 || this.comparePersonsToLdap(false).size() > 0)
-            return false;
-        else
-            return true;
+        return this.compareLdapToPersons(true).size() <= 0 && this.compareLdapToPersons(false).size() <= 0 && this.comparePersonsToLdap(true).size() <= 0 && this.comparePersonsToLdap(false).size() <= 0;
     }
 
     @Override
@@ -75,7 +72,7 @@ public class LdapServiceImpl implements LdapService {
 
         personsCompared = tmembers.stream().filter(tmember -> !usersToRemove.contains(tmember.getUserCn())).collect(Collectors.toList());
 
-        personsCompared.stream().forEach(person -> ldapToPersons.add(new LdapPersonDto(person.getTperson().getName(), person.getTperson().getLastname(), person.getTperson().getUsername())));
+        personsCompared.forEach(person -> ldapToPersons.add(new LdapPersonDto(person.getTperson().getName(), person.getTperson().getLastname(), person.getTperson().getUsername())));
 
         return ldapToPersons;
 
