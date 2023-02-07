@@ -48,6 +48,8 @@ public class VScholarDto {
     private Date endDate;
 
     private String title;
+    
+    private String pon;
 
     private Integer action;
 
@@ -219,6 +221,14 @@ public class VScholarDto {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+    
+    public String getPon() {
+        return pon;
+    }
+
+    public void setPon(String pon) {
+        this.pon = pon;
     }
 
     public Integer getAction() {
