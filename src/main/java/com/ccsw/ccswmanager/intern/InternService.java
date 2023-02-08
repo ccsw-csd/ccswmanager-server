@@ -1,0 +1,22 @@
+package com.ccsw.ccswmanager.intern;
+
+import com.ccsw.ccswmanager.intern.model.InternEntity;
+
+import java.util.List;
+
+
+public interface InternService {
+
+    List<InternEntity> findAll();
+
+    InternEntity getById(Long id);
+
+    InternEntity save(InternEntity entity);
+
+    List<InternEntity> saveAll(List<InternEntity> entities);
+
+    void deleteById(Long id);
+
+    void deleteAll(List<InternEntity> entities);
+
+}
