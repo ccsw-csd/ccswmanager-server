@@ -1,6 +1,8 @@
 package com.ccsw.ccswmanager.intern;
 
 import com.ccsw.ccswmanager.intern.model.InternEntity;
+import com.ccsw.ccswmanager.intern.model.TimeLineDto;
+import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
 
 import java.util.List;
 
@@ -19,4 +21,5 @@ public interface InternService {
 
     void deleteAll(List<InternEntity> entities);
 
+    List<TimeLineDto> findTimelineByDate(TimeLineSearchDto date);
 }

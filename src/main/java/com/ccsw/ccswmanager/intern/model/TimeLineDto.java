@@ -1,15 +1,11 @@
-package com.ccsw.ccswmanager.scholar.model;
-
-import java.util.List;
+package com.ccsw.ccswmanager.intern.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * @author jchengli
- *
- */
+import java.util.List;
 
-public class VScholarTimeLineDto {
+public class TimeLineDto {
+
     @JsonProperty("x")
     private String axisX;
 

@@ -17,6 +17,10 @@ import java.util.List;
 @Table(name = "intern")
 public class InternEntity {
 
+    public static final String ATT_START_DATE = "startDate";
+
+    public static final String ATT_END_DATE = "endDate";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

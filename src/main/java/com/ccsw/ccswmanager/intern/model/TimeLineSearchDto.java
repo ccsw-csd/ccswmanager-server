@@ -1,12 +1,8 @@
-package com.ccsw.ccswmanager.scholar.model;
+package com.ccsw.ccswmanager.intern.model;
 
 import java.util.Date;
 
-/**
- * @author jchengli
- */
-
-public class VScholarTimeLineSearchDto {
+public class TimeLineSearchDto {
 
     private Date startDate;
 

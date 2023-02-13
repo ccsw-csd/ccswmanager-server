@@ -1,4 +1,4 @@
-package com.ccsw.ccswmanager.scholar.model;
+package com.ccsw.ccswmanager.common;
 
 /**
  * @author jchengli

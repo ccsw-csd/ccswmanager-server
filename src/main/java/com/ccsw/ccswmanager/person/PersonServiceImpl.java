@@ -1,26 +1,23 @@
 package com.ccsw.ccswmanager.person;
 
+import com.ccsw.ccswmanager.center.CenterService;
+import com.ccsw.ccswmanager.config.mapper.BeanMapper;
+import com.ccsw.ccswmanager.config.security.UserUtils;
+import com.ccsw.ccswmanager.person.model.PersonDto;
+import com.ccsw.ccswmanager.person.model.PersonEntity;
+import com.ccsw.ccswmanager.province.ProvinceService;
+import com.ccsw.ccswmanager.tperson.TPersonService;
+import com.ccsw.ccswmanager.tperson.model.TPersonEntity;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.ccsw.ccswmanager.config.security.UserUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.ccsw.ccswmanager.center.CenterService;
-import com.ccsw.ccswmanager.config.mapper.BeanMapper;
-import com.ccsw.ccswmanager.person.model.PersonDto;
-import com.ccsw.ccswmanager.person.model.PersonEntity;
-import com.ccsw.ccswmanager.province.ProvinceService;
-import com.ccsw.ccswmanager.scholar.ScholarService;
-import com.ccsw.ccswmanager.scholar.model.ScholarEntity;
-import com.ccsw.ccswmanager.tperson.TPersonService;
-import com.ccsw.ccswmanager.tperson.model.TPersonEntity;
 
 /**
  * @author aolmosca
@@ -39,9 +36,6 @@ public class PersonServiceImpl implements PersonService {
 
     @Autowired
     TPersonService tpersonService;
-
-    @Autowired
-    ScholarService scholarService;
 
     @Autowired
     CenterService centerService;
@@ -130,11 +124,6 @@ public class PersonServiceImpl implements PersonService {
     public Optional<PersonEntity> saveOrUpdatePerson(PersonDto personTo) {
 
         if (personTo.getId() != null && personTo.getDelete() != null && personTo.getDelete()) {
-            ScholarEntity scholarPerson = this.scholarService.getByPersonId(personTo.getId());
-            if (scholarPerson != null) {
-                this.scholarService.deleteById(scholarPerson.getId());
-            }
-
             this.personRepository.deleteById(personTo.getId());
 
             return Optional.empty();

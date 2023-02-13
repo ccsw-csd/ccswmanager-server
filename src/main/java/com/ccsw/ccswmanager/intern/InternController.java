@@ -3,6 +3,8 @@ package com.ccsw.ccswmanager.intern;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.intern.model.InternDto;
 import com.ccsw.ccswmanager.intern.model.InternEntity;
+import com.ccsw.ccswmanager.intern.model.TimeLineDto;
+import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +56,12 @@ public class InternController {
         this.service.deleteAll(this.beanMapper.mapList(toDelete, InternEntity.class));
 
         return this.beanMapper.mapList(this.service.saveAll(this.beanMapper.mapList(toSave, InternEntity.class)), InternDto.class);
+    }
+
+    @RequestMapping(path = "/dateFilter", method = RequestMethod.POST)
+    public List<TimeLineDto> findTimelineByDate(@RequestBody TimeLineSearchDto date) {
+
+        return this.service.findTimelineByDate(date);
     }
 
 }

@@ -1,18 +1,5 @@
 package com.ccsw.ccswmanager.pyramid;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.person.PersonService;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
@@ -20,6 +7,11 @@ import com.ccsw.ccswmanager.pyramid.model.PyramidCostEntity;
 import com.ccsw.ccswmanager.pyramid.model.PyramidCountDto;
 import com.ccsw.ccswmanager.pyramid.model.PyramidDto;
 import com.ccsw.ccswmanager.pyramid.model.PyramidTeamsListDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author jchengli
@@ -107,7 +99,7 @@ public class PyramidServiceImpl implements PyramidService {
 
         Optional<Map<String, Double>> gradeIndexMap = this.getGradeIndexMap();
 
-        Map<String, Long> countMap = personEntityList.stream().filter(person -> person.getGrade().matches(GRADE_REGEX)).collect(Collectors.groupingBy(person -> person.getGrade(), Collectors.counting()));
+        Map<String, Long> countMap = personEntityList.stream().filter(person -> person.getGrade() != null && person.getGrade().matches(GRADE_REGEX)).collect(Collectors.groupingBy(PersonEntity::getGrade, Collectors.counting()));
 
         countTotal = gradeIndexMap.get().entrySet().stream().filter(grade -> countMap.get(grade.getKey()) != null).mapToLong(grade -> countMap.get(grade.getKey())).sum();
 
@@ -148,11 +140,11 @@ public class PyramidServiceImpl implements PyramidService {
 
         Optional<Map<String, Double>> gradeIndexMap = this.getGradeIndexMap();
 
-        Map<String, Long> countMap = personEntityList.stream().filter(person -> person.getGrade().matches(GRADE_REGEX)).collect(Collectors.groupingBy(person -> String.valueOf(person.getGrade().charAt(0)), Collectors.counting()));
+        Map<String, Long> countMap = personEntityList.stream().filter(person -> person.getGrade() != null && person.getGrade().matches(GRADE_REGEX)).collect(Collectors.groupingBy(person -> String.valueOf(person.getGrade().charAt(0)), Collectors.counting()));
 
-        long countScholars = personEntityList.stream().filter(person -> person.getGrade().equals(SCHOLAR)).collect(Collectors.counting());
+        long countScholars = personEntityList.stream().filter(person -> person.getGrade() != null && person.getGrade().equals(SCHOLAR)).count();
 
-        countTotal = personEntityList.stream().filter(person -> person.getGrade().matches(GRADE_REGEX) || person.getGrade().equals(SCHOLAR)).collect(Collectors.counting());
+        countTotal = personEntityList.stream().filter(person -> person.getGrade() != null && (person.getGrade().matches(GRADE_REGEX) || person.getGrade().equals(SCHOLAR))).count();
 
         gradeIndexMap.get().entrySet().stream().filter(grade -> countMap.get(String.valueOf(grade.getKey().charAt(0))) == null).forEach(grade -> countMap.put(String.valueOf(grade.getKey().charAt(0)), (long) 0));
 

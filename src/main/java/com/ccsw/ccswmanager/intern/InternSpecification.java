@@ -1,31 +1,25 @@
-package com.ccsw.ccswmanager.scholar;
+package com.ccsw.ccswmanager.intern;
 
-import java.util.Date;
+import com.ccsw.ccswmanager.intern.model.InternEntity;
+import com.ccsw.ccswmanager.common.SearchCriteria;
+import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Date;
 
-import org.springframework.data.jpa.domain.Specification;
-
-import com.ccsw.ccswmanager.scholar.model.SearchCriteria;
-import com.ccsw.ccswmanager.scholar.model.VScholarEntity;
-
-/**
- * @author jchengli
- *
- */
-
-public class VScholarSpecification implements Specification<VScholarEntity> {
+public class InternSpecification implements Specification<InternEntity> {
+    
     private SearchCriteria criteria;
 
-    public VScholarSpecification(SearchCriteria searchCriteria) {
+    public InternSpecification(SearchCriteria searchCriteria) {
         this.criteria = searchCriteria;
     }
 
     @Override
-    public Predicate toPredicate(Root<VScholarEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+    public Predicate toPredicate(Root<InternEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 
         if (criteria.getOperation().equalsIgnoreCase("<=")) {
             return builder.greaterThanOrEqualTo(root.get(criteria.getKey()).as(Date.class),
