@@ -1,14 +1,20 @@
 package com.ccsw.ccswmanager.technology;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.technology.model.TechnologyDto;
 import com.ccsw.ccswmanager.technology.model.TechnologyEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import com.ccsw.ccswmanager.utils.ItemInUseException;
 
-import java.util.List;
-
-@RequestMapping(value = "/Technology")
+@RequestMapping(value = "/technology")
 @RestController
 public class TechnologyController {
 
@@ -37,9 +43,13 @@ public class TechnologyController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public void deleteById(@PathVariable Long id) {
+    public void deleteById(@PathVariable Long id) throws ItemInUseException {
 
-        this.service.deleteById(id);
+        try {
+            this.service.deleteById(id);
+        } catch (Exception e) {
+            throw new ItemInUseException();
+        }
     }
 
 }

@@ -1,12 +1,18 @@
 package com.ccsw.ccswmanager.level;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.level.model.LevelDto;
 import com.ccsw.ccswmanager.level.model.LevelEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import com.ccsw.ccswmanager.utils.ItemInUseException;
 
 @RequestMapping(value = "/level")
 @RestController
@@ -37,9 +43,14 @@ public class LevelController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public void deleteById(@PathVariable Long id) {
+    public void deleteById(@PathVariable Long id) throws ItemInUseException {
 
-        this.service.deleteById(id);
+        try {
+            this.service.deleteById(id);
+        } catch (Exception e) {
+            throw new ItemInUseException();
+        }
+
     }
 
 }
