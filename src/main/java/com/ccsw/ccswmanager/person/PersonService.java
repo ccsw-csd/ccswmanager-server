@@ -2,6 +2,7 @@ package com.ccsw.ccswmanager.person;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import com.ccsw.ccswmanager.person.model.PersonDto;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
@@ -13,6 +14,8 @@ import com.ccsw.ccswmanager.person.model.PersonEntity;
 public interface PersonService {
 
     List<PersonDto> findPersons();
+
+    Set<String> getAllUsernames();
 
     List<PersonDto> saveOrUpdatePersons(List<PersonDto> persons);
 

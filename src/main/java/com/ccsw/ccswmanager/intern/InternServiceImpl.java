@@ -1,9 +1,9 @@
 package com.ccsw.ccswmanager.intern;
 
+import com.ccsw.ccswmanager.common.SearchCriteria;
 import com.ccsw.ccswmanager.intern.model.InternEntity;
 import com.ccsw.ccswmanager.intern.model.TimeLineDto;
 import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
-import com.ccsw.ccswmanager.common.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,6 +15,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class InternServiceImpl implements InternService {
@@ -67,6 +69,12 @@ public class InternServiceImpl implements InternService {
     public void deleteAll(List<InternEntity> entities) {
 
         repository.deleteAll(entities);
+    }
+
+    @Override
+    public Set<String> getAllUsernames() {
+
+        return findAll().stream().map(InternEntity::getUsername).collect(Collectors.toSet());
     }
 
     @Override

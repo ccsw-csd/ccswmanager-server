@@ -3,6 +3,7 @@ package com.ccsw.ccswmanager.person;
 import com.ccsw.ccswmanager.center.CenterService;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.config.security.UserUtils;
+import com.ccsw.ccswmanager.intern.InternService;
 import com.ccsw.ccswmanager.person.model.PersonDto;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
 import com.ccsw.ccswmanager.province.ProvinceService;
@@ -38,6 +39,9 @@ public class PersonServiceImpl implements PersonService {
     TPersonService tpersonService;
 
     @Autowired
+    InternService internService;
+
+    @Autowired
     CenterService centerService;
 
     @Autowired
@@ -68,7 +72,7 @@ public class PersonServiceImpl implements PersonService {
 
         List<TPersonEntity> persons = this.tpersonService.findAllTPersonsFromFilters(filter); //TODO rehacer query
 
-        return getPerson(filter, persons);
+        return getPerson(filter, persons, this.getAllUsernames());
     }
 
     @Override
@@ -76,15 +80,12 @@ public class PersonServiceImpl implements PersonService {
 
         List<TPersonEntity> persons = this.tpersonService.findAllTPersonsFromFiltersWithoutGrade(filter); //TODO rehacer query
 
-        return getPerson(filter, persons);
+        return getPerson(filter, persons, internService.getAllUsernames());
     }
 
-    private List<PersonDto> getPerson(String filter, List<TPersonEntity> personsLike) {
+    private List<PersonDto> getPerson(String filter, List<TPersonEntity> personsLike, Set<String> usernamesToRemove) {
 
-        List<PersonEntity> allPersons = findAll();
-
-        Set<String> personsToRemove = allPersons.stream().map(PersonEntity::getUsername).collect(Collectors.toSet());
-        List<TPersonEntity> persons = personsLike.stream().filter(person -> !personsToRemove.contains(person.getUsername())).collect(Collectors.toList());
+        List<TPersonEntity> persons = personsLike.stream().filter(person -> !usernamesToRemove.contains(person.getUsername())).collect(Collectors.toList());
 
         List<PersonDto> personsToReturn = this.beanMapper.mapList(persons, PersonDto.class);
 
@@ -106,6 +107,12 @@ public class PersonServiceImpl implements PersonService {
         newPerson.setLastname(EMPTY_STRING.equals(lastname.toString()) ? EMPTY_STRING : lastname.toString());
 
         personsToReturn.add(0, newPerson);
+    }
+
+    @Override
+    public Set<String> getAllUsernames() {
+
+        return findAll().stream().map(PersonEntity::getUsername).collect(Collectors.toSet());
     }
 
     @Override

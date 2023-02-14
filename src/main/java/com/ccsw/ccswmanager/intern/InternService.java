@@ -5,6 +5,7 @@ import com.ccsw.ccswmanager.intern.model.TimeLineDto;
 import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
 
 import java.util.List;
+import java.util.Set;
 
 
 public interface InternService {
@@ -20,6 +21,8 @@ public interface InternService {
     void deleteById(Long id);
 
     void deleteAll(List<InternEntity> entities);
+
+    Set<String> getAllUsernames();
 
     List<TimeLineDto> findTimelineByDate(TimeLineSearchDto date);
 }
