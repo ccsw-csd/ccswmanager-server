@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class InternServiceImpl implements InternService {
 
-    static final String ACTION_OUT_EXT = "Out – Rechazo por becario";
-    static final String ACTION_OUT_INT = "Out – Rechazo por becario";
+    static final String ACTION_OUT_INT = "Rechazo por CCA";
+    static final String ACTION_OUT_EXT = "Rechazo por becario";
     static final String ACTION_CONTRACT = "Contrato";
     static final String ACTION_CONTINUE = "Continuar";
 
@@ -99,7 +99,7 @@ public class InternServiceImpl implements InternService {
 
             if (intern.getAction() != null && (ACTION_CONTINUE.equals(intern.getAction().getName()) || ACTION_CONTRACT.equals(intern.getAction().getName()))) {
                 internTimeline.setFillColor(GREEN);
-            } else if (intern.getAction() != null && (ACTION_OUT_EXT.equals(intern.getAction().getName()) || ACTION_OUT_INT.equals(intern.getAction().getName()))) {
+            } else if (intern.getAction() != null && (ACTION_OUT_INT.equals(intern.getAction().getName()) || ACTION_OUT_EXT.equals(intern.getAction().getName()))) {
                 internTimeline.setFillColor(RED);
             } else {
                 internTimeline.setFillColor(BLUE);
@@ -110,8 +110,6 @@ public class InternServiceImpl implements InternService {
 
         return internsTimeLine;
     }
-
-
 
     private List<InternEntity> getAllByDates(Date startDate, Date endDate) {
 
@@ -133,7 +131,8 @@ public class InternServiceImpl implements InternService {
                 Sort.by(InternEntity.ATT_START_DATE));
     }
 
-    private String getUsername(String username){
+    private String getUsername(String username) {
+
         return username != null ? " (" + username + ")": "";
     }
 
