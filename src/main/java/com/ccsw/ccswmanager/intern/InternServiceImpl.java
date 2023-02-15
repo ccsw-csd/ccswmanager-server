@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.ACTIVE_TRUE;
+import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.EMPTY_STRING;
+
 @Service
 public class InternServiceImpl implements InternService {
 
@@ -37,6 +40,12 @@ public class InternServiceImpl implements InternService {
     public List<InternEntity> findAll() {
 
         return repository.findAll();
+    }
+
+    @Override
+    public List<InternEntity> findNotEmptyActives() {
+
+        return repository.findByUsernameIsNotNullAndUsernameIsNotAndActive(EMPTY_STRING, ACTIVE_TRUE);
     }
 
     @Override

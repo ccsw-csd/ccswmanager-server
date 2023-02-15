@@ -12,6 +12,8 @@ public interface InternService {
 
     List<InternEntity> findAll();
 
+    List<InternEntity> findNotEmptyActives();
+
     InternEntity getById(Long id);
 
     InternEntity save(InternEntity entity);
