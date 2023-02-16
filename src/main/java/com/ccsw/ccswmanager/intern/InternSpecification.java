@@ -30,6 +30,12 @@ public class InternSpecification implements Specification<InternEntity> {
         } else if (criteria.getOperation().equalsIgnoreCase("<>")) {
             return builder.between(root.get(criteria.getKey()).as(Date.class), (Date) criteria.getFirstValue(),
                     (Date) criteria.getSecondValue());
+        } else if (criteria.getOperation().equalsIgnoreCase(":")) {
+            if (root.get(criteria.getKey()).getJavaType() == String.class) {
+                return builder.like(root.<String>get(criteria.getKey()), "%" + criteria.getFirstValue() + "%");
+            } else {
+                return builder.equal(root.get(criteria.getKey()), criteria.getFirstValue());
+            }
         }
 
         return null;

@@ -21,6 +21,8 @@ public class InternEntity {
 
     public static final String ATT_END_DATE = "endDate";
 
+    public static final String ATT_ACTIVE = "active";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

@@ -122,6 +122,8 @@ public class InternServiceImpl implements InternService {
 
     private List<InternEntity> getAllByDates(Date startDate, Date endDate) {
 
+        InternSpecification active = new InternSpecification(
+                new SearchCriteria(InternEntity.ATT_ACTIVE, ":", ACTIVE_TRUE, null));
         InternSpecification startDateGrThEq = new InternSpecification(
                 new SearchCriteria(InternEntity.ATT_START_DATE, ">=", startDate, null));
         InternSpecification endDateLsThEq = new InternSpecification(
@@ -135,9 +137,11 @@ public class InternServiceImpl implements InternService {
         InternSpecification endDateBtw = new InternSpecification(
                 new SearchCriteria(InternEntity.ATT_END_DATE, "<>", startDate, endDate));
 
-        return repository.findAll(
-                Specification.where(startDateGrThEq).and(endDateLsThEq).or(startDateLsThEq).and(endDateGrThEq).or(startDateBtw).or(endDateBtw),
-                Sort.by(InternEntity.ATT_START_DATE));
+        Specification<InternEntity> firstRange = startDateGrThEq.and(endDateLsThEq);
+        Specification<InternEntity> secondRange = startDateLsThEq.and(endDateGrThEq);
+        Specification<InternEntity> dateSpecs = firstRange.or(secondRange).or(startDateBtw).or(endDateBtw);
+        
+        return repository.findAll(Specification.where(active).and(dateSpecs), Sort.by(InternEntity.ATT_START_DATE));
     }
 
     private String getUsername(String username) {
