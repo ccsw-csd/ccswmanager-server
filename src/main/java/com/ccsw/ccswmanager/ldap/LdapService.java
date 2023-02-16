@@ -10,14 +10,6 @@ import java.util.List;
  */
 public interface LdapService {
 
-    Boolean check();
-
-    List<LdapPersonDto> compareLdapToPersons(boolean contract);
-
-    List<LdapPersonDto> comparePersonsToLdap(boolean contract);
-
-    List<String> findUsernames(boolean contract);
-
     Boolean checkPersons();
 
     List<LdapPersonDto> compareLdapToPersons();

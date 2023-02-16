@@ -1,16 +1,8 @@
 package com.ccsw.ccswmanager.educationcenter.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.ccsw.ccswmanager.province.model.ProvinceEntity;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "education_center")
@@ -47,30 +39,18 @@ public class EducationCenterEntity {
         this.name = name;
     }
 
-    /**
-     * @return the type
-     */
     public String getType() {
         return type;
     }
 
-    /**
-     * @param type the type to set
-     */
     public void setType(String type) {
         this.type = type;
     }
 
-    /**
-     * @return the province
-     */
     public ProvinceEntity getProvince() {
         return province;
     }
 
-    /**
-     * @param province the province to set
-     */
     public void setProvince(ProvinceEntity province) {
         this.province = province;
     }

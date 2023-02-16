@@ -28,30 +28,18 @@ public class EducationCenterDto {
         this.name = name;
     }
 
-    /**
-     * @return the type
-     */
     public String getType() {
         return type;
     }
 
-    /**
-     * @param type the type to set
-     */
     public void setType(String type) {
         this.type = type;
     }
 
-    /**
-     * @return the province
-     */
     public ProvinceDto getProvince() {
         return province;
     }
 
-    /**
-     * @param province the province to set
-     */
     public void setProvince(ProvinceDto province) {
         this.province = province;
     }
