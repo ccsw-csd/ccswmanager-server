@@ -19,7 +19,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.ACTIVE_TRUE;
-import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.EMPTY_STRING;
 
 @Service
 public class InternServiceImpl implements InternService {
@@ -32,6 +31,10 @@ public class InternServiceImpl implements InternService {
     static final String GREEN = "#00E396";
     static final String RED = "#FF4560";
     static final String BLUE = "#008FFB";
+
+    public static final String EMPTY_STRING = " ";
+    public static final String SEPARATOR = " | ";
+    public static final String EMPTY_VALUE = "";
 
     @Autowired
     InternRepository repository;
@@ -97,7 +100,7 @@ public class InternServiceImpl implements InternService {
             TimeLineDto internTimeline = new TimeLineDto();
             List<Long> axisY = new ArrayList<>();
 
-            internTimeline.setAxisX(intern.getName() + " " + intern.getLastname() + getUsername(intern.getUsername()));
+            internTimeline.setAxisX(getAxisX(intern));
             if (intern.getStartDate() != null) {
                 axisY.add(getParsedTimestamp(intern.getStartDate()));
             }
@@ -144,9 +147,24 @@ public class InternServiceImpl implements InternService {
         return repository.findAll(Specification.where(active).and(dateSpecs), Sort.by(InternEntity.ATT_START_DATE));
     }
 
+    private String getAxisX(InternEntity intern){
+
+        return intern.getName() + EMPTY_STRING + intern.getLastname() + getUsername(intern.getUsername()) + getCustomer(intern.getCustomer()) + getMentor(intern.getMentor());
+    }
+
     private String getUsername(String username) {
 
-        return username != null ? " (" + username + ")": "";
+        return username != null && !EMPTY_STRING.equals(username) ? " (" + username + ")" : EMPTY_VALUE;
+    }
+
+    private String getCustomer(String customer){
+
+        return customer != null && !EMPTY_STRING.equals(customer) ? SEPARATOR + customer : EMPTY_VALUE;
+    }
+
+    private String getMentor(String mentor){
+
+        return mentor != null && !EMPTY_STRING.equals(mentor) ? SEPARATOR + mentor : EMPTY_VALUE;
     }
 
     private Long getParsedTimestamp(Date date) {
