@@ -1,13 +1,12 @@
 package com.ccsw.ccswmanager.province;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.province.model.ProvinceDto;
 import com.ccsw.ccswmanager.province.model.ProvinceEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProvinceServiceImpl implements ProvinceService {
@@ -20,6 +19,7 @@ public class ProvinceServiceImpl implements ProvinceService {
 
     @Override
     public List<ProvinceDto> findProvinces() {
+
         return this.beanMapper.mapList(this.provinceRepository.findByOrderByProvinceAsc(), ProvinceDto.class);
     }
 

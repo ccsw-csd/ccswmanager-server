@@ -1,20 +1,18 @@
 package com.ccsw.ccswmanager.province;
 
-import java.util.List;
-
+import com.ccsw.ccswmanager.province.model.ProvinceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ccsw.ccswmanager.province.model.ProvinceDto;
+import java.util.List;
 
 /**
  * @author dapalmie
  *
  */
-
-@RequestMapping(value = "/province/")
+@RequestMapping(value = "/province")
 @RestController
 public class ProvinceController {
 
@@ -22,7 +20,8 @@ public class ProvinceController {
     private ProvinceService provinceService;
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public List<ProvinceDto> findPprovinces() {
+    public List<ProvinceDto> findProvinces() {
+
         return this.provinceService.findProvinces();
     }
 
