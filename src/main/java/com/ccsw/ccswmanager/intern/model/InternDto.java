@@ -23,6 +23,8 @@ public class InternDto {
 
     private String lastname;
 
+    private Integer gender;
+
     private String email;
 
     private EducationDto education;
@@ -103,6 +105,14 @@ public class InternDto {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
     }
 
     public String getEmail() {

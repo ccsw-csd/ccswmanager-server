@@ -40,6 +40,9 @@ public class InternEntity {
     @Column(name = "lastname")
     private String lastname;
 
+    @Column(name = "gender")
+    private Integer gender;
+
     @Column(name = "email")
     private String email;
 
@@ -145,6 +148,14 @@ public class InternEntity {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
     }
 
     public String getEmail() {
