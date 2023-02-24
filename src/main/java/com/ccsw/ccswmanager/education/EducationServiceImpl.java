@@ -40,7 +40,7 @@ public class EducationServiceImpl implements EducationService {
 
         EducationEntity educationDb = repository.findByName(educationDto.getName());
         if (educationDb != null) {
-            throw new AlreadyExistsException();
+            throw new AlreadyExistsException("El nombre ya existe en la BBDD");
         }
 
         BeanUtils.copyProperties(educationDto, education, "id", "name");

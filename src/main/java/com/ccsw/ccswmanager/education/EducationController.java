@@ -40,6 +40,7 @@ public class EducationController {
     public EducationDto save(@PathVariable(name = "id", required = false) Long id, @RequestBody EducationDto educationDto) throws AlreadyExistsException {
 
         return this.beanMapper.map(this.service.save(id, educationDto), EducationDto.class);
+
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
