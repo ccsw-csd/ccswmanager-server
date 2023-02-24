@@ -7,14 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
 import com.ccsw.ccswmanager.education.model.EducationDto;
 import com.ccsw.ccswmanager.education.model.EducationEntity;
+import com.ccsw.ccswmanager.intern.InternService;
+import com.ccsw.ccswmanager.intern.model.InternEntity;
 
 @Service
 public class EducationServiceImpl implements EducationService {
 
     @Autowired
     EducationRepository repository;
+
+    @Autowired
+    private InternService internService;
 
     @Override
     public List<EducationEntity> findAll() {
@@ -51,9 +57,16 @@ public class EducationServiceImpl implements EducationService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws ConflictOnDeletionException {
 
-        repository.deleteById(id);
+        InternEntity internDb = this.internService.findByEducationId(id);
+
+        if (internDb != null) {
+            throw new ConflictOnDeletionException("No se puede borrar la titulación porque está relacionada con un becario ");
+        } else {
+            repository.deleteById(id);
+        }
+
     }
 
 }

@@ -1,13 +1,6 @@
 package com.ccsw.ccswmanager.intern;
 
-import com.ccsw.ccswmanager.common.SearchCriteria;
-import com.ccsw.ccswmanager.intern.model.InternEntity;
-import com.ccsw.ccswmanager.intern.model.TimeLineDto;
-import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
+import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.ACTIVE_TRUE;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -18,7 +11,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.ACTIVE_TRUE;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import com.ccsw.ccswmanager.common.SearchCriteria;
+import com.ccsw.ccswmanager.intern.model.InternEntity;
+import com.ccsw.ccswmanager.intern.model.TimeLineDto;
+import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
 
 @Service
 public class InternServiceImpl implements InternService {
@@ -125,29 +126,22 @@ public class InternServiceImpl implements InternService {
 
     private List<InternEntity> getAllByDates(Date startDate, Date endDate) {
 
-        InternSpecification active = new InternSpecification(
-                new SearchCriteria(InternEntity.ATT_ACTIVE, ":", ACTIVE_TRUE, null));
-        InternSpecification startDateGrThEq = new InternSpecification(
-                new SearchCriteria(InternEntity.ATT_START_DATE, ">=", startDate, null));
-        InternSpecification endDateLsThEq = new InternSpecification(
-                new SearchCriteria(InternEntity.ATT_END_DATE, "<=", endDate, null));
-        InternSpecification startDateLsThEq = new InternSpecification(
-                new SearchCriteria(InternEntity.ATT_START_DATE, "<=", startDate, null));
-        InternSpecification endDateGrThEq = new InternSpecification(
-                new SearchCriteria(InternEntity.ATT_END_DATE, ">=", endDate, null));
-        InternSpecification startDateBtw = new InternSpecification(
-                new SearchCriteria(InternEntity.ATT_START_DATE, "<>", startDate, endDate));
-        InternSpecification endDateBtw = new InternSpecification(
-                new SearchCriteria(InternEntity.ATT_END_DATE, "<>", startDate, endDate));
+        InternSpecification active = new InternSpecification(new SearchCriteria(InternEntity.ATT_ACTIVE, ":", ACTIVE_TRUE, null));
+        InternSpecification startDateGrThEq = new InternSpecification(new SearchCriteria(InternEntity.ATT_START_DATE, ">=", startDate, null));
+        InternSpecification endDateLsThEq = new InternSpecification(new SearchCriteria(InternEntity.ATT_END_DATE, "<=", endDate, null));
+        InternSpecification startDateLsThEq = new InternSpecification(new SearchCriteria(InternEntity.ATT_START_DATE, "<=", startDate, null));
+        InternSpecification endDateGrThEq = new InternSpecification(new SearchCriteria(InternEntity.ATT_END_DATE, ">=", endDate, null));
+        InternSpecification startDateBtw = new InternSpecification(new SearchCriteria(InternEntity.ATT_START_DATE, "<>", startDate, endDate));
+        InternSpecification endDateBtw = new InternSpecification(new SearchCriteria(InternEntity.ATT_END_DATE, "<>", startDate, endDate));
 
         Specification<InternEntity> firstRange = startDateGrThEq.and(endDateLsThEq);
         Specification<InternEntity> secondRange = startDateLsThEq.and(endDateGrThEq);
         Specification<InternEntity> dateSpecs = firstRange.or(secondRange).or(startDateBtw).or(endDateBtw);
-        
+
         return repository.findAll(Specification.where(active).and(dateSpecs), Sort.by(InternEntity.ATT_START_DATE));
     }
 
-    private String getAxisX(InternEntity intern){
+    private String getAxisX(InternEntity intern) {
 
         return intern.getName() + EMPTY_STRING + intern.getLastname() + getUsername(intern.getUsername()) + getCustomer(intern.getCustomer()) + getMentor(intern.getMentor());
     }
@@ -157,12 +151,12 @@ public class InternServiceImpl implements InternService {
         return username != null && !EMPTY_STRING.equals(username) ? " (" + username + ")" : EMPTY_VALUE;
     }
 
-    private String getCustomer(String customer){
+    private String getCustomer(String customer) {
 
         return customer != null && !EMPTY_STRING.equals(customer) ? SEPARATOR + customer : EMPTY_VALUE;
     }
 
-    private String getMentor(String mentor){
+    private String getMentor(String mentor) {
 
         return mentor != null && !EMPTY_STRING.equals(mentor) ? SEPARATOR + mentor : EMPTY_VALUE;
     }
@@ -172,6 +166,12 @@ public class InternServiceImpl implements InternService {
         LocalDate ld = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         ZonedDateTime zdtAtUtc = ld.atStartOfDay().atZone(ZoneId.of("UTC"));
         return zdtAtUtc.toInstant().toEpochMilli();
+    }
+
+    @Override
+    public InternEntity findByEducationId(Long id) {
+        return this.repository.findByEducationId(id);
+
     }
 
 }
