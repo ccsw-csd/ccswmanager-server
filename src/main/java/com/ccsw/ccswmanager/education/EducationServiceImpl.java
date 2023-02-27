@@ -2,7 +2,6 @@ package com.ccsw.ccswmanager.education;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,8 +48,6 @@ public class EducationServiceImpl implements EducationService {
             throw new AlreadyExistsException("El nombre ya existe en la BBDD");
         }
 
-        BeanUtils.copyProperties(educationDto, education, "id", "name");
-
         education.setName(educationDto.getName());
 
         return repository.save(education);
@@ -59,7 +56,7 @@ public class EducationServiceImpl implements EducationService {
     @Override
     public void deleteById(Long id) throws ConflictOnDeletionException {
 
-        InternEntity internDb = this.internService.findByEducationId(id);
+        InternEntity internDb = this.internService.getByEducationId(id);
 
         if (internDb != null) {
             throw new ConflictOnDeletionException("No se puede borrar la titulación porque está relacionada con un becario ");
