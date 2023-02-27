@@ -13,6 +13,4 @@ public interface EducationRepository extends CrudRepository<EducationEntity, Lon
 
     EducationEntity getByName(String name);
 
-    boolean existsByName(String name);
-
 }

@@ -169,8 +169,8 @@ public class InternServiceImpl implements InternService {
     }
 
     @Override
-    public List<InternEntity> findByEducationId(Long id) {
-        return this.repository.findByEducationId(id);
+    public List<InternEntity> findByEducationId(Long educationId) {
+        return this.repository.findByEducationId(educationId);
 
     }
 
