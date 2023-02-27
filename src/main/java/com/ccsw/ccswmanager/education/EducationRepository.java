@@ -11,6 +11,8 @@ public interface EducationRepository extends CrudRepository<EducationEntity, Lon
     @Override
     List<EducationEntity> findAll();
 
-    EducationEntity findByName(String name);
+    EducationEntity getByName(String name);
+
+    boolean existsByName(String name);
 
 }

@@ -13,7 +13,7 @@ public interface EducationService {
 
     EducationEntity getById(Long id);
 
-    EducationEntity save(Long id, EducationDto educationDto) throws AlreadyExistsException;
+    EducationEntity save(EducationDto educationDto) throws AlreadyExistsException;
 
     void deleteById(Long id) throws ConflictOnDeletionException;
 

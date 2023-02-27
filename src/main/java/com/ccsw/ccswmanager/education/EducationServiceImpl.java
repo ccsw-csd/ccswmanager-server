@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
+import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.education.model.EducationDto;
 import com.ccsw.ccswmanager.education.model.EducationEntity;
 import com.ccsw.ccswmanager.intern.InternService;
-import com.ccsw.ccswmanager.intern.model.InternEntity;
 
 @Service
 public class EducationServiceImpl implements EducationService {
@@ -20,6 +20,9 @@ public class EducationServiceImpl implements EducationService {
 
     @Autowired
     private InternService internService;
+
+    @Autowired
+    BeanMapper beanMapper;
 
     @Override
     public List<EducationEntity> findAll() {
@@ -34,31 +37,23 @@ public class EducationServiceImpl implements EducationService {
     }
 
     @Override
-    public EducationEntity save(Long id, EducationDto educationDto) throws AlreadyExistsException {
+    public EducationEntity save(EducationDto educationDto) throws AlreadyExistsException {
 
-        EducationEntity education = null;
-
-        if (id == null)
-            education = new EducationEntity();
-        else
-            education = repository.findById(id).orElse(null);
-
-        EducationEntity educationDb = repository.findByName(educationDto.getName());
-        if (educationDb != null) {
-            throw new AlreadyExistsException("El nombre ya existe en la BBDD");
+        if (this.repository.existsByName(educationDto.getName())) {
+            if (educationDto.getId() == null || this.repository.getByName(educationDto.getName()).getId() != educationDto.getId()) {
+                throw new AlreadyExistsException("El nombre ya existe en la BBDD");
+            }
         }
 
-        education.setName(educationDto.getName());
+        EducationEntity educationEntity = this.beanMapper.map(educationDto, EducationEntity.class);
+        return repository.save(educationEntity);
 
-        return repository.save(education);
     }
 
     @Override
     public void deleteById(Long id) throws ConflictOnDeletionException {
 
-        InternEntity internDb = this.internService.getByEducationId(id);
-
-        if (internDb != null) {
+        if (!this.internService.findByEducationId(id).isEmpty()) {
             throw new ConflictOnDeletionException("No se puede borrar la titulación porque está relacionada con un becario ");
         } else {
             repository.deleteById(id);

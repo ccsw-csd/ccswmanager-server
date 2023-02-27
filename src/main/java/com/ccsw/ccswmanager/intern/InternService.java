@@ -27,6 +27,6 @@ public interface InternService {
 
     List<TimeLineDto> findTimelineByDate(TimeLineSearchDto date);
 
-    InternEntity getByEducationId(Long id);
+    List<InternEntity> findByEducationId(Long id);
 
 }

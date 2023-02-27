@@ -36,10 +36,10 @@ public class EducationController {
         return this.beanMapper.map(this.service.getById(id), EducationDto.class);
     }
 
-    @RequestMapping(path = { "", "{id}" }, method = RequestMethod.PUT)
-    public EducationDto save(@PathVariable(name = "id", required = false) Long id, @RequestBody EducationDto educationDto) throws AlreadyExistsException {
+    @RequestMapping(path = { "/" }, method = RequestMethod.PUT)
+    public EducationDto save(@RequestBody EducationDto educationDto) throws AlreadyExistsException {
 
-        return this.beanMapper.map(this.service.save(id, educationDto), EducationDto.class);
+        return this.beanMapper.map(this.service.save(educationDto), EducationDto.class);
 
     }
 
