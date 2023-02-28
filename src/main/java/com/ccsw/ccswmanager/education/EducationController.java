@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.education.model.EducationDto;
-import com.ccsw.ccswmanager.education.model.EducationEntity;
 import com.ccsw.ccswmanager.utils.ItemInUseException;
 
 @RequestMapping(value = "/education")
@@ -36,10 +36,11 @@ public class EducationController {
         return this.beanMapper.map(this.service.getById(id), EducationDto.class);
     }
 
-    @RequestMapping(path = "/", method = RequestMethod.POST)
-    public EducationDto save(@RequestBody EducationDto dto) {
+    @RequestMapping(path = { "/" }, method = RequestMethod.POST)
+    public EducationDto save(@RequestBody EducationDto educationDto) throws AlreadyExistsException {
 
-        return this.beanMapper.map(this.service.save(this.beanMapper.map(dto, EducationEntity.class)), EducationDto.class);
+        return this.beanMapper.map(this.service.save(educationDto), EducationDto.class);
+
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
