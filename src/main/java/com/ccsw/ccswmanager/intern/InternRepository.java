@@ -17,6 +17,6 @@ public interface InternRepository extends CrudRepository<InternEntity, Long>, Jp
     @EntityGraph(attributePaths = { "education", "educationCenter", "center", "province", "technologies", "englishLevel", "action" })
     List<InternEntity> findByUsernameIsNotNullAndUsernameIsNotAndActive(String username, Integer active);
 
-    List<InternEntity> findByEducationId(Long educationId);
+    boolean existsByEducationId(Long educationId);
 
 }

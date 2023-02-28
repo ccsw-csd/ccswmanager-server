@@ -39,12 +39,10 @@ public class EducationServiceImpl implements EducationService {
     @Override
     public EducationEntity save(EducationDto educationDto) throws AlreadyExistsException {
 
-        EducationEntity educationInDb = this.repository.getByName(educationDto.getName());
+        EducationEntity existsEducation = this.repository.getByName(educationDto.getName());
 
-        if (educationInDb != null) {
-            if (educationDto.getId() == null || educationInDb.getId() != educationDto.getId()) {
-                throw new AlreadyExistsException("El nombre ya existe en la BBDD");
-            }
+        if (existsEducation != null && (educationDto.getId() == null || !existsEducation.getId().equals(educationDto.getId()))) {
+            throw new AlreadyExistsException("El nombre ya existe en la BBDD");
         }
 
         EducationEntity educationEntity = this.beanMapper.map(educationDto, EducationEntity.class);
@@ -55,7 +53,7 @@ public class EducationServiceImpl implements EducationService {
     @Override
     public void deleteById(Long id) throws ConflictOnDeletionException {
 
-        if (!this.internService.findByEducationId(id).isEmpty()) {
+        if (this.internService.existsByEducationId(id)) {
             throw new ConflictOnDeletionException("No se puede borrar la titulación porque está relacionada con un becario ");
         }
         repository.deleteById(id);
