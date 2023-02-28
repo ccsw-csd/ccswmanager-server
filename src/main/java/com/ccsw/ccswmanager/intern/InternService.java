@@ -6,6 +6,7 @@ import java.util.Set;
 import com.ccsw.ccswmanager.intern.model.InternEntity;
 import com.ccsw.ccswmanager.intern.model.TimeLineDto;
 import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
+import com.ccsw.ccswmanager.technology.model.TechnologyEntity;
 
 public interface InternService {
 
@@ -28,5 +29,7 @@ public interface InternService {
     List<TimeLineDto> findTimelineByDate(TimeLineSearchDto date);
 
     boolean existsByEducationId(Long educationId);
+
+    List<InternEntity> findByTechnologiesContaining(TechnologyEntity technology);
 
 }

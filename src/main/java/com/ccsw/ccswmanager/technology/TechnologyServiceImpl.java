@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
+import com.ccsw.ccswmanager.intern.InternService;
+import com.ccsw.ccswmanager.intern.model.InternEntity;
 import com.ccsw.ccswmanager.technology.model.TechnologyDto;
 import com.ccsw.ccswmanager.technology.model.TechnologyEntity;
 
@@ -18,6 +21,9 @@ public class TechnologyServiceImpl implements TechnologyService {
 
     @Autowired
     BeanMapper beanMapper;
+
+    @Autowired
+    private InternService internService;
 
     @Override
     public List<TechnologyEntity> findAll() {
@@ -46,12 +52,15 @@ public class TechnologyServiceImpl implements TechnologyService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        /*
-        if (this.internService.existsByEducationId(id)) {
-            throw new ConflictOnDeletionException("No se puede borrar la titulación porque está relacionada con un becario ");
+    public void deleteById(Long id) throws ConflictOnDeletionException {
+
+        TechnologyEntity technology = this.repository.findById(id).orElse(null);
+
+        List<InternEntity> interns = internService.findByTechnologiesContaining(technology);
+        if (!interns.isEmpty()) {
+            throw new ConflictOnDeletionException("No se puede borrar la tecnología porque está relacionada con un becario ");
         }
-        */
+
         repository.deleteById(id);
     }
 

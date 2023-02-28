@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 import com.ccsw.ccswmanager.intern.model.InternEntity;
+import com.ccsw.ccswmanager.technology.model.TechnologyEntity;
 
 public interface InternRepository extends CrudRepository<InternEntity, Long>, JpaSpecificationExecutor<InternEntity> {
 
@@ -18,5 +19,7 @@ public interface InternRepository extends CrudRepository<InternEntity, Long>, Jp
     List<InternEntity> findByUsernameIsNotNullAndUsernameIsNotAndActive(String username, Integer active);
 
     boolean existsByEducationId(Long educationId);
+
+    List<InternEntity> findByTechnologiesContaining(TechnologyEntity technology);
 
 }
