@@ -1,16 +1,23 @@
 package com.ccsw.ccswmanager.technology;
 
-import com.ccsw.ccswmanager.technology.model.TechnologyEntity;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.config.mapper.BeanMapper;
+import com.ccsw.ccswmanager.technology.model.TechnologyDto;
+import com.ccsw.ccswmanager.technology.model.TechnologyEntity;
 
 @Service
 public class TechnologyServiceImpl implements TechnologyService {
 
     @Autowired
     TechnologyRepository repository;
+
+    @Autowired
+    BeanMapper beanMapper;
 
     @Override
     public List<TechnologyEntity> findAll() {
@@ -25,14 +32,26 @@ public class TechnologyServiceImpl implements TechnologyService {
     }
 
     @Override
-    public TechnologyEntity save(TechnologyEntity entity) {
+    public TechnologyEntity save(TechnologyDto technologyDto) throws AlreadyExistsException {
 
-        return repository.save(entity);
+        TechnologyEntity existsTechnology = this.repository.getByName(technologyDto.getName());
+
+        if (existsTechnology != null && (technologyDto.getId() == null || !existsTechnology.getId().equals(technologyDto.getId()))) {
+            throw new AlreadyExistsException("El nombre ya existe en la BBDD");
+        }
+
+        TechnologyEntity technologyEntity = this.beanMapper.map(technologyDto, TechnologyEntity.class);
+        return repository.save(technologyEntity);
+
     }
 
     @Override
     public void deleteById(Long id) {
-
+        /*
+        if (this.internService.existsByEducationId(id)) {
+            throw new ConflictOnDeletionException("No se puede borrar la titulación porque está relacionada con un becario ");
+        }
+        */
         repository.deleteById(id);
     }
 

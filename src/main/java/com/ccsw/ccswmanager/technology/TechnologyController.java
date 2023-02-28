@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.technology.model.TechnologyDto;
-import com.ccsw.ccswmanager.technology.model.TechnologyEntity;
 import com.ccsw.ccswmanager.utils.ItemInUseException;
 
 @RequestMapping(value = "/technology")
@@ -37,9 +37,9 @@ public class TechnologyController {
     }
 
     @RequestMapping(path = "/", method = RequestMethod.POST)
-    public TechnologyDto save(@RequestBody TechnologyDto dto) {
+    public TechnologyDto save(@RequestBody TechnologyDto technologyDto) throws AlreadyExistsException {
 
-        return this.beanMapper.map(this.service.save(this.beanMapper.map(dto, TechnologyEntity.class)), TechnologyDto.class);
+        return this.beanMapper.map(this.service.save(technologyDto), TechnologyDto.class);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
