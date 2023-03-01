@@ -110,9 +110,11 @@ public class InternServiceImpl implements InternService {
             }
             internTimeline.setAxisY(axisY);
 
-            if (intern.getAction() != null && (ACTION_CONTINUE.equals(intern.getAction().getName()) || ACTION_CONTRACT.equals(intern.getAction().getName()))) {
+            if (intern.getAction() != null && (ACTION_CONTINUE.equals(intern.getAction().getName())
+                    || ACTION_CONTRACT.equals(intern.getAction().getName()))) {
                 internTimeline.setFillColor(GREEN);
-            } else if (intern.getAction() != null && (ACTION_OUT_INT.equals(intern.getAction().getName()) || ACTION_OUT_EXT.equals(intern.getAction().getName()))) {
+            } else if (intern.getAction() != null && (ACTION_OUT_INT.equals(intern.getAction().getName())
+                    || ACTION_OUT_EXT.equals(intern.getAction().getName()))) {
                 internTimeline.setFillColor(RED);
             } else {
                 internTimeline.setFillColor(BLUE);
@@ -126,13 +128,20 @@ public class InternServiceImpl implements InternService {
 
     private List<InternEntity> getAllByDates(Date startDate, Date endDate) {
 
-        InternSpecification active = new InternSpecification(new SearchCriteria(InternEntity.ATT_ACTIVE, ":", ACTIVE_TRUE, null));
-        InternSpecification startDateGrThEq = new InternSpecification(new SearchCriteria(InternEntity.ATT_START_DATE, ">=", startDate, null));
-        InternSpecification endDateLsThEq = new InternSpecification(new SearchCriteria(InternEntity.ATT_END_DATE, "<=", endDate, null));
-        InternSpecification startDateLsThEq = new InternSpecification(new SearchCriteria(InternEntity.ATT_START_DATE, "<=", startDate, null));
-        InternSpecification endDateGrThEq = new InternSpecification(new SearchCriteria(InternEntity.ATT_END_DATE, ">=", endDate, null));
-        InternSpecification startDateBtw = new InternSpecification(new SearchCriteria(InternEntity.ATT_START_DATE, "<>", startDate, endDate));
-        InternSpecification endDateBtw = new InternSpecification(new SearchCriteria(InternEntity.ATT_END_DATE, "<>", startDate, endDate));
+        InternSpecification active = new InternSpecification(
+                new SearchCriteria(InternEntity.ATT_ACTIVE, ":", ACTIVE_TRUE, null));
+        InternSpecification startDateGrThEq = new InternSpecification(
+                new SearchCriteria(InternEntity.ATT_START_DATE, ">=", startDate, null));
+        InternSpecification endDateLsThEq = new InternSpecification(
+                new SearchCriteria(InternEntity.ATT_END_DATE, "<=", endDate, null));
+        InternSpecification startDateLsThEq = new InternSpecification(
+                new SearchCriteria(InternEntity.ATT_START_DATE, "<=", startDate, null));
+        InternSpecification endDateGrThEq = new InternSpecification(
+                new SearchCriteria(InternEntity.ATT_END_DATE, ">=", endDate, null));
+        InternSpecification startDateBtw = new InternSpecification(
+                new SearchCriteria(InternEntity.ATT_START_DATE, "<>", startDate, endDate));
+        InternSpecification endDateBtw = new InternSpecification(
+                new SearchCriteria(InternEntity.ATT_END_DATE, "<>", startDate, endDate));
 
         Specification<InternEntity> firstRange = startDateGrThEq.and(endDateLsThEq);
         Specification<InternEntity> secondRange = startDateLsThEq.and(endDateGrThEq);
@@ -143,7 +152,8 @@ public class InternServiceImpl implements InternService {
 
     private String getAxisX(InternEntity intern) {
 
-        return intern.getName() + EMPTY_STRING + intern.getLastname() + getUsername(intern.getUsername()) + getCustomer(intern.getCustomer()) + getMentor(intern.getMentor());
+        return intern.getName() + EMPTY_STRING + intern.getLastname() + getUsername(intern.getUsername())
+                + getCustomer(intern.getCustomer()) + getMentor(intern.getMentor());
     }
 
     private String getUsername(String username) {
@@ -167,8 +177,7 @@ public class InternServiceImpl implements InternService {
         ZonedDateTime zdtAtUtc = ld.atStartOfDay().atZone(ZoneId.of("UTC"));
         return zdtAtUtc.toInstant().toEpochMilli();
     }
-    
-    
+
     @Override
     public boolean existsByEducationId(Long educationId) {
         return this.repository.existsByEducationId(educationId);

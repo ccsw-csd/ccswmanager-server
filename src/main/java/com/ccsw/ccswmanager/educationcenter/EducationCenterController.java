@@ -39,7 +39,8 @@ public class EducationCenterController {
     @RequestMapping(path = "/", method = RequestMethod.POST)
     public EducationCenterDto save(@RequestBody EducationCenterDto dto) {
 
-        return this.beanMapper.map(this.service.save(this.beanMapper.map(dto, EducationCenterEntity.class)), EducationCenterDto.class);
+        return this.beanMapper.map(this.service.save(this.beanMapper.map(dto, EducationCenterEntity.class)),
+                EducationCenterDto.class);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
