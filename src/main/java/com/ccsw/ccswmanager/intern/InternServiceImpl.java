@@ -173,5 +173,10 @@ public class InternServiceImpl implements InternService {
         ZonedDateTime zdtAtUtc = ld.atStartOfDay().atZone(ZoneId.of("UTC"));
         return zdtAtUtc.toInstant().toEpochMilli();
     }
+    
+    public List<InternEntity>findAllByEducationCenterId(Long id){
+        
+        return repository.findAllByEducationCenterId(id);
+    }
 
 }

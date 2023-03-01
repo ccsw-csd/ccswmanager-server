@@ -27,4 +27,6 @@ public interface InternService {
     Set<String> getAllUsernames();
 
     List<TimeLineDto> findTimelineByDate(TimeLineSearchDto date);
+    
+    List<InternEntity>findAllByEducationCenterId(Long id);
 }
