@@ -6,7 +6,6 @@ import java.util.Set;
 import com.ccsw.ccswmanager.intern.model.InternEntity;
 import com.ccsw.ccswmanager.intern.model.TimeLineDto;
 import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
-import com.ccsw.ccswmanager.technology.model.TechnologyEntity;
 
 public interface InternService {
 
@@ -30,6 +29,6 @@ public interface InternService {
 
     boolean existsByEducationId(Long educationId);
 
-    boolean existsByTechnologiesContains(TechnologyEntity technology);
+    boolean existsByTechnologiesId(Long technologyId);
 
 }

@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 import com.ccsw.ccswmanager.intern.model.InternEntity;
-import com.ccsw.ccswmanager.technology.model.TechnologyEntity;
 
 public interface InternRepository extends CrudRepository<InternEntity, Long>, JpaSpecificationExecutor<InternEntity> {
 
@@ -20,6 +19,6 @@ public interface InternRepository extends CrudRepository<InternEntity, Long>, Jp
 
     boolean existsByEducationId(Long educationId);
 
-    boolean existsByTechnologiesContains(TechnologyEntity technology);
+    boolean existsByTechnologiesId(Long technologyId);
 
 }

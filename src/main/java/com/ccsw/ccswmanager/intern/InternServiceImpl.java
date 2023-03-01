@@ -20,7 +20,6 @@ import com.ccsw.ccswmanager.common.SearchCriteria;
 import com.ccsw.ccswmanager.intern.model.InternEntity;
 import com.ccsw.ccswmanager.intern.model.TimeLineDto;
 import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
-import com.ccsw.ccswmanager.technology.model.TechnologyEntity;
 
 @Service
 public class InternServiceImpl implements InternService {
@@ -176,9 +175,9 @@ public class InternServiceImpl implements InternService {
     }
 
     @Override
-    public boolean existsByTechnologiesContains(TechnologyEntity technology) {
+    public boolean existsByTechnologiesId(Long technologyId) {
 
-        return this.repository.existsByTechnologiesContains(technology);
+        return this.repository.existsByTechnologiesId(technologyId);
 
     }
 

@@ -51,16 +51,14 @@ public class TechnologyServiceImpl implements TechnologyService {
     }
 
     @Override
-    public void deleteById(Long id) throws ConflictOnDeletionException {
+    public void deleteById(Long technologyId) throws ConflictOnDeletionException {
 
-        TechnologyEntity technology = this.repository.findById(id).orElse(null);
-
-        boolean existsIntern = internService.existsByTechnologiesContains(technology);
+        boolean existsIntern = internService.existsByTechnologiesId(technologyId);
         if (existsIntern) {
             throw new ConflictOnDeletionException("No se puede borrar la tecnología porque está relacionada con un becario ");
         }
 
-        repository.deleteById(id);
+        repository.deleteById(technologyId);
     }
 
 }
