@@ -176,9 +176,9 @@ public class InternServiceImpl implements InternService {
     }
 
     @Override
-    public List<InternEntity> findByTechnologiesContaining(TechnologyEntity technology) {
+    public boolean existsByTechnologiesContains(TechnologyEntity technology) {
 
-        return this.repository.findByTechnologiesContaining(technology);
+        return this.repository.existsByTechnologiesContains(technology);
 
     }
 

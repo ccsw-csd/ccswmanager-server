@@ -9,7 +9,6 @@ import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.intern.InternService;
-import com.ccsw.ccswmanager.intern.model.InternEntity;
 import com.ccsw.ccswmanager.technology.model.TechnologyDto;
 import com.ccsw.ccswmanager.technology.model.TechnologyEntity;
 
@@ -56,8 +55,8 @@ public class TechnologyServiceImpl implements TechnologyService {
 
         TechnologyEntity technology = this.repository.findById(id).orElse(null);
 
-        List<InternEntity> interns = internService.findByTechnologiesContaining(technology);
-        if (!interns.isEmpty()) {
+        boolean existsIntern = internService.existsByTechnologiesContains(technology);
+        if (existsIntern) {
             throw new ConflictOnDeletionException("No se puede borrar la tecnología porque está relacionada con un becario ");
         }
 

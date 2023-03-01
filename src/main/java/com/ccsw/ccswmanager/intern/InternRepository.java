@@ -20,6 +20,6 @@ public interface InternRepository extends CrudRepository<InternEntity, Long>, Jp
 
     boolean existsByEducationId(Long educationId);
 
-    List<InternEntity> findByTechnologiesContaining(TechnologyEntity technology);
+    boolean existsByTechnologiesContains(TechnologyEntity technology);
 
 }

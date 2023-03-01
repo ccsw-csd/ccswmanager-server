@@ -30,6 +30,6 @@ public interface InternService {
 
     boolean existsByEducationId(Long educationId);
 
-    List<InternEntity> findByTechnologiesContaining(TechnologyEntity technology);
+    boolean existsByTechnologiesContains(TechnologyEntity technology);
 
 }
