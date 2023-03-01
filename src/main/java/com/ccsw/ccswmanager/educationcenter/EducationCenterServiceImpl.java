@@ -41,8 +41,8 @@ public class EducationCenterServiceImpl implements EducationCenterService {
     @Override
     public void deleteById(Long id) throws ItemInUseException{
 
-        List<InternEntity> interns = this.internService.findAllByEducationCenterId(id);
-        if(interns.isEmpty()) {
+       
+        if(!this.internService.existsByEducationId(id)) {
             repository.deleteById(id);   
         }else {
             throw new ItemInUseException();
