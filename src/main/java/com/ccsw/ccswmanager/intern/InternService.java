@@ -29,4 +29,6 @@ public interface InternService {
 
     boolean existsByEducationId(Long educationId);
 
+    boolean existsByEducationCenterId(Long educationCenterId);
+
 }
