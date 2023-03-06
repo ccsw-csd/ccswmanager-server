@@ -1,16 +1,22 @@
 package com.ccsw.ccswmanager.educationcenter;
 
-import com.ccsw.ccswmanager.educationcenter.model.EducationCenterEntity;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.ccsw.ccswmanager.educationcenter.model.EducationCenterEntity;
+import com.ccsw.ccswmanager.intern.InternService;
+import com.ccsw.ccswmanager.utils.ItemInUseException;
 
 @Service
 public class EducationCenterServiceImpl implements EducationCenterService {
 
     @Autowired
     EducationCenterRepository repository;
+
+    @Autowired
+    InternService internService;
 
     @Override
     public List<EducationCenterEntity> findAll() {
@@ -31,7 +37,11 @@ public class EducationCenterServiceImpl implements EducationCenterService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws ItemInUseException {
+
+        if (this.internService.existsByEducationCenterId(id)) {
+            throw new ItemInUseException();
+        }
 
         repository.deleteById(id);
     }

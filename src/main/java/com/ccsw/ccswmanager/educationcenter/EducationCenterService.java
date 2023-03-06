@@ -1,9 +1,9 @@
 package com.ccsw.ccswmanager.educationcenter;
 
-import com.ccsw.ccswmanager.educationcenter.model.EducationCenterEntity;
-
 import java.util.List;
 
+import com.ccsw.ccswmanager.educationcenter.model.EducationCenterEntity;
+import com.ccsw.ccswmanager.utils.ItemInUseException;
 
 public interface EducationCenterService {
 
@@ -13,6 +13,6 @@ public interface EducationCenterService {
 
     EducationCenterEntity save(EducationCenterEntity entity);
 
-    void deleteById(Long id);
+    void deleteById(Long id) throws ItemInUseException;
 
 }
