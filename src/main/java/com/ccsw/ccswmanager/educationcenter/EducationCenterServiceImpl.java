@@ -33,7 +33,9 @@ public class EducationCenterServiceImpl implements EducationCenterService {
     @Override
     public EducationCenterEntity save(EducationCenterEntity entity) throws ItemInUseException {
 
-        if (this.repository.existsEducationCenterByName(entity.getName())) {
+        EducationCenterEntity educationCenter = this.repository.findByName(entity.getName());
+
+        if (educationCenter != null && (entity.getId() == null || !educationCenter.getId().equals(entity.getId()))) {
             throw new ItemInUseException();
         }
         return repository.save(entity);
