@@ -45,7 +45,6 @@ public class EducationCenterServiceImpl implements EducationCenterService {
         if (this.internService.existsByEducationCenterId(id)) {
             throw new ItemInUseException();
         }
-
         repository.deleteById(id);
     }
 
