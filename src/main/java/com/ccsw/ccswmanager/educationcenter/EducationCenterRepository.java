@@ -1,11 +1,11 @@
 package com.ccsw.ccswmanager.educationcenter;
 
-import com.ccsw.ccswmanager.educationcenter.model.EducationCenterEntity;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
-
+import com.ccsw.ccswmanager.educationcenter.model.EducationCenterEntity;
 
 public interface EducationCenterRepository extends CrudRepository<EducationCenterEntity, Long> {
 
@@ -13,4 +13,5 @@ public interface EducationCenterRepository extends CrudRepository<EducationCente
     @EntityGraph(attributePaths = { "province" })
     List<EducationCenterEntity> findAll();
 
+    boolean existsEducationCenterByName(String name);
 }

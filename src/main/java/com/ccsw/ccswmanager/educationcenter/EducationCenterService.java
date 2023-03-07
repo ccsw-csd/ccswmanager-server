@@ -11,7 +11,7 @@ public interface EducationCenterService {
 
     EducationCenterEntity getById(Long id);
 
-    EducationCenterEntity save(EducationCenterEntity entity);
+    EducationCenterEntity save(EducationCenterEntity entity) throws ItemInUseException;
 
     void deleteById(Long id) throws ItemInUseException;
 

@@ -37,9 +37,14 @@ public class EducationCenterController {
     }
 
     @RequestMapping(path = "/", method = RequestMethod.POST)
-    public EducationCenterDto save(@RequestBody EducationCenterDto dto) {
+    public EducationCenterDto save(@RequestBody EducationCenterDto dto) throws ItemInUseException {
 
-        return this.beanMapper.map(this.service.save(this.beanMapper.map(dto, EducationCenterEntity.class)), EducationCenterDto.class);
+        try {
+            return this.beanMapper.map(this.service.save(this.beanMapper.map(dto, EducationCenterEntity.class)),
+                    EducationCenterDto.class);
+        } catch (ItemInUseException e) {
+            throw new ItemInUseException();
+        }
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
