@@ -180,12 +180,19 @@ public class InternServiceImpl implements InternService {
 
     @Override
     public boolean existsByEducationId(Long educationId) {
-        return this.repository.existsByEducationId(educationId);
 
+        return this.repository.existsByEducationId(educationId);
+    }
+
+    @Override
+    public boolean existsByTechnologiesId(Long technologyId) {
+
+        return this.repository.existsByTechnologiesId(technologyId);
     }
 
     @Override
     public boolean existsByEducationCenterId(Long educationCenterId) {
+
         return this.repository.existsByEducationCenterId(educationCenterId);
     }
 }
