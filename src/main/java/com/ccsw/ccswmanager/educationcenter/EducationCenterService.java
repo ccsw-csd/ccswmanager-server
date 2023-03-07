@@ -2,8 +2,9 @@ package com.ccsw.ccswmanager.educationcenter;
 
 import java.util.List;
 
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
 import com.ccsw.ccswmanager.educationcenter.model.EducationCenterEntity;
-import com.ccsw.ccswmanager.utils.ItemInUseException;
 
 public interface EducationCenterService {
 
@@ -11,8 +12,8 @@ public interface EducationCenterService {
 
     EducationCenterEntity getById(Long id);
 
-    EducationCenterEntity save(EducationCenterEntity entity);
+    EducationCenterEntity save(EducationCenterEntity entity) throws AlreadyExistsException;
 
-    void deleteById(Long id) throws ItemInUseException;
+    void deleteById(Long id) throws ConflictOnDeletionException;
 
 }

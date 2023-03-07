@@ -13,4 +13,5 @@ public interface EducationCenterRepository extends CrudRepository<EducationCente
     @EntityGraph(attributePaths = { "province" })
     List<EducationCenterEntity> findAll();
 
+    EducationCenterEntity findByName(String name);
 }
