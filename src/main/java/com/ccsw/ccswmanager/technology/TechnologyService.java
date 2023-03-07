@@ -13,7 +13,7 @@ public interface TechnologyService {
 
     TechnologyEntity getById(Long id);
 
-    TechnologyEntity save(TechnologyDto entity) throws AlreadyExistsException;
+    TechnologyEntity save(TechnologyDto technologyDto) throws AlreadyExistsException;
 
     void deleteById(Long id) throws ConflictOnDeletionException;;
 

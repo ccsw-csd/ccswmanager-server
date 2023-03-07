@@ -45,8 +45,7 @@ public class TechnologyServiceImpl implements TechnologyService {
             throw new AlreadyExistsException("El nombre ya existe en la BBDD");
         }
 
-        TechnologyEntity technologyEntity = this.beanMapper.map(technologyDto, TechnologyEntity.class);
-        return repository.save(technologyEntity);
+        return repository.save(this.beanMapper.map(technologyDto, TechnologyEntity.class));
 
     }
 
