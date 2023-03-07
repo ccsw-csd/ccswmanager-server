@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.education.model.EducationDto;
-import com.ccsw.ccswmanager.utils.ItemInUseException;
 
 @RequestMapping(value = "/education")
 @RestController
@@ -44,13 +44,10 @@ public class EducationController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public void deleteById(@PathVariable Long id) throws ItemInUseException {
+    public void deleteById(@PathVariable Long id) throws ConflictOnDeletionException {
 
-        try {
-            this.service.deleteById(id);
-        } catch (Exception e) {
-            throw new ItemInUseException();
-        }
+        this.service.deleteById(id);
+
     }
 
 }

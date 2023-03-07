@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ccsw.ccswmanager.action.model.ActionDto;
 import com.ccsw.ccswmanager.action.model.ActionEntity;
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
-import com.ccsw.ccswmanager.utils.ItemInUseException;
 
 @RequestMapping(value = "/action")
 @RestController
@@ -43,13 +43,10 @@ public class ActionController {
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
-    public void deleteById(@PathVariable Long id) throws ItemInUseException {
+    public void deleteById(@PathVariable Long id) throws AlreadyExistsException {
 
-        try {
-            this.service.deleteById(id);
-        } catch (Exception e) {
-            throw new ItemInUseException();
-        }
+        this.service.deleteById(id);
+
     }
 
 }

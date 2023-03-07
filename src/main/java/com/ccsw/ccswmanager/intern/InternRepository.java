@@ -11,12 +11,15 @@ import com.ccsw.ccswmanager.intern.model.InternEntity;
 public interface InternRepository extends CrudRepository<InternEntity, Long>, JpaSpecificationExecutor<InternEntity> {
 
     @Override
-    @EntityGraph(attributePaths = { "education", "educationCenter", "center", "province", "technologies", "englishLevel", "action" })
+    @EntityGraph(attributePaths = { "education", "educationCenter", "center", "province", "technologies",
+            "englishLevel", "action" })
     List<InternEntity> findAll();
 
-    @EntityGraph(attributePaths = { "education", "educationCenter", "center", "province", "technologies", "englishLevel", "action" })
+    @EntityGraph(attributePaths = { "education", "educationCenter", "center", "province", "technologies",
+            "englishLevel", "action" })
     List<InternEntity> findByUsernameIsNotNullAndUsernameIsNotAndActive(String username, Integer active);
 
     boolean existsByEducationId(Long educationId);
 
+    boolean existsByEducationCenterId(Long educationCenterId);
 }
