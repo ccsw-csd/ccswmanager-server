@@ -37,4 +37,12 @@ public interface PersonService {
 
     List<PersonEntity> findAllContractsActives();
 
+    void deleteById(Long id);
+
+    PersonEntity save(PersonDto dto);
+
+    List<PersonEntity> saveAll(List<PersonEntity> entities);
+
+    PersonEntity getById(Long id);
+
 }

@@ -1,5 +1,16 @@
 package com.ccsw.ccswmanager.person;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.ccsw.ccswmanager.center.CenterService;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.config.security.UserUtils;
@@ -9,16 +20,6 @@ import com.ccsw.ccswmanager.person.model.PersonEntity;
 import com.ccsw.ccswmanager.province.ProvinceService;
 import com.ccsw.ccswmanager.tperson.TPersonService;
 import com.ccsw.ccswmanager.tperson.model.TPersonEntity;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author aolmosca
@@ -164,7 +165,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<PersonEntity> findAll() {
 
-        return this.personRepository.findAllByOrderByUsernameAsc();
+        return this.personRepository.findAll();
     }
 
     @Override
@@ -177,6 +178,32 @@ public class PersonServiceImpl implements PersonService {
     public List<PersonEntity> findAllContractsActives() {
 
         return this.personRepository.findByGradeIsNotNullAndGradeIsNotAndActive(EMPTY_STRING, ACTIVE_TRUE);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+        this.personRepository.deleteById(id);
+    }
+
+    @Override
+    public PersonEntity save(PersonDto dto) {
+
+        return personRepository.save(this.beanMapper.map(dto, PersonEntity.class));
+    }
+
+    @Override
+    public List<PersonEntity> saveAll(List<PersonEntity> entities) {
+
+        this.personRepository.saveAll(entities);
+
+        return findAll();
+    }
+
+    @Override
+    public PersonEntity getById(Long id) {
+
+        return this.personRepository.findById(id).orElse(null);
     }
 
 }
