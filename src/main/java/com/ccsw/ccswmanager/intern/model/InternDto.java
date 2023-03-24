@@ -59,6 +59,8 @@ public class InternDto {
 
     private Date contractDate;
 
+    private String saga;
+
     private Integer active;
 
     private String link;
@@ -249,6 +251,14 @@ public class InternDto {
 
     public void setContractDate(Date contractDate) {
         this.contractDate = contractDate;
+    }
+
+    public String getSaga() {
+        return saga;
+    }
+
+    public void setSaga(String saga) {
+        this.saga = saga;
     }
 
     public Integer getActive() {
