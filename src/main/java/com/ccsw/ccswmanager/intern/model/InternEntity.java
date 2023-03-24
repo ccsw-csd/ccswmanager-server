@@ -101,6 +101,9 @@ public class InternEntity {
     @Column(name = "contract_date")
     private Date contractDate;
 
+    @Column(name = "saga")
+    private String saga;
+
     @Column(name = "active", nullable = false)
     private Integer active;
 
@@ -292,6 +295,14 @@ public class InternEntity {
 
     public void setContractDate(Date contractDate) {
         this.contractDate = contractDate;
+    }
+
+    public String getSaga() {
+        return saga;
+    }
+
+    public void setSaga(String saga) {
+        this.saga = saga;
     }
 
     public Integer getActive() {

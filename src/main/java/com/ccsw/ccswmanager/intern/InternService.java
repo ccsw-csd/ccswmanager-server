@@ -29,6 +29,8 @@ public interface InternService {
 
     boolean existsByEducationId(Long educationId);
 
+    boolean existsByTechnologiesId(Long technologyId);
+    
     boolean existsByEducationCenterId(Long educationCenterId);
 
 }

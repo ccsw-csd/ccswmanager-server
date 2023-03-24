@@ -1,6 +1,13 @@
 package com.ccsw.ccswmanager.intern;
 
-import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.ACTIVE_TRUE;
+import com.ccsw.ccswmanager.common.SearchCriteria;
+import com.ccsw.ccswmanager.intern.model.InternEntity;
+import com.ccsw.ccswmanager.intern.model.TimeLineDto;
+import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -11,21 +18,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-
-import com.ccsw.ccswmanager.common.SearchCriteria;
-import com.ccsw.ccswmanager.intern.model.InternEntity;
-import com.ccsw.ccswmanager.intern.model.TimeLineDto;
-import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
+import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.ACTIVE_TRUE;
 
 @Service
 public class InternServiceImpl implements InternService {
 
     static final String ACTION_OUT_INT = "Rechazo por CCA";
     static final String ACTION_OUT_EXT = "Rechazo por becario";
+    static final String ACTION_OUT_FUT = "Rechazado, buscar a futuro";
     static final String ACTION_CONTRACT = "Contrato";
     static final String ACTION_CONTINUE = "Continuar";
 
@@ -114,7 +114,7 @@ public class InternServiceImpl implements InternService {
                     || ACTION_CONTRACT.equals(intern.getAction().getName()))) {
                 internTimeline.setFillColor(GREEN);
             } else if (intern.getAction() != null && (ACTION_OUT_INT.equals(intern.getAction().getName())
-                    || ACTION_OUT_EXT.equals(intern.getAction().getName()))) {
+                    || ACTION_OUT_EXT.equals(intern.getAction().getName()) || ACTION_OUT_FUT.equals(intern.getAction().getName()))) {
                 internTimeline.setFillColor(RED);
             } else {
                 internTimeline.setFillColor(BLUE);
@@ -180,12 +180,19 @@ public class InternServiceImpl implements InternService {
 
     @Override
     public boolean existsByEducationId(Long educationId) {
-        return this.repository.existsByEducationId(educationId);
 
+        return this.repository.existsByEducationId(educationId);
+    }
+
+    @Override
+    public boolean existsByTechnologiesId(Long technologyId) {
+
+        return this.repository.existsByTechnologiesId(technologyId);
     }
 
     @Override
     public boolean existsByEducationCenterId(Long educationCenterId) {
+
         return this.repository.existsByEducationCenterId(educationCenterId);
     }
 }
