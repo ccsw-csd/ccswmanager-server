@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.person.model.PersonDto;
 
@@ -32,7 +33,7 @@ public class PersonController {
         return this.personService.findPersons();
     }
 
-    @RequestMapping(path = "/{filter}", method = RequestMethod.GET)
+    @RequestMapping(path = "/filter/{filter}", method = RequestMethod.GET)
     public List<PersonDto> findByFilter(@PathVariable String filter) {
 
         return this.personService.findByFilter(filter);
@@ -44,7 +45,7 @@ public class PersonController {
         return this.personService.findByFilterWithoutGrade(filter);
     }
 
-    @RequestMapping(path = "/bulk", method = RequestMethod.POST)
+    @RequestMapping(path = "/bulk-persons", method = RequestMethod.POST)
     public List<PersonDto> saveOrUpdatePersons(@RequestBody List<PersonDto> persons) {
 
         return this.personService.saveOrUpdatePersons(persons);
@@ -70,9 +71,10 @@ public class PersonController {
     }
 
     @RequestMapping(path = "/", method = RequestMethod.POST)
-    public PersonDto save(@RequestBody PersonDto personDto) {
+    public PersonDto save(@RequestBody PersonDto personDto) throws AlreadyExistsException {
 
         return this.beanMapper.map(this.personService.save(personDto), PersonDto.class);
+
     }
 
 }

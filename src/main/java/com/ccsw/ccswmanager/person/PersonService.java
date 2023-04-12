@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.person.model.PersonDto;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
 
@@ -39,7 +40,7 @@ public interface PersonService {
 
     void deleteById(Long id);
 
-    PersonEntity save(PersonDto dto);
+    PersonEntity save(PersonDto dto) throws AlreadyExistsException;
 
     List<PersonEntity> saveAll(List<PersonEntity> entities);
 

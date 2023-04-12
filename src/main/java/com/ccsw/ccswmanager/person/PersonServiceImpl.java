@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ccsw.ccswmanager.center.CenterService;
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.config.security.UserUtils;
 import com.ccsw.ccswmanager.intern.InternService;
@@ -131,9 +132,14 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Optional<PersonEntity> saveOrUpdatePerson(PersonDto personTo) {
 
+        Optional<PersonEntity> existingPerson = personRepository.findByUsername(personTo.getUsername());
+
+        if (existingPerson.isPresent() && !existingPerson.get().getId().equals(personTo.getId())) {
+            throw new IllegalArgumentException("Ya existe una persona con el mismo nombre de usuario");
+        }
+
         if (personTo.getId() != null && personTo.getDelete() != null && personTo.getDelete()) {
             this.personRepository.deleteById(personTo.getId());
-
             return Optional.empty();
         } else {
             PersonEntity person = personTo.getId() != null ? getOrNew(personTo.getId()) : new PersonEntity();
@@ -187,9 +193,15 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonEntity save(PersonDto dto) {
+    public PersonEntity save(PersonDto dto) throws AlreadyExistsException {
 
-        return personRepository.save(this.beanMapper.map(dto, PersonEntity.class));
+        PersonEntity existsPerson = this.personRepository.getByUsername(dto.getUsername());
+
+        if (existsPerson != null && (dto.getId() == null || !existsPerson.getId().equals(dto.getId()))) {
+            throw new AlreadyExistsException("El username ya existe en la BBDD");
+        }
+
+        return this.personRepository.save(this.beanMapper.map(dto, PersonEntity.class));
     }
 
     @Override
