@@ -17,6 +17,8 @@ public interface InternService {
 
     InternEntity save(InternEntity entity);
 
+    void savePredict(InternEntity entity, Long quantity);
+
     List<InternEntity> saveAll(List<InternEntity> entities);
 
     void deleteById(Long id);
@@ -30,7 +32,7 @@ public interface InternService {
     boolean existsByEducationId(Long educationId);
 
     boolean existsByTechnologiesId(Long technologyId);
-    
+
     boolean existsByEducationCenterId(Long educationCenterId);
 
 }

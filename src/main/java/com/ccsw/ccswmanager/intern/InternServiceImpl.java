@@ -1,13 +1,6 @@
 package com.ccsw.ccswmanager.intern;
 
-import com.ccsw.ccswmanager.common.SearchCriteria;
-import com.ccsw.ccswmanager.intern.model.InternEntity;
-import com.ccsw.ccswmanager.intern.model.TimeLineDto;
-import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
+import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.ACTIVE_TRUE;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -18,7 +11,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.ACTIVE_TRUE;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import com.ccsw.ccswmanager.common.SearchCriteria;
+import com.ccsw.ccswmanager.intern.model.InternEntity;
+import com.ccsw.ccswmanager.intern.model.TimeLineDto;
+import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
 
 @Service
 public class InternServiceImpl implements InternService {
@@ -73,6 +74,14 @@ public class InternServiceImpl implements InternService {
     }
 
     @Override
+    public void savePredict(InternEntity entity, Long quantity) {
+
+        for (int i = 0; i < quantity; i++) {
+            repository.save(entity);
+        }
+    }
+
+    @Override
     public void deleteById(Long id) {
 
         repository.deleteById(id);
@@ -114,7 +123,8 @@ public class InternServiceImpl implements InternService {
                     || ACTION_CONTRACT.equals(intern.getAction().getName()))) {
                 internTimeline.setFillColor(GREEN);
             } else if (intern.getAction() != null && (ACTION_OUT_INT.equals(intern.getAction().getName())
-                    || ACTION_OUT_EXT.equals(intern.getAction().getName()) || ACTION_OUT_FUT.equals(intern.getAction().getName()))) {
+                    || ACTION_OUT_EXT.equals(intern.getAction().getName())
+                    || ACTION_OUT_FUT.equals(intern.getAction().getName()))) {
                 internTimeline.setFillColor(RED);
             } else {
                 internTimeline.setFillColor(BLUE);

@@ -46,6 +46,12 @@ public class InternController {
         return this.beanMapper.map(this.service.save(this.beanMapper.map(dto, InternEntity.class)), InternDto.class);
     }
 
+    @RequestMapping(path = "/predict/{number}", method = RequestMethod.POST)
+    public void saveMassive(@RequestBody InternDto dto, @PathVariable Long quantity) {
+
+        this.service.savePredict(this.beanMapper.map(dto, InternEntity.class), quantity);
+    }
+
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public void deleteById(@PathVariable Long id) {
 
