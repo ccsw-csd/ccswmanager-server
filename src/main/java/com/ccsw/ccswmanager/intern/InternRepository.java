@@ -24,4 +24,8 @@ public interface InternRepository extends CrudRepository<InternEntity, Long>, Jp
     boolean existsByTechnologiesId(Long technologyId);
 
     boolean existsByEducationCenterId(Long educationCenterId);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }
