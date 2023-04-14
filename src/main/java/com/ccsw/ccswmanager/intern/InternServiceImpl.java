@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.ccsw.ccswmanager.common.SearchCriteria;
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.intern.model.InternEntity;
 import com.ccsw.ccswmanager.intern.model.TimeLineDto;
 import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
@@ -60,7 +61,14 @@ public class InternServiceImpl implements InternService {
     }
 
     @Override
-    public InternEntity save(InternEntity entity) {
+    public InternEntity save(InternEntity entity) throws AlreadyExistsException {
+
+        if (this.repository.existsByUsername(entity.getUsername())) {
+            throw new AlreadyExistsException("El username ya esta en uso");
+        }
+        if (this.repository.existsByEmail(entity.getEmail())) {
+            throw new AlreadyExistsException("El email ya esta en uso");
+        }
 
         return repository.save(entity);
     }

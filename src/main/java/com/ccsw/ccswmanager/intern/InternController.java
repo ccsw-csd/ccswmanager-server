@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.intern.model.InternDto;
 import com.ccsw.ccswmanager.intern.model.InternEntity;
@@ -41,7 +42,7 @@ public class InternController {
     }
 
     @RequestMapping(path = "/", method = RequestMethod.POST)
-    public InternDto save(@RequestBody InternDto dto) {
+    public InternDto save(@RequestBody InternDto dto) throws AlreadyExistsException {
 
         return this.beanMapper.map(this.service.save(this.beanMapper.map(dto, InternEntity.class)), InternDto.class);
     }
