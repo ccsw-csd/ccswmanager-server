@@ -195,10 +195,15 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonEntity save(PersonDto dto) throws AlreadyExistsException {
 
-        PersonEntity existsPerson = this.personRepository.getByUsername(dto.getUsername());
+        PersonEntity existsPersonByUsername = this.personRepository.getByUsername(dto.getUsername());
+        PersonEntity existsPersonByEmail = this.personRepository.getByEmail(dto.getEmail());
 
-        if (existsPerson != null && (dto.getId() == null || !existsPerson.getId().equals(dto.getId()))) {
+        if (existsPersonByUsername != null && (dto.getId() == null || !existsPersonByUsername.getId().equals(dto.getId()))) {
             throw new AlreadyExistsException("El username ya existe en la BBDD");
+        }
+
+        if (existsPersonByEmail != null && (dto.getId() == null || !existsPersonByEmail.getId().equals(dto.getId()))) {
+            throw new AlreadyExistsException("El email ya existe en la BBDD");
         }
 
         return this.personRepository.save(this.beanMapper.map(dto, PersonEntity.class));

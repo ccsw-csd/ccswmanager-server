@@ -46,4 +46,8 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     PersonEntity getById(Long id);
 
+    PersonEntity getByEmail(String email);
+
+    Object existsByUsername(String username);
+
 }
