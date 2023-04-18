@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import com.ccsw.ccswmanager.common.SearchCriteria;
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.config.mapper.BeanMapper;
+import com.ccsw.ccswmanager.intern.model.InternDto;
 import com.ccsw.ccswmanager.intern.model.InternEntity;
 import com.ccsw.ccswmanager.intern.model.TimeLineDto;
 import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
@@ -42,6 +46,9 @@ public class InternServiceImpl implements InternService {
     @Autowired
     InternRepository repository;
 
+    @Autowired
+    private BeanMapper beanMapper;
+
     @Override
     public List<InternEntity> findAll() {
 
@@ -63,10 +70,14 @@ public class InternServiceImpl implements InternService {
     @Override
     public InternEntity save(InternEntity entity) throws AlreadyExistsException {
 
-        if (this.repository.existsByUsername(entity.getUsername())) {
+        InternEntity internByUsername = this.repository.findByUsername(entity.getUsername());
+
+        InternEntity internByEmail = this.repository.findByEmail(entity.getEmail());
+
+        if (internByUsername != null && (entity.getId() == null || !internByUsername.getId().equals(entity.getId()))) {
             throw new AlreadyExistsException("El username ya esta en uso");
         }
-        if (this.repository.existsByEmail(entity.getEmail())) {
+        if (internByEmail != null && (entity.getId() == null || !internByEmail.getId().equals(entity.getId()))) {
             throw new AlreadyExistsException("El email ya esta en uso");
         }
 
@@ -82,10 +93,11 @@ public class InternServiceImpl implements InternService {
     }
 
     @Override
-    public void savePredict(InternEntity entity, Long quantity) {
+    @Transactional
+    public void savePredict(InternDto dto, Long quantity) {
 
         for (int i = 0; i < quantity; i++) {
-            repository.save(entity);
+            repository.save(this.beanMapper.map(dto, InternEntity.class));
         }
     }
 

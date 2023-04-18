@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.intern.model.InternDto;
 import com.ccsw.ccswmanager.intern.model.InternEntity;
 import com.ccsw.ccswmanager.intern.model.TimeLineDto;
 import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
@@ -18,7 +19,7 @@ public interface InternService {
 
     InternEntity save(InternEntity entity) throws AlreadyExistsException;
 
-    void savePredict(InternEntity entity, Long quantity);
+    void savePredict(InternDto dto, Long quantity);
 
     List<InternEntity> saveAll(List<InternEntity> entities);
 
