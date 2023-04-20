@@ -70,17 +70,19 @@ public class InternServiceImpl implements InternService {
     @Override
     public InternEntity save(InternEntity entity) throws AlreadyExistsException {
 
-        InternEntity internByUsername = this.repository.findByUsername(entity.getUsername());
+        if (entity.getUsername() != null && !entity.getUsername().isEmpty()) {
+            InternEntity internByUsername = this.repository.findByUsername(entity.getUsername());
 
-        InternEntity internByEmail = this.repository.findByEmail(entity.getEmail());
+            InternEntity internByEmail = this.repository.findByEmail(entity.getEmail());
 
-        if (internByUsername != null && (entity.getId() == null || !internByUsername.getId().equals(entity.getId()))) {
-            throw new AlreadyExistsException("El username ya esta en uso");
+            if (internByUsername != null
+                    && (entity.getId() == null || !internByUsername.getId().equals(entity.getId()))) {
+                throw new AlreadyExistsException("El username ya esta en uso");
+            }
+            if (internByEmail != null && (entity.getId() == null || !internByEmail.getId().equals(entity.getId()))) {
+                throw new AlreadyExistsException("El email ya esta en uso");
+            }
         }
-        if (internByEmail != null && (entity.getId() == null || !internByEmail.getId().equals(entity.getId()))) {
-            throw new AlreadyExistsException("El email ya esta en uso");
-        }
-
         return repository.save(entity);
     }
 
