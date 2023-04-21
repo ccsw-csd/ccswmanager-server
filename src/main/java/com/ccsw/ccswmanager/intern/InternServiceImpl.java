@@ -82,6 +82,12 @@ public class InternServiceImpl implements InternService {
             if (internByEmail != null && (entity.getId() == null || !internByEmail.getId().equals(entity.getId()))) {
                 throw new AlreadyExistsException("El email ya esta en uso");
             }
+        } else {
+            InternEntity internByEmail = this.repository.findByEmail(entity.getEmail());
+
+            if (internByEmail != null && (entity.getId() == null || !internByEmail.getId().equals(entity.getId()))) {
+                throw new AlreadyExistsException("El email ya esta en uso");
+            }
         }
         return repository.save(entity);
     }
