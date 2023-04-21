@@ -27,7 +27,7 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
-    @RequestMapping(path = "/bulk", method = RequestMethod.GET)
+    @RequestMapping(path = "/", method = RequestMethod.GET)
     public List<PersonDto> findPersons() {
 
         return this.personService.findPersons();
@@ -45,17 +45,10 @@ public class PersonController {
         return this.personService.findByFilterWithoutGrade(filter);
     }
 
-    @RequestMapping(path = "/bulk-persons", method = RequestMethod.POST)
+    @RequestMapping(path = "/bulk", method = RequestMethod.POST)
     public List<PersonDto> saveOrUpdatePersons(@RequestBody List<PersonDto> persons) {
 
         return this.personService.saveOrUpdatePersons(persons);
-    }
-
-    @RequestMapping(path = "/", method = RequestMethod.GET)
-    public List<PersonDto> findAll() {
-
-        List<PersonDto> a = this.beanMapper.mapList(this.personService.findAll(), PersonDto.class);
-        return a;
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)

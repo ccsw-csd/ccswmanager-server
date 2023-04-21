@@ -171,7 +171,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<PersonEntity> findAll() {
 
-        return this.personRepository.findAll();
+        return this.personRepository.findAllByOrderByUsernameAsc();
     }
 
     @Override

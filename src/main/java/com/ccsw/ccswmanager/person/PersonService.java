@@ -32,8 +32,6 @@ public interface PersonService {
 
     List<PersonEntity> findContracts(String department, String grade, Integer active);
 
-    List<PersonEntity> findAll();
-
     List<PersonEntity> findByDepartmentActives(String department);
 
     List<PersonEntity> findAllContractsActives();
@@ -45,5 +43,7 @@ public interface PersonService {
     List<PersonEntity> saveAll(List<PersonEntity> entities);
 
     PersonEntity getById(Long id);
+
+    List<PersonEntity> findAll();
 
 }
