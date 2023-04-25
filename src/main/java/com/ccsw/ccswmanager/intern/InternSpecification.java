@@ -1,17 +1,19 @@
 package com.ccsw.ccswmanager.intern;
 
-import com.ccsw.ccswmanager.intern.model.InternEntity;
-import com.ccsw.ccswmanager.common.SearchCriteria;
-import org.springframework.data.jpa.domain.Specification;
+import java.util.Date;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.Date;
+
+import org.springframework.data.jpa.domain.Specification;
+
+import com.ccsw.ccswmanager.common.SearchCriteria;
+import com.ccsw.ccswmanager.intern.model.InternEntity;
 
 public class InternSpecification implements Specification<InternEntity> {
-    
+
     private SearchCriteria criteria;
 
     public InternSpecification(SearchCriteria searchCriteria) {

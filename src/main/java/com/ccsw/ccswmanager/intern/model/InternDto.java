@@ -3,7 +3,7 @@ package com.ccsw.ccswmanager.intern.model;
 import com.ccsw.ccswmanager.action.model.ActionDto;
 import com.ccsw.ccswmanager.center.model.CenterDto;
 import com.ccsw.ccswmanager.education.model.EducationDto;
-import com.ccsw.ccswmanager.educationcenter.model.EducationCenterDto;
+import com.ccsw.ccswmanager.educationcenter.model.EducationCenterSimpleDto;
 import com.ccsw.ccswmanager.level.model.LevelDto;
 import com.ccsw.ccswmanager.province.model.ProvinceDto;
 import com.ccsw.ccswmanager.technology.model.TechnologyDto;
@@ -29,7 +29,7 @@ public class InternDto {
 
     private EducationDto education;
 
-    private EducationCenterDto educationCenter;
+    private EducationCenterSimpleDto educationCenter;
 
     private CenterDto center;
 
@@ -133,11 +133,11 @@ public class InternDto {
         this.education = education;
     }
 
-    public EducationCenterDto getEducationCenter() {
+    public EducationCenterSimpleDto getEducationCenter() {
         return educationCenter;
     }
 
-    public void setEducationCenter(EducationCenterDto educationCenter) {
+    public void setEducationCenter(EducationCenterSimpleDto educationCenter) {
         this.educationCenter = educationCenter;
     }
 

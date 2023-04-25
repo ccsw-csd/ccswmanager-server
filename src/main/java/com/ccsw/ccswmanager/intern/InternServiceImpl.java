@@ -1,13 +1,6 @@
 package com.ccsw.ccswmanager.intern;
 
-import com.ccsw.ccswmanager.common.SearchCriteria;
-import com.ccsw.ccswmanager.intern.model.InternEntity;
-import com.ccsw.ccswmanager.intern.model.TimeLineDto;
-import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
+import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.ACTIVE_TRUE;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -18,7 +11,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.ccsw.ccswmanager.ldap.LdapServiceImpl.ACTIVE_TRUE;
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import com.ccsw.ccswmanager.common.SearchCriteria;
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.config.mapper.BeanMapper;
+import com.ccsw.ccswmanager.intern.model.InternDto;
+import com.ccsw.ccswmanager.intern.model.InternEntity;
+import com.ccsw.ccswmanager.intern.model.TimeLineDto;
+import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
 
 @Service
 public class InternServiceImpl implements InternService {
@@ -40,6 +46,9 @@ public class InternServiceImpl implements InternService {
     @Autowired
     InternRepository repository;
 
+    @Autowired
+    private BeanMapper beanMapper;
+
     @Override
     public List<InternEntity> findAll() {
 
@@ -59,7 +68,24 @@ public class InternServiceImpl implements InternService {
     }
 
     @Override
-    public InternEntity save(InternEntity entity) {
+    public InternEntity save(InternEntity entity) throws AlreadyExistsException {
+
+        if (entity.getUsername() != null && !entity.getUsername().isEmpty()) {
+            InternEntity internByUsername = this.repository.findByUsername(entity.getUsername());
+
+            if (internByUsername != null
+                    && (entity.getId() == null || !internByUsername.getId().equals(entity.getId()))) {
+                throw new AlreadyExistsException("El username ya está en uso");
+            }
+        }
+
+        if (entity.getEmail() != null && !entity.getEmail().isEmpty()) {
+            InternEntity internByEmail = this.repository.findByEmail(entity.getEmail());
+
+            if (internByEmail != null && (entity.getId() == null || !internByEmail.getId().equals(entity.getId()))) {
+                throw new AlreadyExistsException("El email ya está en uso");
+            }
+        }
 
         return repository.save(entity);
     }
@@ -70,6 +96,15 @@ public class InternServiceImpl implements InternService {
         repository.saveAll(entities);
 
         return findAll();
+    }
+
+    @Override
+    @Transactional
+    public void savePredict(InternDto dto, Long quantity) {
+
+        for (int i = 0; i < quantity; i++) {
+            repository.save(this.beanMapper.map(dto, InternEntity.class));
+        }
     }
 
     @Override
@@ -114,7 +149,8 @@ public class InternServiceImpl implements InternService {
                     || ACTION_CONTRACT.equals(intern.getAction().getName()))) {
                 internTimeline.setFillColor(GREEN);
             } else if (intern.getAction() != null && (ACTION_OUT_INT.equals(intern.getAction().getName())
-                    || ACTION_OUT_EXT.equals(intern.getAction().getName()) || ACTION_OUT_FUT.equals(intern.getAction().getName()))) {
+                    || ACTION_OUT_EXT.equals(intern.getAction().getName())
+                    || ACTION_OUT_FUT.equals(intern.getAction().getName()))) {
                 internTimeline.setFillColor(RED);
             } else {
                 internTimeline.setFillColor(BLUE);

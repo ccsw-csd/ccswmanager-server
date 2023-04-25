@@ -6,4 +6,5 @@ import com.ccsw.ccswmanager.centertranscode.model.CenterTranscodeEntity;
 
 public interface CenterTranscodeRepository extends CrudRepository<CenterTranscodeEntity, Long> {
 
+    CenterTranscodeEntity findByName(String name);
 }
