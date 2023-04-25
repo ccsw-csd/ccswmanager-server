@@ -195,15 +195,20 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonEntity save(PersonDto dto) throws AlreadyExistsException {
 
-        PersonEntity existsPersonByUsername = this.personRepository.getByUsername(dto.getUsername());
-        PersonEntity existsPersonByEmail = this.personRepository.getByEmail(dto.getEmail());
+        if (dto.getUsername() != null && !dto.getUsername().isEmpty()) {
+            PersonEntity personByUsername = this.personRepository.getByUsername(dto.getUsername());
 
-        if (existsPersonByUsername != null && (dto.getId() == null || !existsPersonByUsername.getId().equals(dto.getId()))) {
-            throw new AlreadyExistsException("El username ya existe en la BBDD");
+            if (personByUsername != null && (dto.getId() == null || !personByUsername.getId().equals(dto.getId()))) {
+                throw new AlreadyExistsException("El username ya está en uso");
+            }
         }
 
-        if (existsPersonByEmail != null && (dto.getId() == null || !existsPersonByEmail.getId().equals(dto.getId()))) {
-            throw new AlreadyExistsException("El email ya existe en la BBDD");
+        if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
+            PersonEntity personByEmail = this.personRepository.getByEmail(dto.getEmail());
+
+            if (personByEmail != null && (dto.getId() == null || !personByEmail.getId().equals(dto.getId()))) {
+                throw new AlreadyExistsException("El email ya está en uso");
+            }
         }
 
         return this.personRepository.save(this.beanMapper.map(dto, PersonEntity.class));
