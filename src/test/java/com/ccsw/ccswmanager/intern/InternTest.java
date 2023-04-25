@@ -56,7 +56,6 @@ public class InternTest {
         intern.setEmail(EMAIL);
 
         when(internRepository.findByUsername(intern.getUsername())).thenReturn(intern);
-        when(internRepository.findByEmail(intern.getEmail())).thenReturn(null);
 
         assertThrows(AlreadyExistsException.class, () -> {
             internService.save(intern);
