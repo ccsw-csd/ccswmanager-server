@@ -1,17 +1,23 @@
 package com.ccsw.ccswmanager.intern;
 
+import static java.lang.Boolean.FALSE;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.intern.model.InternDto;
 import com.ccsw.ccswmanager.intern.model.InternEntity;
 import com.ccsw.ccswmanager.intern.model.TimeLineDto;
 import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.lang.Boolean.FALSE;
 
 @RequestMapping(value = "/intern")
 @RestController
@@ -36,9 +42,15 @@ public class InternController {
     }
 
     @RequestMapping(path = "/", method = RequestMethod.POST)
-    public InternDto save(@RequestBody InternDto dto) {
+    public InternDto save(@RequestBody InternDto dto) throws AlreadyExistsException {
 
         return this.beanMapper.map(this.service.save(this.beanMapper.map(dto, InternEntity.class)), InternDto.class);
+    }
+
+    @RequestMapping(path = "/predict/{quantity}", method = RequestMethod.POST)
+    public void saveMassive(@RequestBody InternDto dto, @PathVariable Long quantity) {
+
+        this.service.savePredict(dto, quantity);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
@@ -55,7 +67,8 @@ public class InternController {
 
         this.service.deleteAll(this.beanMapper.mapList(toDelete, InternEntity.class));
 
-        return this.beanMapper.mapList(this.service.saveAll(this.beanMapper.mapList(toSave, InternEntity.class)), InternDto.class);
+        return this.beanMapper.mapList(this.service.saveAll(this.beanMapper.mapList(toSave, InternEntity.class)),
+                InternDto.class);
     }
 
     @RequestMapping(path = "/dateFilter", method = RequestMethod.POST)

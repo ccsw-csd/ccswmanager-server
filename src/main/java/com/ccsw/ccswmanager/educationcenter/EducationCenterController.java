@@ -14,6 +14,7 @@ import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.educationcenter.model.EducationCenterDto;
 import com.ccsw.ccswmanager.educationcenter.model.EducationCenterEntity;
+import com.ccsw.ccswmanager.educationcenter.model.EducationCenterSimpleDto;
 
 @RequestMapping(value = "/educationCenter")
 @RestController
@@ -50,4 +51,9 @@ public class EducationCenterController {
         this.service.deleteById(id);
     }
 
+    @RequestMapping(path = "/simple", method = RequestMethod.GET)
+    public List<EducationCenterSimpleDto> findAllSimple() {
+
+        return this.beanMapper.mapList(this.service.findAll(), EducationCenterSimpleDto.class);
+    }
 }
