@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.person.model.PersonDto;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
 
@@ -31,10 +32,16 @@ public interface PersonService {
 
     List<PersonEntity> findContracts(String department, String grade, Integer active);
 
-    List<PersonEntity> findAll();
-
     List<PersonEntity> findByDepartmentActives(String department);
 
     List<PersonEntity> findAllContractsActives();
+
+    void deleteById(Long id);
+
+    PersonEntity save(PersonDto dto) throws AlreadyExistsException;
+
+    PersonEntity getById(Long id);
+
+    List<PersonEntity> findAll();
 
 }

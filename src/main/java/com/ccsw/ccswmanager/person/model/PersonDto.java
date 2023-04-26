@@ -3,8 +3,6 @@ package com.ccsw.ccswmanager.person.model;
 import com.ccsw.ccswmanager.center.model.CenterDto;
 import com.ccsw.ccswmanager.province.model.ProvinceDto;
 
-import javax.persistence.Column;
-
 /**
  * @author aolmosca
  *

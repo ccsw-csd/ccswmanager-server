@@ -2,6 +2,7 @@ package com.ccsw.ccswmanager.person;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
@@ -38,5 +39,15 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     @EntityGraph(attributePaths = { "center" })
     List<PersonEntity> findByUpdatedAtBetween(LocalDateTime start, LocalDateTime end);
+
+    PersonEntity getByUsername(String username);
+
+    Optional<PersonEntity> findByUsername(String username);
+
+    PersonEntity getById(Long id);
+
+    PersonEntity getByEmail(String email);
+
+    Object existsByUsername(String username);
 
 }
