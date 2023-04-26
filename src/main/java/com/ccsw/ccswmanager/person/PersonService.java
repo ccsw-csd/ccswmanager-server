@@ -40,8 +40,6 @@ public interface PersonService {
 
     PersonEntity save(PersonDto dto) throws AlreadyExistsException;
 
-    List<PersonEntity> saveAll(List<PersonEntity> entities);
-
     PersonEntity getById(Long id);
 
     List<PersonEntity> findAll();

@@ -132,14 +132,9 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Optional<PersonEntity> saveOrUpdatePerson(PersonDto personTo) {
 
-        Optional<PersonEntity> existingPerson = personRepository.findByUsername(personTo.getUsername());
-
-        if (existingPerson.isPresent() && !existingPerson.get().getId().equals(personTo.getId())) {
-            throw new IllegalArgumentException("Ya existe una persona con el mismo nombre de usuario");
-        }
-
         if (personTo.getId() != null && personTo.getDelete() != null && personTo.getDelete()) {
             this.personRepository.deleteById(personTo.getId());
+
             return Optional.empty();
         } else {
             PersonEntity person = personTo.getId() != null ? getOrNew(personTo.getId()) : new PersonEntity();
@@ -212,14 +207,6 @@ public class PersonServiceImpl implements PersonService {
         }
 
         return this.personRepository.save(this.beanMapper.map(dto, PersonEntity.class));
-    }
-
-    @Override
-    public List<PersonEntity> saveAll(List<PersonEntity> entities) {
-
-        this.personRepository.saveAll(entities);
-
-        return findAll();
     }
 
     @Override
