@@ -49,7 +49,7 @@ public class LdapServiceImpl implements LdapService {
     @Override
     public Boolean checkPersons() {
 
-        ListsLdapPersonDto personLists = this.compareLdapToPersons_PersonsToLdap();
+        ListsLdapPersonDto personLists = this.compareLdapToPersonsToLdap();
 
         return personLists.getLdapToPersons().size() <= 0 && personLists.getPersonsToLdap().size() <= 0;
     }
@@ -57,12 +57,12 @@ public class LdapServiceImpl implements LdapService {
     @Override
     public Boolean checkInterns() {
 
-        ListsLdapPersonDto personLists = this.compareLdapToInterns_InternsToLdap();
+        ListsLdapPersonDto personLists = this.compareLdapToInternsToLdap();
         return personLists.getLdapToPersons().size() <= 0 && personLists.getPersonsToLdap().size() <= 0;
     }
 
     @Override
-    public ListsLdapPersonDto compareLdapToPersons_PersonsToLdap() {
+    public ListsLdapPersonDto compareLdapToPersonsToLdap() {
 
         List<LdapPersonDto> ldapToPersons = new ArrayList<>();
         List<LdapPersonDto> personsToLdap = new ArrayList<>();
@@ -84,7 +84,7 @@ public class LdapServiceImpl implements LdapService {
     }
 
     @Override
-    public ListsLdapPersonDto compareLdapToInterns_InternsToLdap() {
+    public ListsLdapPersonDto compareLdapToInternsToLdap() {
 
         List<LdapPersonDto> ldapToPersons = new ArrayList<>();
         List<LdapPersonDto> personsToLdap = new ArrayList<>();
@@ -118,6 +118,71 @@ public class LdapServiceImpl implements LdapService {
         List<InternEntity> interns = this.internService.findNotEmptyActives();
 
         return interns.stream().map(InternEntity::getUsername).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<LdapPersonDto> compareLdapToPersons() {
+
+        List<LdapPersonDto> ldapToPersons = new ArrayList<>();
+
+        List<PersonEntity> persons = this.personService.findContracts(DEPARTMENT_CODE, EMPTY_STRING, ACTIVE_TRUE);
+        List<TMemberEntity> members = this.tmemberService.findTMembers(CONTRACT_GROUP);
+
+        Set<String> usersToRemove = persons.stream().map(PersonEntity::getUsername).collect(Collectors.toSet());
+        List<TMemberEntity> personsCompared = members.stream().filter(member -> !usersToRemove.contains(member.getUserCn())).collect(Collectors.toList());
+
+        personsCompared.forEach(person -> ldapToPersons.add(new LdapPersonDto(person.getTperson().getName(), person.getTperson().getLastname(), person.getTperson().getUsername())));
+
+        return ldapToPersons;
+    }
+
+    @Override
+    public List<LdapPersonDto> comparePersonsToLdap() {
+
+        List<LdapPersonDto> personsToLdap = new ArrayList<>();
+
+        List<TMemberEntity> members = this.tmemberService.findTMembers(CONTRACT_GROUP);
+        List<PersonEntity> persons = this.personService.findContracts(DEPARTMENT_CODE, EMPTY_STRING, ACTIVE_TRUE);
+
+        Set<String> usersToRemove = members.stream().map(TMemberEntity::getUserCn).collect(Collectors.toSet());
+        List<PersonEntity> personsCompared = persons.stream().filter(person -> !usersToRemove.contains(person.getUsername())).collect(Collectors.toList());
+
+        personsCompared.forEach(person -> personsToLdap.add(new LdapPersonDto(person.getName(), person.getLastname(), person.getUsername())));
+
+        return personsToLdap;
+    }
+
+    @Override
+    public List<LdapPersonDto> compareLdapToInterns() {
+
+        List<LdapPersonDto> ldapToPersons = new ArrayList<>();
+
+        List<InternEntity> interns = this.internService.findNotEmptyActives();
+        List<TMemberEntity> members = this.tmemberService.findTMembers(INTERNS_GROUP);
+
+        Set<String> usersToRemove = interns.stream().map(InternEntity::getUsername).collect(Collectors.toSet());
+        List<TMemberEntity> personsCompared = members.stream().filter(member -> !usersToRemove.contains(member.getUserCn())).collect(Collectors.toList());
+
+        personsCompared.forEach(person -> ldapToPersons.add(new LdapPersonDto(person.getTperson().getName(), person.getTperson().getLastname(), person.getTperson().getUsername())));
+
+        return ldapToPersons;
+    }
+
+    @Override
+    public List<LdapPersonDto> compareInternsToLdap() {
+
+        List<LdapPersonDto> personsToLdap = new ArrayList<>();
+
+        List<TMemberEntity> members = this.tmemberService.findTMembers(INTERNS_GROUP);
+        List<InternEntity> interns = this.internService.findNotEmptyActives();
+
+        Set<String> usersToRemove = members.stream().map(TMemberEntity::getUserCn).collect(Collectors.toSet());
+        List<InternEntity> internsCompared = interns.stream().filter(intern -> !usersToRemove.contains(intern.getUsername())).collect(Collectors.toList());
+
+        internsCompared.forEach(intern -> personsToLdap.add(new LdapPersonDto(intern.getName(), intern.getLastname(), intern.getUsername())));
+
+        return personsToLdap;
     }
 
 }
