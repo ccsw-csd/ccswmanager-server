@@ -1,12 +1,13 @@
 package com.ccsw.ccswmanager.ldap;
 
-import com.ccsw.ccswmanager.ldap.model.LdapPersonDto;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.ccsw.ccswmanager.ldap.model.ListsLdapPersonDto;
 
 /**
  * @author dapalmie
@@ -25,40 +26,30 @@ public class LdapController {
         return this.ldapService.checkPersons();
     }
 
-    @RequestMapping(path = "/person/compare/ldap", method = RequestMethod.GET)
-    public List<LdapPersonDto> compareLdapToPersons() {
-
-        return this.ldapService.compareLdapToPersons();
-    }
-
-    @RequestMapping(path = "/person/compare/person", method = RequestMethod.GET)
-    public List<LdapPersonDto> comparePersonsToLdap() {
-
-        return this.ldapService.comparePersonsToLdap();
-    }
-
-    @RequestMapping(path = "/person/list", method = RequestMethod.GET)
-    public List<String> findPersonUsernamesList() {
-
-        return this.ldapService.findPersonUsernames();
-    }
-
     @RequestMapping(path = "/intern", method = RequestMethod.GET)
     public boolean checkInterns() {
 
         return this.ldapService.checkInterns();
     }
 
-    @RequestMapping(path = "/intern/compare/ldap", method = RequestMethod.GET)
-    public List<LdapPersonDto> compareLdapToInterns() {
+    @RequestMapping(path = "/person/compare/personLdap", method = RequestMethod.GET)
+    public ListsLdapPersonDto compareLdapToPersons_PersonsToLdap() {
 
-        return this.ldapService.compareLdapToInterns();
+        return this.ldapService.compareLdapToPersons_PersonsToLdap();
+
     }
 
-    @RequestMapping(path = "/intern/compare/intern", method = RequestMethod.GET)
-    public List<LdapPersonDto> compareInternsToLdap() {
+    @RequestMapping(path = "/person/compare/internLdap", method = RequestMethod.GET)
+    public ListsLdapPersonDto compareLdapToInterns_InternsToLdap() {
 
-        return this.ldapService.compareInternsToLdap();
+        return this.ldapService.compareLdapToInterns_InternsToLdap();
+
+    }
+
+    @RequestMapping(path = "/person/list", method = RequestMethod.GET)
+    public List<String> findPersonUsernamesList() {
+
+        return this.ldapService.findPersonUsernames();
     }
 
     @RequestMapping(path = "/intern/list", method = RequestMethod.GET)
