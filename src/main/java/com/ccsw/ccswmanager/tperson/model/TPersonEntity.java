@@ -2,6 +2,7 @@ package com.ccsw.ccswmanager.tperson.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -34,7 +35,7 @@ public class TPersonEntity {
     @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "center", referencedColumnName = "name", updatable = false)
     private CenterTranscodeEntity centerTranscode;
 
