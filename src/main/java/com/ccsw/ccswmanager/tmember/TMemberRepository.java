@@ -1,11 +1,10 @@
 package com.ccsw.ccswmanager.tmember;
 
-import java.util.List;
-
+import com.ccsw.ccswmanager.tmember.model.TMemberEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 
-import com.ccsw.ccswmanager.tmember.model.TMemberEntity;
+import java.util.List;
 
 /**
  * @author dapalmie
@@ -13,6 +12,7 @@ import com.ccsw.ccswmanager.tmember.model.TMemberEntity;
  */
 public interface TMemberRepository extends CrudRepository<TMemberEntity, Long> {
 
+    //TODO revisar, monta la query correctamente pero aun asi lanza sub consultas
     @EntityGraph(attributePaths = { "tperson", "tperson.centerTranscode", "tperson.centerTranscode.center" })
     List<TMemberEntity> findByIdGroupCnOrderByIdUserCnAsc(String groupCn);
 

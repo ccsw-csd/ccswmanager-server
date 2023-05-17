@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,7 +23,7 @@ public class CenterTranscodeEntity implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "center_id")
     private CenterEntity center;
 
