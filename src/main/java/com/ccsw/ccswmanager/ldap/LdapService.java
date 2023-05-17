@@ -1,9 +1,9 @@
 package com.ccsw.ccswmanager.ldap;
 
-import java.util.List;
-
 import com.ccsw.ccswmanager.ldap.model.LdapPersonDto;
 import com.ccsw.ccswmanager.ldap.model.ListsLdapPersonDto;
+
+import java.util.List;
 
 /**
  * @author dapalmie
@@ -11,23 +11,33 @@ import com.ccsw.ccswmanager.ldap.model.ListsLdapPersonDto;
  */
 public interface LdapService {
 
-    Boolean checkPersons();
+    Boolean checkPersonsToSync();
+
+    Boolean checkInternsToSync();
 
     List<String> findPersonUsernames();
 
-    Boolean checkInterns();
-
     List<String> findInternUsernames();
 
-    ListsLdapPersonDto compareLdapToPersonsToLdap();
+    ListsLdapPersonDto comparePersons();
 
-    ListsLdapPersonDto compareLdapToInternsToLdap();
+    ListsLdapPersonDto compareInterns();
 
+    @Deprecated
+    Boolean checkPersons();
+
+    @Deprecated
+    Boolean checkInterns();
+
+    @Deprecated
     List<LdapPersonDto> compareLdapToPersons();
 
+    @Deprecated
     List<LdapPersonDto> comparePersonsToLdap();
 
+    @Deprecated
     List<LdapPersonDto> compareLdapToInterns();
 
+    @Deprecated
     List<LdapPersonDto> compareInternsToLdap();
 }

@@ -1,14 +1,13 @@
 package com.ccsw.ccswmanager.ldap;
 
-import java.util.List;
-
+import com.ccsw.ccswmanager.ldap.model.LdapPersonDto;
+import com.ccsw.ccswmanager.ldap.model.ListsLdapPersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ccsw.ccswmanager.ldap.model.LdapPersonDto;
-import com.ccsw.ccswmanager.ldap.model.ListsLdapPersonDto;
+import java.util.List;
 
 /**
  * @author dapalmie
@@ -21,30 +20,16 @@ public class LdapController {
     @Autowired
     private LdapService ldapService;
 
-    @RequestMapping(path = "/person", method = RequestMethod.GET)
-    public boolean checkPersons() {
+    @RequestMapping(path = "/person/check", method = RequestMethod.GET)
+    public boolean checkPersonsToSync() {
 
-        return this.ldapService.checkPersons();
+        return this.ldapService.checkPersonsToSync();
     }
 
-    @RequestMapping(path = "/intern", method = RequestMethod.GET)
-    public boolean checkInterns() {
+    @RequestMapping(path = "/intern/check", method = RequestMethod.GET)
+    public boolean checkInternsToSync() {
 
-        return this.ldapService.checkInterns();
-    }
-
-    @RequestMapping(path = "/person/compare/personLdap", method = RequestMethod.GET)
-    public ListsLdapPersonDto compareLdapToPersonsToLdap() {
-
-        return this.ldapService.compareLdapToPersonsToLdap();
-
-    }
-
-    @RequestMapping(path = "/person/compare/internLdap", method = RequestMethod.GET)
-    public ListsLdapPersonDto compareLdapToInternsToLdap() {
-
-        return this.ldapService.compareLdapToInternsToLdap();
-
+        return this.ldapService.checkInternsToSync();
     }
 
     @RequestMapping(path = "/person/list", method = RequestMethod.GET)
@@ -57,6 +42,30 @@ public class LdapController {
     public List<String> findInternUsernamesList() {
 
         return this.ldapService.findInternUsernames();
+    }
+
+    @RequestMapping(path = "/person/compare", method = RequestMethod.GET)
+    public ListsLdapPersonDto comparePersons() {
+
+        return this.ldapService.comparePersons();
+    }
+
+    @RequestMapping(path = "/intern/compare", method = RequestMethod.GET)
+    public ListsLdapPersonDto compareInterns() {
+
+        return this.ldapService.compareInterns();
+    }
+
+    @RequestMapping(path = "/person", method = RequestMethod.GET)
+    public boolean checkPersons() {
+
+        return this.ldapService.checkPersons();
+    }
+
+    @RequestMapping(path = "/intern", method = RequestMethod.GET)
+    public boolean checkInterns() {
+
+        return this.ldapService.checkInterns();
     }
 
     @RequestMapping(path = "/intern/compare/ldap", method = RequestMethod.GET)

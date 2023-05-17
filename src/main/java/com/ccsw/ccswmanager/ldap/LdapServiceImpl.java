@@ -1,13 +1,5 @@
 package com.ccsw.ccswmanager.ldap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.intern.InternService;
 import com.ccsw.ccswmanager.intern.model.InternEntity;
@@ -17,6 +9,13 @@ import com.ccsw.ccswmanager.person.PersonService;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
 import com.ccsw.ccswmanager.tmember.TMemberService;
 import com.ccsw.ccswmanager.tmember.model.TMemberEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author dapalmie
@@ -47,22 +46,39 @@ public class LdapServiceImpl implements LdapService {
     InternService internService;
 
     @Override
-    public Boolean checkPersons() {
+    public Boolean checkPersonsToSync() {
 
-        ListsLdapPersonDto personLists = this.compareLdapToPersonsToLdap();
+        ListsLdapPersonDto personLists = this.comparePersons();
 
-        return personLists.getLdapToPersons().size() <= 0 && personLists.getPersonsToLdap().size() <= 0;
+        return personLists.getLdapToPersons().isEmpty() && personLists.getPersonsToLdap().isEmpty();
     }
 
     @Override
-    public Boolean checkInterns() {
+    public Boolean checkInternsToSync() {
 
-        ListsLdapPersonDto personLists = this.compareLdapToInternsToLdap();
-        return personLists.getLdapToPersons().size() <= 0 && personLists.getPersonsToLdap().size() <= 0;
+        ListsLdapPersonDto personLists = this.compareInterns();
+
+        return personLists.getLdapToPersons().isEmpty() && personLists.getPersonsToLdap().isEmpty();
     }
 
     @Override
-    public ListsLdapPersonDto compareLdapToPersonsToLdap() {
+    public List<String> findPersonUsernames() {
+
+        List<PersonEntity> persons = this.personService.findContracts(DEPARTMENT_CODE, EMPTY_STRING, ACTIVE_TRUE);
+
+        return persons.stream().map(PersonEntity::getUsername).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> findInternUsernames() {
+
+        List<InternEntity> interns = this.internService.findNotEmptyActives();
+
+        return interns.stream().map(InternEntity::getUsername).collect(Collectors.toList());
+    }
+
+    @Override
+    public ListsLdapPersonDto comparePersons() {
 
         List<LdapPersonDto> ldapToPersons = new ArrayList<>();
         List<LdapPersonDto> personsToLdap = new ArrayList<>();
@@ -84,7 +100,7 @@ public class LdapServiceImpl implements LdapService {
     }
 
     @Override
-    public ListsLdapPersonDto compareLdapToInternsToLdap() {
+    public ListsLdapPersonDto compareInterns() {
 
         List<LdapPersonDto> ldapToPersons = new ArrayList<>();
         List<LdapPersonDto> personsToLdap = new ArrayList<>();
@@ -105,20 +121,15 @@ public class LdapServiceImpl implements LdapService {
     }
 
     @Override
-    public List<String> findPersonUsernames() {
+    public Boolean checkPersons() {
 
-        List<PersonEntity> persons = this.personService.findContracts(DEPARTMENT_CODE, EMPTY_STRING, ACTIVE_TRUE);
-
-        return persons.stream().map(PersonEntity::getUsername).collect(Collectors.toList());
+        return this.compareLdapToPersons().size() <= 0 && this.comparePersonsToLdap().size() <= 0;
     }
 
     @Override
-    public List<String> findInternUsernames() {
+    public Boolean checkInterns() {
 
-        List<InternEntity> interns = this.internService.findNotEmptyActives();
-
-        return interns.stream().map(InternEntity::getUsername).collect(Collectors.toList());
-
+        return this.compareLdapToInterns().size() <= 0 && this.compareInternsToLdap().size() <= 0;
     }
 
     @Override

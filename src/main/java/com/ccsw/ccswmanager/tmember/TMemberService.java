@@ -1,15 +1,11 @@
 package com.ccsw.ccswmanager.tmember;
 
-import java.util.List;
-
 import com.ccsw.ccswmanager.tmember.model.TMemberEntity;
+
+import java.util.List;
 
 public interface TMemberService {
 
-    /**
-     * @return
-     */
-
-    public List<TMemberEntity> findTMembers(String groupCn);
+    List<TMemberEntity> findTMembers(String groupCn);
 
 }
