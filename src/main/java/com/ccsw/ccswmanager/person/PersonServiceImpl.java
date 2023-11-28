@@ -1,26 +1,28 @@
 package com.ccsw.ccswmanager.person;
 
+import com.ccsw.ccswmanager.center.CenterService;
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.config.mapper.BeanMapper;
+import com.ccsw.ccswmanager.config.security.UserInfoDto;
+import com.ccsw.ccswmanager.config.security.UserUtils;
+import com.ccsw.ccswmanager.intern.InternService;
+import com.ccsw.ccswmanager.person.model.PersonDto;
+import com.ccsw.ccswmanager.person.model.PersonEntity;
+import com.ccsw.ccswmanager.person.model.PersonSimpleDto;
+import com.ccsw.ccswmanager.province.ProvinceService;
+import com.ccsw.ccswmanager.tperson.TPersonService;
+import com.ccsw.ccswmanager.tperson.model.TPersonEntity;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.ccsw.ccswmanager.center.CenterService;
-import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
-import com.ccsw.ccswmanager.config.mapper.BeanMapper;
-import com.ccsw.ccswmanager.config.security.UserUtils;
-import com.ccsw.ccswmanager.intern.InternService;
-import com.ccsw.ccswmanager.person.model.PersonDto;
-import com.ccsw.ccswmanager.person.model.PersonEntity;
-import com.ccsw.ccswmanager.province.ProvinceService;
-import com.ccsw.ccswmanager.tperson.TPersonService;
-import com.ccsw.ccswmanager.tperson.model.TPersonEntity;
 
 /**
  * @author aolmosca
@@ -33,6 +35,9 @@ public class PersonServiceImpl implements PersonService {
     public static final String SPACE_STRING = " ";
 
     private static final Integer ACTIVE_TRUE = 1;
+
+    @Value("${app.code}")
+    private String appCode;
 
     @Autowired
     PersonRepository personRepository;
@@ -182,6 +187,18 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public List<PersonEntity> findAllContractsActivesByUserRoles() {
+
+        UserInfoDto user = UserUtils.getUserDetails();
+
+        if(user.getAppRoles(appCode).contains("MAINTENANCE")){
+            return this.personRepository.findByGradeIsNotNullAndGradeIsNotAndActive(EMPTY_STRING, ACTIVE_TRUE);
+        } else{
+            return this.personRepository.findByGradeIsNotNullAndGradeIsNotAndActiveAndCustomersManagersUsername(EMPTY_STRING, ACTIVE_TRUE, user.getUsername());
+        }
+    }
+
+    @Override
     public void deleteById(Long id) {
 
         this.personRepository.deleteById(id);
@@ -213,6 +230,31 @@ public class PersonServiceImpl implements PersonService {
     public PersonEntity getById(Long id) {
 
         return this.personRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<PersonSimpleDto> findPersonByFilter(String filter) {
+
+        List<PersonEntity> persons = this.personRepository.findByNameContainingIgnoreCaseOrLastnameContainingIgnoreCaseOrUsernameContainingIgnoreCase(filter, filter, filter);
+
+        return this.beanMapper.mapList(persons, PersonSimpleDto.class);
+    }
+
+    @Override
+    public List<PersonDto> findByUserRoles() {
+        UserInfoDto user = UserUtils.getUserDetails();
+
+        if(user.getAppRoles(appCode).contains("MAINTENANCE")){
+            return this.beanMapper.mapList(this.personRepository.findAll(), PersonDto.class);
+        } else {
+            return this.beanMapper.mapList(this.personRepository.findByCustomersManagersUsername(user.getUsername()), PersonDto.class);
+        }
+    }
+
+    @Override
+    public boolean existsByCustomersId(Long customerId) {
+
+        return this.personRepository.existsByCustomersId(customerId);
     }
 
 }

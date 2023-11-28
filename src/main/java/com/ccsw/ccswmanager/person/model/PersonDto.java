@@ -1,7 +1,10 @@
 package com.ccsw.ccswmanager.person.model;
 
 import com.ccsw.ccswmanager.center.model.CenterDto;
+import com.ccsw.ccswmanager.customer.model.CustomerSimpleDto;
 import com.ccsw.ccswmanager.province.model.ProvinceDto;
+
+import java.util.List;
 
 /**
  * @author aolmosca
@@ -31,7 +34,7 @@ public class PersonDto {
 
     private String grade;
 
-    private String customer;
+    private List<CustomerSimpleDto> customers;
 
     private String role;
 
@@ -133,12 +136,12 @@ public class PersonDto {
         this.grade = grade;
     }
 
-    public String getCustomer() {
-        return customer;
+    public List<CustomerSimpleDto> getCustomers() {
+        return customers;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setCustomers(List<CustomerSimpleDto> customers) {
+        this.customers = customers;
     }
 
     public String getRole() {

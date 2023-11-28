@@ -1,17 +1,13 @@
 package com.ccsw.ccswmanager.person;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.person.model.PersonDto;
+import com.ccsw.ccswmanager.person.model.PersonSimpleDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author dapalmie
@@ -67,7 +63,18 @@ public class PersonController {
     public PersonDto save(@RequestBody PersonDto personDto) throws AlreadyExistsException {
 
         return this.beanMapper.map(this.personService.save(personDto), PersonDto.class);
+    }
 
+    @RequestMapping(path = "/filter/person/{filter}", method = RequestMethod.GET)
+    public List<PersonSimpleDto> findPersonByFilter(@PathVariable String filter) {
+
+        return this.personService.findPersonByFilter(filter);
+    }
+
+    @RequestMapping(path = "/secured", method = RequestMethod.GET)
+    public List<PersonDto> findByUserRoles() {
+
+        return this.personService.findByUserRoles();
     }
 
 }

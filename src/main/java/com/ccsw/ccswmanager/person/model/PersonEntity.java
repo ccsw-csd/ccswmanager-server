@@ -1,20 +1,13 @@
 package com.ccsw.ccswmanager.person.model;
 
+import com.ccsw.ccswmanager.center.model.CenterEntity;
+import com.ccsw.ccswmanager.customer.model.CustomerEntity;
+import com.ccsw.ccswmanager.province.model.ProvinceEntity;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import com.ccsw.ccswmanager.center.model.CenterEntity;
-import com.ccsw.ccswmanager.province.model.ProvinceEntity;
+import java.util.List;
 
 /**
  * @author aolmosca
@@ -63,8 +56,9 @@ public class PersonEntity implements Serializable {
     @Column(name = "grade")
     private String grade;
 
-    @Column(name = "customer")
-    private String customer;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "person_customer", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "customer_id"))
+    public List<CustomerEntity> customers;
 
     @Column(name = "role")
     private String role;
@@ -175,12 +169,12 @@ public class PersonEntity implements Serializable {
         this.grade = grade;
     }
 
-    public String getCustomer() {
-        return customer;
+    public List<CustomerEntity> getCustomers() {
+        return customers;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setCustomers(List<CustomerEntity> customers) {
+        this.customers = customers;
     }
 
     public String getRole() {

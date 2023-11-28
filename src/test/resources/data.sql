@@ -72,6 +72,6 @@ CREATE TABLE person (
   CONSTRAINT person_province_FK FOREIGN KEY (province_id) REFERENCES province (id)
 );
 
-INSERT INTO PERSON(id, saga, username, department, name, lastname, active, customer, grade, role, businesscode, center_id, email, details, hours, province_id, updated_at, updated_by, manager)
-values (1, 'TEMP_SAGA', 'TEMP_USERNAME', 'TEMP_DEPARTMENT', 'TEMP_NAME', 'TEMP_LASTNAME', 1, 'TEMP_CUSTOMER', 'C', 'TEMP_ROLE', 'TEMP_BUSINESSCODE', 1, 'temp@temp', 'TEMP_DETAILS', 5 , 1, null, null, 'TEMP_MANAGER');
+INSERT INTO PERSON(id, saga, username, department, name, lastname, active, grade, role, businesscode, center_id, email, details, hours, province_id, updated_at, updated_by, manager)
+values (1, 'TEMP_SAGA', 'TEMP_USERNAME', 'TEMP_DEPARTMENT', 'TEMP_NAME', 'TEMP_LASTNAME', 1, 'C', 'TEMP_ROLE', 'TEMP_BUSINESSCODE', 1, 'temp@temp', 'TEMP_DETAILS', 5 , 1, null, null, 'TEMP_MANAGER');
 

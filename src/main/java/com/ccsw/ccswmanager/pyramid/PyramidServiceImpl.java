@@ -1,6 +1,8 @@
 package com.ccsw.ccswmanager.pyramid;
 
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
+import com.ccsw.ccswmanager.customer.CustomerService;
+import com.ccsw.ccswmanager.customer.model.CustomerEntity;
 import com.ccsw.ccswmanager.person.PersonService;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
 import com.ccsw.ccswmanager.pyramid.model.PyramidCostEntity;
@@ -38,6 +40,9 @@ public class PyramidServiceImpl implements PyramidService {
 
     @Autowired
     PersonService personService;
+
+    @Autowired
+    CustomerService customerService;
 
     @Autowired
     private BeanMapper beanMapper;
@@ -185,8 +190,9 @@ public class PyramidServiceImpl implements PyramidService {
 
         List<PyramidTeamsListDto> customerCosts = new ArrayList<>();
 
-        List<PersonEntity> personList = personService.findAllContractsActives();
-        Set<String> customers = personList.stream().filter(person -> person.getCustomer() != null && !person.getCustomer().isEmpty()).map(PersonEntity::getCustomer).collect(Collectors.toSet());
+        Set<String> customers = customerService.findByUserRoles().stream().map(CustomerEntity::getName).collect(Collectors.toSet());
+
+        List<PersonEntity> personList = personService.findAllContractsActivesByUserRoles();
 
         List<Map<String, Double>> gradeIndexCostMapList = getPyramidIndexCost();
         Map<String, Double> gradeMap = gradeIndexCostMapList.get(0);
@@ -197,7 +203,7 @@ public class PyramidServiceImpl implements PyramidService {
             Map<String, Long> gradeCountMap = new HashMap<>();
             Map<String, Double> gradeIndexMap = new HashMap<>();
 
-            gradeCountMap = personList.stream().filter(person -> customer.equals(person.getCustomer())).collect(Collectors.groupingBy(PersonEntity::getGrade, Collectors.counting()));
+            gradeCountMap = personList.stream().filter(person -> person.getCustomers().stream().anyMatch(c -> c.getName().equals(customer))).collect(Collectors.groupingBy(PersonEntity::getGrade, Collectors.counting()));
 
             Long mapSize = gradeCountMap.values().stream().mapToLong(Long::longValue).sum();
             for (String grade : gradeList) {
