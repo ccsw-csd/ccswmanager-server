@@ -16,7 +16,7 @@ $ mvn clean install
 ```  
 Este comando lanzará la compilación del proyecto tras ejecutar los Test Unitarios de la aplicación.
 
-### Ejecución:
+### Ejecución: 
 
 Para arrancar la aplicación navegar hasta la calase anotada como @SpringBootApplication
 
