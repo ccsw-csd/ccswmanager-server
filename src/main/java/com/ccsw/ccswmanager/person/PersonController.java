@@ -1,16 +1,12 @@
 package com.ccsw.ccswmanager.person;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
@@ -84,14 +80,6 @@ public class PersonController {
     public List<PersonDto> findByUserRoles() {
 
         return this.personService.findByUserRoles();
-    }
-
-    @RequestMapping(path = "/{idPerson}/photo", method = RequestMethod.GET)
-    public @ResponseBody byte[] getPhoto(@PathVariable Long idPerson) throws IOException {
-
-        InputStream in = getClass().getResourceAsStream("/userphoto.jpg");
-        return IOUtils.toByteArray(in);
-
     }
 
 }
