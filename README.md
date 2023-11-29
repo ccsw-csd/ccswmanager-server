@@ -1,6 +1,6 @@
 # CCSW Manager
 
-Parte backend del aplicativo CCSW Manager
+Parte backend del aplicativo CCSW Manager 
 
 ## Instalación
 
