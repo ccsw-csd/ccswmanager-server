@@ -75,6 +75,10 @@ public class PersonEntity implements Serializable {
     @Column(name = "manager")
     private String manager;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private PersonEntity parent;
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
@@ -215,6 +219,14 @@ public class PersonEntity implements Serializable {
 
     public void setManager(String manager) {
         this.manager = manager;
+    }
+
+    public PersonEntity getParent() {
+        return parent;
+    }
+
+    public void setParent(PersonEntity parent) {
+        this.parent = parent;
     }
 
     public LocalDateTime getUpdatedAt() {

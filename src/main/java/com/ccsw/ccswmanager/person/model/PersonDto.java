@@ -46,6 +46,8 @@ public class PersonDto {
 
     private String manager;
 
+    private PersonSimpleDto parent;
+
     private Boolean delete;
 
     public Long getId() {
@@ -182,6 +184,14 @@ public class PersonDto {
 
     public void setManager(String manager) {
         this.manager = manager;
+    }
+
+    public PersonSimpleDto getParent() {
+        return parent;
+    }
+
+    public void setParent(PersonSimpleDto parent) {
+        this.parent = parent;
     }
 
     public Boolean getDelete() {
