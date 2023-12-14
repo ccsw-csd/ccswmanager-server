@@ -10,6 +10,6 @@ import com.ccsw.ccswmanager.customer.model.PersonCustomerEntity;
 public interface PersonCustomerRepository extends CrudRepository<PersonCustomerEntity, Long> {
 
     @EntityGraph(attributePaths = { "person", "parent", "customer" })
-    List<PersonCustomerEntity> findByCustomerId(Long customerId);
+    List<PersonCustomerEntity> findByCustomerIdAndPersonActive(Long customerId, Integer active);
 
 }

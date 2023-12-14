@@ -34,6 +34,8 @@ import com.ccsw.ccswmanager.person.model.PersonEntity;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+    private static final int PERSON_ACTIVE = 1;
+
     @Value("${app.code}")
     private String appCode;
 
@@ -105,7 +107,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<PersonCustomerEntity> findPersonCustomerOrganization(Long customerId) {
 
-        List<PersonCustomerEntity> listPersonOrganization = organizationRepository.findByCustomerId(customerId);
+        List<PersonCustomerEntity> listPersonOrganization = organizationRepository.findByCustomerIdAndPersonActive(customerId, PERSON_ACTIVE);
 
         return listPersonOrganization;
 
@@ -158,7 +160,7 @@ public class CustomerServiceImpl implements CustomerService {
             data.setId(customer.getId());
             data.setName(customer.getName());
 
-            List<PersonCustomerWithPhotoEntity> personList = organizationWithPhotoRepository.findByCustomer(customer.getId());
+            List<PersonCustomerWithPhotoEntity> personList = organizationWithPhotoRepository.findByCustomerAndPersonActive(customer.getId(), PERSON_ACTIVE);
             List<PersonCustomerWithPhotoDto> memberList = new ArrayList<>();
 
             for (PersonCustomerWithPhotoEntity person : personList) {

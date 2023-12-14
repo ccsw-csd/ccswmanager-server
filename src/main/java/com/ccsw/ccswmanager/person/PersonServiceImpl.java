@@ -218,7 +218,7 @@ public class PersonServiceImpl implements PersonService {
         for (int i = personCustomers.size() - 1; i >= 0; i--) {
 
             PersonCustomerEntity personCustomerEntity = personCustomers.get(i);
-            boolean contains = dto.getPersonCustomers().stream().anyMatch(x -> x.getId().equals(personCustomerEntity.getId()));
+            boolean contains = dto.getPersonCustomers().stream().anyMatch(x -> x.getId() != null && x.getId().equals(personCustomerEntity.getId()));
 
             if (contains == false) {
                 personCustomerRepository.delete(personCustomerEntity);

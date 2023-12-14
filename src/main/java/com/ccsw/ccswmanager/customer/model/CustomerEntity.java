@@ -33,7 +33,7 @@ public class CustomerEntity {
     @JoinTable(name = "customer_manager", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "person_id"))
     private List<PersonEntity> managers;
 
-    @Formula("(select count(1) from person_customer pc where pc.customer_id = id and pc.parent_id is null)")
+    @Formula("(select count(1) from person_customer pc join person p on pc.person_id = p.id and p.active = 1 where pc.customer_id = id and pc.parent_id is null)")
     private Long numberOfPersonWithoutOrganization;
 
     public Long getId() {
