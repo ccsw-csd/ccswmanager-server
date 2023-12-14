@@ -1,13 +1,12 @@
 package com.ccsw.ccswmanager.person;
 
+import java.util.List;
+import java.util.Set;
+
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.person.model.PersonDto;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
 import com.ccsw.ccswmanager.person.model.PersonSimpleDto;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author aolmosca
@@ -18,10 +17,6 @@ public interface PersonService {
     List<PersonDto> findPersons();
 
     Set<String> getAllUsernames();
-
-    List<PersonDto> saveOrUpdatePersons(List<PersonDto> persons);
-
-    Optional<PersonEntity> saveOrUpdatePerson(PersonDto personTo);
 
     PersonEntity get(Long id);
 
@@ -52,5 +47,7 @@ public interface PersonService {
     List<PersonDto> findByUserRoles();
 
     boolean existsByCustomersId(Long customerId);
+
+    PersonEntity findById(Long id);
 
 }

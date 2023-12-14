@@ -1,13 +1,28 @@
 package com.ccsw.ccswmanager.person.model;
 
-import com.ccsw.ccswmanager.center.model.CenterEntity;
-import com.ccsw.ccswmanager.customer.model.CustomerEntity;
-import com.ccsw.ccswmanager.province.model.ProvinceEntity;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Formula;
+
+import com.ccsw.ccswmanager.center.model.CenterEntity;
+import com.ccsw.ccswmanager.customer.model.CustomerEntity;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerEntity;
+import com.ccsw.ccswmanager.province.model.ProvinceEntity;
 
 /**
  * @author aolmosca
@@ -56,9 +71,11 @@ public class PersonEntity implements Serializable {
     @Column(name = "grade")
     private String grade;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "person_customer", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "customer_id"))
-    public List<CustomerEntity> customers;
+    @Formula(value = "(select group_concat(distinct concat(' ', p2.name, ' ', p2.lastname)) from person_customer pc join person p2 on pc.parent_id = p2.id where pc.person_id = id)")
+    private String parents;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
+    private List<PersonCustomerEntity> personCustomers = new ArrayList<>();
 
     @Column(name = "role")
     private String role;
@@ -74,10 +91,6 @@ public class PersonEntity implements Serializable {
 
     @Column(name = "manager")
     private String manager;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private PersonEntity parent;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
@@ -173,12 +186,12 @@ public class PersonEntity implements Serializable {
         this.grade = grade;
     }
 
-    public List<CustomerEntity> getCustomers() {
-        return customers;
+    public List<PersonCustomerEntity> getPersonCustomers() {
+        return personCustomers;
     }
 
-    public void setCustomers(List<CustomerEntity> customers) {
-        this.customers = customers;
+    public void setPersonCustomers(List<PersonCustomerEntity> personCustomers) {
+        this.personCustomers = personCustomers;
     }
 
     public String getRole() {
@@ -221,14 +234,6 @@ public class PersonEntity implements Serializable {
         this.manager = manager;
     }
 
-    public PersonEntity getParent() {
-        return parent;
-    }
-
-    public void setParent(PersonEntity parent) {
-        this.parent = parent;
-    }
-
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
@@ -245,4 +250,18 @@ public class PersonEntity implements Serializable {
         this.updatedBy = updatedBy;
     }
 
+    public String getParents() {
+        return parents;
+    }
+
+    public void setParents(String parents) {
+        this.parents = parents;
+    }
+
+    public List<CustomerEntity> getCustomers() {
+        if (personCustomers == null)
+            return null;
+
+        return personCustomers.stream().map(item -> item.getCustomer()).collect(Collectors.toList());
+    }
 }

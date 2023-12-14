@@ -1,9 +1,8 @@
 package com.ccsw.ccswmanager.customer.model;
 
+import java.util.List;
 
 import com.ccsw.ccswmanager.person.model.PersonSimpleDto;
-
-import java.util.List;
 
 public class CustomerDto {
 
@@ -13,27 +12,38 @@ public class CustomerDto {
 
     private List<PersonSimpleDto> managers;
 
+    private Long numberOfPersonWithoutOrganization;
+
     public Long getId() {
-    return id;
-  }
+        return id;
+    }
 
     public void setId(Long id) {
-    this.id = id;
-  }
+        this.id = id;
+    }
 
     public String getName() {
-    return name;
-  }
+        return name;
+    }
 
     public void setName(String name) {
-    this.name = name;
-  }
+        this.name = name;
+    }
 
     public List<PersonSimpleDto> getManagers() {
-    return managers;
-  }
+        return managers;
+    }
 
     public void setManagers(List<PersonSimpleDto> managers) {
-    this.managers = managers;
-  }
+        this.managers = managers;
+    }
+
+    public Long getNumberOfPersonWithoutOrganization() {
+        return numberOfPersonWithoutOrganization;
+    }
+
+    public void setNumberOfPersonWithoutOrganization(Long numberOfPersonWithoutOrganization) {
+        this.numberOfPersonWithoutOrganization = numberOfPersonWithoutOrganization;
+    }
+
 }

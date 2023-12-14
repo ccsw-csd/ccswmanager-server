@@ -1,10 +1,24 @@
 package com.ccsw.ccswmanager.person;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ccsw.ccswmanager.center.CenterService;
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.config.security.UserInfoDto;
 import com.ccsw.ccswmanager.config.security.UserUtils;
+import com.ccsw.ccswmanager.customer.CustomerService;
+import com.ccsw.ccswmanager.customer.PersonCustomerRepository;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerEntity;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerSimpleDto;
 import com.ccsw.ccswmanager.intern.InternService;
 import com.ccsw.ccswmanager.person.model.PersonDto;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
@@ -12,23 +26,13 @@ import com.ccsw.ccswmanager.person.model.PersonSimpleDto;
 import com.ccsw.ccswmanager.province.ProvinceService;
 import com.ccsw.ccswmanager.tperson.TPersonService;
 import com.ccsw.ccswmanager.tperson.model.TPersonEntity;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author aolmosca
  *
  */
 @Service
+@Transactional(readOnly = true)
 public class PersonServiceImpl implements PersonService {
 
     private static final String EMPTY_STRING = "";
@@ -41,6 +45,12 @@ public class PersonServiceImpl implements PersonService {
 
     @Autowired
     PersonRepository personRepository;
+
+    @Autowired
+    PersonCustomerRepository personCustomerRepository;
+
+    @Autowired
+    CustomerService customerService;
 
     @Autowired
     TPersonService tpersonService;
@@ -67,11 +77,6 @@ public class PersonServiceImpl implements PersonService {
     public PersonEntity get(Long id) {
 
         return this.personRepository.findById(id).orElse(null);
-    }
-
-    private PersonEntity getOrNew(Long id) {
-
-        return this.personRepository.findById(id).orElse(new PersonEntity());
     }
 
     @Override
@@ -123,40 +128,6 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PersonDto> saveOrUpdatePersons(List<PersonDto> personListTo) {
-
-        personListTo.forEach(personTo -> {
-            Objects.requireNonNull(personTo, "person");
-
-            saveOrUpdatePerson(personTo);
-        });
-
-        return findPersons();
-    }
-
-    @Override
-    public Optional<PersonEntity> saveOrUpdatePerson(PersonDto personTo) {
-
-        if (personTo.getId() != null && personTo.getDelete() != null && personTo.getDelete()) {
-            this.personRepository.deleteById(personTo.getId());
-
-            return Optional.empty();
-        } else {
-            PersonEntity person = personTo.getId() != null ? getOrNew(personTo.getId()) : new PersonEntity();
-
-            BeanUtils.copyProperties(personTo, person, "id", "center", "province");
-
-            person.setCenter(this.centerService.getById(personTo.getCenter().getId()));
-            person.setProvince(personTo.getProvince() != null ? this.provinceService.getById(personTo.getProvince().getId()) : null);
-            person.setUpdatedAt(LocalDateTime.now());
-            person.setUpdatedBy(UserUtils.getUserDetails().getUsername());
-            this.personRepository.save(person);
-
-            return Optional.of(person);
-        }
-    }
-
-    @Override
     public List<PersonEntity> findScholars(String department, String grade, Integer active) {
 
         return this.personRepository.findByDepartmentAndGradeIsNullOrGradeIsAndActiveIsOrderByUsernameAsc(department, grade, active);
@@ -191,20 +162,22 @@ public class PersonServiceImpl implements PersonService {
 
         UserInfoDto user = UserUtils.getUserDetails();
 
-        if(user.getAppRoles(appCode).contains("MAINTENANCE")){
+        if (user.getAppRoles(appCode).contains("MAINTENANCE")) {
             return this.personRepository.findByGradeIsNotNullAndGradeIsNotAndActive(EMPTY_STRING, ACTIVE_TRUE);
-        } else{
-            return this.personRepository.findByGradeIsNotNullAndGradeIsNotAndActiveAndCustomersManagersUsername(EMPTY_STRING, ACTIVE_TRUE, user.getUsername());
+        } else {
+            return this.personRepository.findByGradeIsNotNullAndGradeIsNotAndActiveAndPersonCustomersCustomerManagersUsername(EMPTY_STRING, ACTIVE_TRUE, user.getUsername());
         }
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteById(Long id) {
 
         this.personRepository.deleteById(id);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public PersonEntity save(PersonDto dto) throws AlreadyExistsException {
 
         if (dto.getUsername() != null && !dto.getUsername().isEmpty()) {
@@ -223,7 +196,54 @@ public class PersonServiceImpl implements PersonService {
             }
         }
 
-        return this.personRepository.save(this.beanMapper.map(dto, PersonEntity.class));
+        List<PersonCustomerEntity> originalPersonCustomers = null;
+        if (dto.getId() != null) {
+            PersonEntity originalPerson = get(dto.getId());
+            originalPersonCustomers = new ArrayList<>(originalPerson.getPersonCustomers());
+        } else {
+            originalPersonCustomers = new ArrayList<>();
+        }
+
+        PersonEntity personUpdated = this.beanMapper.map(dto, PersonEntity.class);
+        personUpdated = this.personRepository.save(personUpdated);
+
+        personUpdated.setPersonCustomers(createOrRemovePersonCustomers(originalPersonCustomers, personUpdated, dto));
+
+        return personUpdated;
+    }
+
+    private List<PersonCustomerEntity> createOrRemovePersonCustomers(List<PersonCustomerEntity> personCustomers, PersonEntity updated, PersonDto dto) {
+
+        //Check Customer deleted
+        for (int i = personCustomers.size() - 1; i >= 0; i--) {
+
+            PersonCustomerEntity personCustomerEntity = personCustomers.get(i);
+            boolean contains = dto.getPersonCustomers().stream().anyMatch(x -> x.getId().equals(personCustomerEntity.getId()));
+
+            if (contains == false) {
+                personCustomerRepository.delete(personCustomerEntity);
+                personCustomers.remove(i);
+            }
+        }
+
+        //Check Customer new
+        for (int i = 0; i < dto.getPersonCustomers().size(); i++) {
+
+            PersonCustomerSimpleDto personCustomer = dto.getPersonCustomers().get(i);
+            boolean contains = personCustomers.stream().anyMatch(x -> x.getId().equals(personCustomer.getId()));
+
+            if (contains == false) {
+
+                PersonCustomerEntity personCustomerEntity = new PersonCustomerEntity();
+                personCustomerEntity.setPerson(updated);
+                personCustomerEntity.setCustomer(customerService.getById(personCustomer.getCustomer().getId()));
+                personCustomerRepository.save(personCustomerEntity);
+                personCustomers.add(personCustomerEntity);
+            }
+        }
+
+        return personCustomers;
+
     }
 
     @Override
@@ -244,17 +264,26 @@ public class PersonServiceImpl implements PersonService {
     public List<PersonDto> findByUserRoles() {
         UserInfoDto user = UserUtils.getUserDetails();
 
-        if(user.getAppRoles(appCode).contains("MAINTENANCE")){
+        if (user.getAppRoles(appCode).contains("MAINTENANCE")) {
             return this.beanMapper.mapList(this.personRepository.findAll(), PersonDto.class);
         } else {
-            return this.beanMapper.mapList(this.personRepository.findByCustomersManagersUsername(user.getUsername()), PersonDto.class);
+            return this.beanMapper.mapList(this.personRepository.findByPersonCustomersCustomerManagersUsername(user.getUsername()), PersonDto.class);
         }
     }
 
     @Override
     public boolean existsByCustomersId(Long customerId) {
 
-        return this.personRepository.existsByCustomersId(customerId);
+        return this.personRepository.existsByPersonCustomersCustomerId(customerId);
+    }
+
+    @Override
+    public PersonEntity findById(Long id) {
+
+        if (id == null)
+            return null;
+
+        return personRepository.findById(id).orElse(null);
     }
 
 }

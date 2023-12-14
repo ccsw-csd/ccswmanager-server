@@ -1,5 +1,19 @@
 package com.ccsw.ccswmanager.customer;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.transaction.Transactional;
+
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
@@ -7,12 +21,15 @@ import com.ccsw.ccswmanager.config.security.UserInfoDto;
 import com.ccsw.ccswmanager.config.security.UserUtils;
 import com.ccsw.ccswmanager.customer.model.CustomerDto;
 import com.ccsw.ccswmanager.customer.model.CustomerEntity;
+import com.ccsw.ccswmanager.customer.model.OrganizationCustomerDto;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerDto;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerEditRequest;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerEntity;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerWithPhotoDto;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerWithPhotoEntity;
 import com.ccsw.ccswmanager.person.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import com.ccsw.ccswmanager.person.model.PersonDto;
+import com.ccsw.ccswmanager.person.model.PersonEntity;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -24,6 +41,12 @@ public class CustomerServiceImpl implements CustomerService {
     CustomerRepository repository;
 
     @Autowired
+    PersonCustomerRepository organizationRepository;
+
+    @Autowired
+    PersonCustomerWithPhotoRepository organizationWithPhotoRepository;
+
+    @Autowired
     BeanMapper beanMapper;
 
     @Autowired
@@ -32,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerEntity> findAll() {
 
-        UserInfoDto user = UserUtils.getUserDetails();
+        //UserInfoDto user = UserUtils.getUserDetails();
 
         return repository.findAll();
     }
@@ -72,11 +95,104 @@ public class CustomerServiceImpl implements CustomerService {
 
         UserInfoDto user = UserUtils.getUserDetails();
 
-        if(user.getAppRoles(appCode).contains("MAINTENANCE")){
+        if (user.getAppRoles(appCode).contains("MAINTENANCE")) {
             return repository.findAll();
-        } else{
+        } else {
             return repository.findByManagersUsername(user.getUsername());
         }
+    }
+
+    @Override
+    public List<PersonCustomerEntity> findPersonCustomerOrganization(Long customerId) {
+
+        List<PersonCustomerEntity> listPersonOrganization = organizationRepository.findByCustomerId(customerId);
+
+        return listPersonOrganization;
+
+    }
+
+    private boolean isDiferentPerson(PersonEntity personEntity, PersonDto personDto) {
+
+        if (personEntity == null && personDto != null)
+            return true;
+        if (personEntity != null && personDto == null)
+            return true;
+
+        return personEntity.getId().equals(personDto.getId()) == false;
+    }
+
+    @Override
+    @Transactional
+    public void savePersonCustomerOrganization(PersonCustomerEditRequest request) {
+
+        for (PersonCustomerDto personCustomerData : request.getData()) {
+
+            PersonCustomerEntity personCustomer = organizationRepository.findById(personCustomerData.getId()).orElse(null);
+
+            if (isDiferentPerson(personCustomer.getParent(), personCustomerData.getParent())) {
+
+                PersonEntity newPerson = null;
+                if (personCustomerData.getParent() != null)
+                    newPerson = personService.findById(personCustomerData.getParent().getId());
+
+                personCustomer.setParent(newPerson);
+                organizationRepository.save(personCustomer);
+            }
+
+        }
+
+    }
+
+    @Override
+    public List<OrganizationCustomerDto> findOrganizationChart(String customerIds) {
+
+        List<OrganizationCustomerDto> list = new ArrayList<>();
+        List<Long> longIds = Stream.of(customerIds.split(",")).map(Long::parseLong).collect(Collectors.toList());
+
+        List<CustomerEntity> customers = repository.findByIdIn(longIds);
+
+        for (CustomerEntity customer : customers) {
+
+            OrganizationCustomerDto data = new OrganizationCustomerDto();
+
+            data.setId(customer.getId());
+            data.setName(customer.getName());
+
+            List<PersonCustomerWithPhotoEntity> personList = organizationWithPhotoRepository.findByCustomer(customer.getId());
+            List<PersonCustomerWithPhotoDto> memberList = new ArrayList<>();
+
+            for (PersonCustomerWithPhotoEntity person : personList) {
+
+                PersonCustomerWithPhotoDto member = beanMapper.map(person, PersonCustomerWithPhotoDto.class);
+                byte[] photo = person.getPhoto();
+
+                if (photo == null) {
+                    try {
+                        photo = IOUtils.toByteArray(getClass().getResourceAsStream("/userphoto.jpg"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                member.setPhoto(Base64.getEncoder().encodeToString(photo));
+
+                memberList.add(member);
+            }
+
+            data.setMembers(memberList);
+
+            /*
+             
+                     
+            
+             
+             */
+
+            list.add(data);
+
+        }
+
+        return list;
     }
 
 }

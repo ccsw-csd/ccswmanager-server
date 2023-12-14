@@ -1,14 +1,22 @@
 package com.ccsw.ccswmanager.customer;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.customer.model.CustomerDto;
-import com.ccsw.ccswmanager.customer.model.CustomerSimpleDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import com.ccsw.ccswmanager.customer.model.OrganizationCustomerDto;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerDto;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerEditRequest;
 
 @RequestMapping(value = "/customer")
 @RestController
@@ -45,9 +53,30 @@ public class CustomerController {
     }
 
     @RequestMapping(path = "/secured", method = RequestMethod.GET)
-    public List<CustomerSimpleDto> findByUserRoles() {
+    public List<CustomerDto> findByUserRoles() {
 
-        return this.beanMapper.mapList(this.service.findByUserRoles(), CustomerSimpleDto.class);
+        return this.beanMapper.mapList(this.service.findByUserRoles(), CustomerDto.class);
+    }
+
+    @RequestMapping(path = "/{id}/organization-edit", method = RequestMethod.GET)
+    public List<PersonCustomerDto> findPersonCustomerOrganization(@PathVariable(name = "id") Long customerId) {
+
+        return this.beanMapper.mapList(this.service.findPersonCustomerOrganization(customerId), PersonCustomerDto.class);
+
+    }
+
+    @RequestMapping(path = "/organization-edit", method = RequestMethod.POST)
+    public void savePersonCustomerOrganization(@RequestBody PersonCustomerEditRequest request) {
+
+        this.service.savePersonCustomerOrganization(request);
+
+    }
+
+    @RequestMapping(path = "/organization-chart", method = RequestMethod.GET)
+    public List<OrganizationCustomerDto> findOrganizationChart(@RequestParam(name = "ids") String ids) {
+
+        return this.service.findOrganizationChart(ids);
+
     }
 
 }

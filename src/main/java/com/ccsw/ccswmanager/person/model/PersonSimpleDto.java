@@ -1,10 +1,12 @@
 package com.ccsw.ccswmanager.person.model;
 
+import java.io.Serializable;
+
 /**
  * @author amirzoya
  *
  */
-public class PersonSimpleDto {
+public class PersonSimpleDto implements Serializable {
 
     private Long id;
 
@@ -13,6 +15,8 @@ public class PersonSimpleDto {
     private String name;
 
     private String lastname;
+
+    private String role;
 
     public Long getId() {
         return id;
@@ -44,5 +48,13 @@ public class PersonSimpleDto {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

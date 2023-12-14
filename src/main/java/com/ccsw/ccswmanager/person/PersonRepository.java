@@ -1,12 +1,13 @@
 package com.ccsw.ccswmanager.person;
 
-import com.ccsw.ccswmanager.person.model.PersonEntity;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.repository.CrudRepository;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.repository.CrudRepository;
+
+import com.ccsw.ccswmanager.person.model.PersonEntity;
 
 /**
  * @author aolmosca
@@ -15,7 +16,7 @@ import java.util.Optional;
 public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     @Override
-    @EntityGraph(attributePaths = { "center", "province", "customers" })
+    @EntityGraph(attributePaths = { "center", "province", "personCustomers" })
     List<PersonEntity> findAll();
 
     @EntityGraph(attributePaths = { "center" })
@@ -33,11 +34,11 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     @EntityGraph(attributePaths = { "center" })
     List<PersonEntity> findByActive(Integer active);
 
-    @EntityGraph(attributePaths = { "center", "customers" })
+    @EntityGraph(attributePaths = { "center", "personCustomers" })
     List<PersonEntity> findByGradeIsNotNullAndGradeIsNotAndActive(String grade, Integer active);
 
-    @EntityGraph(attributePaths = { "center", "customers" })
-    List<PersonEntity> findByGradeIsNotNullAndGradeIsNotAndActiveAndCustomersManagersUsername(String grade, Integer active, String username);
+    @EntityGraph(attributePaths = { "center", "personCustomers" })
+    List<PersonEntity> findByGradeIsNotNullAndGradeIsNotAndActiveAndPersonCustomersCustomerManagersUsername(String grade, Integer active, String username);
 
     @EntityGraph(attributePaths = { "center" })
     List<PersonEntity> findByUpdatedAtBetween(LocalDateTime start, LocalDateTime end);
@@ -54,9 +55,9 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     List<PersonEntity> findByNameContainingIgnoreCaseOrLastnameContainingIgnoreCaseOrUsernameContainingIgnoreCase(String name, String lastname, String username);
 
-    @EntityGraph(attributePaths = { "center", "province", "customers" })
-    List<PersonEntity> findByCustomersManagersUsername(String username);
+    @EntityGraph(attributePaths = { "center", "province", "personCustomers" })
+    List<PersonEntity> findByPersonCustomersCustomerManagersUsername(String username);
 
-    boolean existsByCustomersId(Long customerId);
+    boolean existsByPersonCustomersCustomerId(Long customerId);
 
 }

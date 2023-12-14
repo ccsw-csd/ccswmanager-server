@@ -3,12 +3,9 @@ package com.ccsw.ccswmanager.photo;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -21,12 +18,6 @@ public class PhotoController {
 
     @Autowired
     PhotoService photoService;
-
-    @RequestMapping(path = "/{idPerson}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
-    public @ResponseBody byte[] getPhoto(@PathVariable Long idPerson) throws IOException {
-
-        return photoService.getPhoto(idPerson);
-    }
 
     //https://capgemini.sharepoint.com/_layouts/15/sharepoint.aspx
     @RequestMapping(path = "/generate", method = RequestMethod.GET)

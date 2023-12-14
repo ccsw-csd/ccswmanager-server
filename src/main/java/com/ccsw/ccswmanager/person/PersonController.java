@@ -46,12 +46,6 @@ public class PersonController {
         return this.personService.findByFilterWithoutGrade(filter);
     }
 
-    @RequestMapping(path = "/bulk", method = RequestMethod.POST)
-    public List<PersonDto> saveOrUpdatePersons(@RequestBody List<PersonDto> persons) {
-
-        return this.personService.saveOrUpdatePersons(persons);
-    }
-
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public void deleteById(@PathVariable Long id) {
 

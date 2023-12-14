@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
+import javax.transaction.Transactional;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,8 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
+    @Transactional
     public void generatePhotos(String query) throws UnsupportedEncodingException {
-        List<PhotoEntity> photos = new ArrayList<>();
-        List<PersonEntity> persons = personService.findAllContractsActives();
 
         MultiValueMap<String, String> params = UriComponentsBuilder.fromUriString(query).build().getQueryParams();
 
@@ -61,6 +61,9 @@ public class PhotoServiceImpl implements PhotoService {
         String P2 = URLEncoder.encode(params.get("P2").get(0), "UTF-8");
         String P3 = URLEncoder.encode(params.get("P3").get(0), "UTF-8");
         String P4 = URLEncoder.encode(params.get("P4").get(0), "UTF-8");
+
+        List<PhotoEntity> photos = new ArrayList<>();
+        List<PersonEntity> persons = personService.findAllContractsActives();
 
         for (PersonEntity person : persons) {
 
@@ -71,7 +74,6 @@ public class PhotoServiceImpl implements PhotoService {
             URL imageURL;
             try {
                 imageURL = new URL("https://capgemini.sharepoint.com/_vti_bin/afdcache.ashx/_userprofile/userphoto.jpg?_oat_=" + _oat_ + "&P1=" + P1 + "&P2=" + P2 + "&P3=" + P3 + "&P4=" + P4 + "&size=M&accountName=" + email);
-                System.out.println(imageURL.toString());
                 BufferedImage image = ImageIO.read(imageURL);
 
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -88,7 +90,6 @@ public class PhotoServiceImpl implements PhotoService {
             }
         }
 
-        System.out.println("Guardamos fotos: " + photos.size());
         if (photos.size() > 0) {
             photoRepository.deleteAll();
             photoRepository.saveAll(photos);

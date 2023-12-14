@@ -1,16 +1,20 @@
 package com.ccsw.ccswmanager.person.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.ccsw.ccswmanager.center.model.CenterDto;
 import com.ccsw.ccswmanager.customer.model.CustomerSimpleDto;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerSimpleDto;
 import com.ccsw.ccswmanager.province.model.ProvinceDto;
-
-import java.util.List;
 
 /**
  * @author aolmosca
  *
  */
-public class PersonDto {
+public class PersonDto implements Serializable {
 
     private Long id;
 
@@ -34,7 +38,9 @@ public class PersonDto {
 
     private String grade;
 
-    private List<CustomerSimpleDto> customers;
+    private List<PersonCustomerSimpleDto> personCustomers = new ArrayList<>();
+
+    private String parents;
 
     private String role;
 
@@ -45,8 +51,6 @@ public class PersonDto {
     private String department;
 
     private String manager;
-
-    private PersonSimpleDto parent;
 
     private Boolean delete;
 
@@ -139,11 +143,10 @@ public class PersonDto {
     }
 
     public List<CustomerSimpleDto> getCustomers() {
-        return customers;
-    }
+        if (personCustomers == null)
+            return null;
 
-    public void setCustomers(List<CustomerSimpleDto> customers) {
-        this.customers = customers;
+        return personCustomers.stream().map(item -> item.getCustomer()).collect(Collectors.toList());
     }
 
     public String getRole() {
@@ -186,14 +189,6 @@ public class PersonDto {
         this.manager = manager;
     }
 
-    public PersonSimpleDto getParent() {
-        return parent;
-    }
-
-    public void setParent(PersonSimpleDto parent) {
-        this.parent = parent;
-    }
-
     public Boolean getDelete() {
         return delete;
     }
@@ -201,4 +196,21 @@ public class PersonDto {
     public void setDelete(Boolean delete) {
         this.delete = delete;
     }
+
+    public String getParents() {
+        return parents;
+    }
+
+    public void setParents(String parents) {
+        this.parents = parents;
+    }
+
+    public List<PersonCustomerSimpleDto> getPersonCustomers() {
+        return personCustomers;
+    }
+
+    public void setPersonCustomers(List<PersonCustomerSimpleDto> personCustomers) {
+        this.personCustomers = personCustomers;
+    }
+
 }
