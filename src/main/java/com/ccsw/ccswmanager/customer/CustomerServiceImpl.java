@@ -182,14 +182,6 @@ public class CustomerServiceImpl implements CustomerService {
             }
 
             data.setMembers(memberList);
-
-            /*
-             
-                     
-            
-             
-             */
-
             list.add(data);
 
         }
