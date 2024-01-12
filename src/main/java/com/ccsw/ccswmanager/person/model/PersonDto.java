@@ -1,14 +1,14 @@
 package com.ccsw.ccswmanager.person.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.ccsw.ccswmanager.center.model.CenterDto;
 import com.ccsw.ccswmanager.customer.model.CustomerSimpleDto;
 import com.ccsw.ccswmanager.customer.model.PersonCustomerSimpleDto;
 import com.ccsw.ccswmanager.province.model.ProvinceDto;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author aolmosca
@@ -39,8 +39,6 @@ public class PersonDto implements Serializable {
     private String grade;
 
     private List<PersonCustomerSimpleDto> personCustomers = new ArrayList<>();
-
-    private String parents;
 
     private String role;
 
@@ -142,11 +140,19 @@ public class PersonDto implements Serializable {
         this.grade = grade;
     }
 
+    public List<PersonCustomerSimpleDto> getPersonCustomers() {
+        return personCustomers;
+    }
+
+    public void setPersonCustomers(List<PersonCustomerSimpleDto> personCustomers) {
+        this.personCustomers = personCustomers;
+    }
+
     public List<CustomerSimpleDto> getCustomers() {
         if (personCustomers == null)
             return null;
 
-        return personCustomers.stream().map(item -> item.getCustomer()).collect(Collectors.toList());
+        return personCustomers.stream().map(PersonCustomerSimpleDto::getCustomer).collect(Collectors.toList());
     }
 
     public String getRole() {
@@ -195,22 +201,6 @@ public class PersonDto implements Serializable {
 
     public void setDelete(Boolean delete) {
         this.delete = delete;
-    }
-
-    public String getParents() {
-        return parents;
-    }
-
-    public void setParents(String parents) {
-        this.parents = parents;
-    }
-
-    public List<PersonCustomerSimpleDto> getPersonCustomers() {
-        return personCustomers;
-    }
-
-    public void setPersonCustomers(List<PersonCustomerSimpleDto> personCustomers) {
-        this.personCustomers = personCustomers;
     }
 
 }

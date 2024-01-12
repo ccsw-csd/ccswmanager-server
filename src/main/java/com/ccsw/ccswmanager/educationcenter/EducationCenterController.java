@@ -1,20 +1,15 @@
 package com.ccsw.ccswmanager.educationcenter;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.educationcenter.model.EducationCenterDto;
 import com.ccsw.ccswmanager.educationcenter.model.EducationCenterEntity;
 import com.ccsw.ccswmanager.educationcenter.model.EducationCenterSimpleDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping(value = "/educationCenter")
 @RestController

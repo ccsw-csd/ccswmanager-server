@@ -1,15 +1,5 @@
 package com.ccsw.ccswmanager.person;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ccsw.ccswmanager.center.CenterService;
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
@@ -26,6 +16,15 @@ import com.ccsw.ccswmanager.person.model.PersonSimpleDto;
 import com.ccsw.ccswmanager.province.ProvinceService;
 import com.ccsw.ccswmanager.tperson.TPersonService;
 import com.ccsw.ccswmanager.tperson.model.TPersonEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author aolmosca
@@ -220,7 +219,7 @@ public class PersonServiceImpl implements PersonService {
             PersonCustomerEntity personCustomerEntity = personCustomers.get(i);
             boolean contains = dto.getPersonCustomers().stream().anyMatch(x -> x.getId() != null && x.getId().equals(personCustomerEntity.getId()));
 
-            if (contains == false) {
+            if (!contains) {
                 personCustomerRepository.delete(personCustomerEntity);
                 personCustomers.remove(i);
             }
@@ -232,7 +231,7 @@ public class PersonServiceImpl implements PersonService {
             PersonCustomerSimpleDto personCustomer = dto.getPersonCustomers().get(i);
             boolean contains = personCustomers.stream().anyMatch(x -> x.getId().equals(personCustomer.getId()));
 
-            if (contains == false) {
+            if (!contains) {
 
                 PersonCustomerEntity personCustomerEntity = new PersonCustomerEntity();
                 personCustomerEntity.setPerson(updated);
@@ -243,7 +242,6 @@ public class PersonServiceImpl implements PersonService {
         }
 
         return personCustomers;
-
     }
 
     @Override

@@ -1,28 +1,16 @@
 package com.ccsw.ccswmanager.person.model;
 
+import com.ccsw.ccswmanager.center.model.CenterEntity;
+import com.ccsw.ccswmanager.customer.model.CustomerEntity;
+import com.ccsw.ccswmanager.customer.model.PersonCustomerEntity;
+import com.ccsw.ccswmanager.province.model.ProvinceEntity;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Formula;
-
-import com.ccsw.ccswmanager.center.model.CenterEntity;
-import com.ccsw.ccswmanager.customer.model.CustomerEntity;
-import com.ccsw.ccswmanager.customer.model.PersonCustomerEntity;
-import com.ccsw.ccswmanager.province.model.ProvinceEntity;
 
 /**
  * @author aolmosca
@@ -70,9 +58,6 @@ public class PersonEntity implements Serializable {
 
     @Column(name = "grade")
     private String grade;
-
-    @Formula(value = "(select group_concat(distinct concat(' ', p2.name, ' ', p2.lastname)) from person_customer pc join person p2 on pc.parent_id = p2.id where pc.person_id = id)")
-    private String parents;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
     private List<PersonCustomerEntity> personCustomers = new ArrayList<>();
@@ -250,18 +235,10 @@ public class PersonEntity implements Serializable {
         this.updatedBy = updatedBy;
     }
 
-    public String getParents() {
-        return parents;
-    }
-
-    public void setParents(String parents) {
-        this.parents = parents;
-    }
-
     public List<CustomerEntity> getCustomers() {
         if (personCustomers == null)
             return null;
 
-        return personCustomers.stream().map(item -> item.getCustomer()).collect(Collectors.toList());
+        return personCustomers.stream().map(PersonCustomerEntity::getCustomer).collect(Collectors.toList());
     }
 }

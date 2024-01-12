@@ -1,35 +1,26 @@
 package com.ccsw.ccswmanager.customer;
 
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
+import com.ccsw.ccswmanager.config.mapper.BeanMapper;
+import com.ccsw.ccswmanager.config.security.UserInfoDto;
+import com.ccsw.ccswmanager.config.security.UserUtils;
+import com.ccsw.ccswmanager.customer.model.*;
+import com.ccsw.ccswmanager.person.PersonService;
+import com.ccsw.ccswmanager.person.model.PersonDto;
+import com.ccsw.ccswmanager.person.model.PersonEntity;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.transaction.Transactional;
-
-import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
-import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
-import com.ccsw.ccswmanager.config.mapper.BeanMapper;
-import com.ccsw.ccswmanager.config.security.UserInfoDto;
-import com.ccsw.ccswmanager.config.security.UserUtils;
-import com.ccsw.ccswmanager.customer.model.CustomerDto;
-import com.ccsw.ccswmanager.customer.model.CustomerEntity;
-import com.ccsw.ccswmanager.customer.model.OrganizationCustomerDto;
-import com.ccsw.ccswmanager.customer.model.PersonCustomerDto;
-import com.ccsw.ccswmanager.customer.model.PersonCustomerEditRequest;
-import com.ccsw.ccswmanager.customer.model.PersonCustomerEntity;
-import com.ccsw.ccswmanager.customer.model.PersonCustomerWithPhotoDto;
-import com.ccsw.ccswmanager.customer.model.PersonCustomerWithPhotoEntity;
-import com.ccsw.ccswmanager.person.PersonService;
-import com.ccsw.ccswmanager.person.model.PersonDto;
-import com.ccsw.ccswmanager.person.model.PersonEntity;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -57,8 +48,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerEntity> findAll() {
 
-        //UserInfoDto user = UserUtils.getUserDetails();
-
         return repository.findAll();
     }
 
@@ -78,7 +67,6 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         return repository.save(this.beanMapper.map(customerDto, CustomerEntity.class));
-
     }
 
     @Override
@@ -107,20 +95,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<PersonCustomerEntity> findPersonCustomerOrganization(Long customerId) {
 
-        List<PersonCustomerEntity> listPersonOrganization = organizationRepository.findByCustomerIdAndPersonActive(customerId, PERSON_ACTIVE);
-
-        return listPersonOrganization;
-
+		return organizationRepository.findByCustomerIdAndPersonActive(customerId, PERSON_ACTIVE);
     }
 
-    private boolean isDiferentPerson(PersonEntity personEntity, PersonDto personDto) {
+    private boolean isDistinctPerson(PersonEntity personEntity, PersonDto personDto) {
 
         if (personEntity == null && personDto != null)
             return true;
         if (personEntity != null && personDto == null)
             return true;
 
-        return personEntity.getId().equals(personDto.getId()) == false;
+        return !personEntity.getId().equals(personDto.getId());
     }
 
     @Override
@@ -131,7 +116,7 @@ public class CustomerServiceImpl implements CustomerService {
 
             PersonCustomerEntity personCustomer = organizationRepository.findById(personCustomerData.getId()).orElse(null);
 
-            if (isDiferentPerson(personCustomer.getParent(), personCustomerData.getParent())) {
+            if (isDistinctPerson(personCustomer.getParent(), personCustomerData.getParent())) {
 
                 PersonEntity newPerson = null;
                 if (personCustomerData.getParent() != null)
@@ -140,9 +125,7 @@ public class CustomerServiceImpl implements CustomerService {
                 personCustomer.setParent(newPerson);
                 organizationRepository.save(personCustomer);
             }
-
         }
-
     }
 
     @Override
@@ -180,12 +163,9 @@ public class CustomerServiceImpl implements CustomerService {
 
                 memberList.add(member);
             }
-
             data.setMembers(memberList);
             list.add(data);
-
         }
-
         return list;
     }
 
