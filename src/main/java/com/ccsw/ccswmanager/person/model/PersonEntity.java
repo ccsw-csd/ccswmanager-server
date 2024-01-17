@@ -59,7 +59,7 @@ public class PersonEntity implements Serializable {
     @Column(name = "grade")
     private String grade;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<PersonCustomerEntity> personCustomers = new ArrayList<>();
 
     @Column(name = "role")
@@ -240,5 +240,11 @@ public class PersonEntity implements Serializable {
             return null;
 
         return personCustomers.stream().map(PersonCustomerEntity::getCustomer).collect(Collectors.toList());
+    }
+
+    public void addPersonToPersonCustomers() {
+        if (personCustomers != null && !personCustomers.isEmpty()) {
+            personCustomers.forEach(pc -> pc.setPerson(this));
+        }
     }
 }

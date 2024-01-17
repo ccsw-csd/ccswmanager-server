@@ -2,13 +2,14 @@ package com.ccsw.ccswmanager.person;
 
 import com.ccsw.ccswmanager.center.CenterService;
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
 import com.ccsw.ccswmanager.config.security.UserInfoDto;
 import com.ccsw.ccswmanager.config.security.UserUtils;
 import com.ccsw.ccswmanager.customer.CustomerService;
 import com.ccsw.ccswmanager.customer.PersonCustomerRepository;
+import com.ccsw.ccswmanager.customer.model.CustomerEntity;
 import com.ccsw.ccswmanager.customer.model.PersonCustomerEntity;
-import com.ccsw.ccswmanager.customer.model.PersonCustomerSimpleDto;
 import com.ccsw.ccswmanager.intern.InternService;
 import com.ccsw.ccswmanager.person.model.PersonDto;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
@@ -21,7 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,6 +38,7 @@ public class PersonServiceImpl implements PersonService {
     public static final String SPACE_STRING = " ";
 
     private static final Integer ACTIVE_TRUE = 1;
+    private static final String ALLOWED_ROLE = "MAINTENANCE";
 
     @Value("${app.code}")
     private String appCode;
@@ -161,7 +162,7 @@ public class PersonServiceImpl implements PersonService {
 
         UserInfoDto user = UserUtils.getUserDetails();
 
-        if (user.getAppRoles(appCode).contains("MAINTENANCE")) {
+        if (user.getAppRoles(appCode).contains(ALLOWED_ROLE)) {
             return this.personRepository.findByGradeIsNotNullAndGradeIsNotAndActive(EMPTY_STRING, ACTIVE_TRUE);
         } else {
             return this.personRepository.findByGradeIsNotNullAndGradeIsNotAndActiveAndPersonCustomersCustomerManagersUsername(EMPTY_STRING, ACTIVE_TRUE, user.getUsername());
@@ -170,7 +171,11 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     @Transactional(readOnly = false)
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws ConflictOnDeletionException {
+
+        if(this.personCustomerRepository.existsByParentId(id)){
+            throw new ConflictOnDeletionException("La persona esta asignada como responsable en el organigrama, cambia la asignación antes del borrado.");
+        }
 
         this.personRepository.deleteById(id);
     }
@@ -195,53 +200,19 @@ public class PersonServiceImpl implements PersonService {
             }
         }
 
-        List<PersonCustomerEntity> originalPersonCustomers = null;
-        if (dto.getId() != null) {
-            PersonEntity originalPerson = get(dto.getId());
-            originalPersonCustomers = new ArrayList<>(originalPerson.getPersonCustomers());
-        } else {
-            originalPersonCustomers = new ArrayList<>();
-        }
-
-        PersonEntity personUpdated = this.beanMapper.map(dto, PersonEntity.class);
-        personUpdated = this.personRepository.save(personUpdated);
-
-        personUpdated.setPersonCustomers(createOrRemovePersonCustomers(originalPersonCustomers, personUpdated, dto));
-
-        return personUpdated;
+        PersonEntity person = this.beanMapper.map(dto, PersonEntity.class);
+        person.addPersonToPersonCustomers();
+        removeOrphanByParent(person);
+        return this.personRepository.save(person);
     }
 
-    private List<PersonCustomerEntity> createOrRemovePersonCustomers(List<PersonCustomerEntity> personCustomers, PersonEntity updated, PersonDto dto) {
+    private void removeOrphanByParent(PersonEntity person){
 
-        //Check Customer deleted
-        for (int i = personCustomers.size() - 1; i >= 0; i--) {
+        List<PersonCustomerEntity> children = this.customerService.findByParentId(person.getId());
 
-            PersonCustomerEntity personCustomerEntity = personCustomers.get(i);
-            boolean contains = dto.getPersonCustomers().stream().anyMatch(x -> x.getId() != null && x.getId().equals(personCustomerEntity.getId()));
+        List<Long> customersId = person.getCustomers().stream().map(CustomerEntity::getId).collect(Collectors.toList());
 
-            if (!contains) {
-                personCustomerRepository.delete(personCustomerEntity);
-                personCustomers.remove(i);
-            }
-        }
-
-        //Check Customer new
-        for (int i = 0; i < dto.getPersonCustomers().size(); i++) {
-
-            PersonCustomerSimpleDto personCustomer = dto.getPersonCustomers().get(i);
-            boolean contains = personCustomers.stream().anyMatch(x -> x.getId().equals(personCustomer.getId()));
-
-            if (!contains) {
-
-                PersonCustomerEntity personCustomerEntity = new PersonCustomerEntity();
-                personCustomerEntity.setPerson(updated);
-                personCustomerEntity.setCustomer(customerService.getById(personCustomer.getCustomer().getId()));
-                personCustomerRepository.save(personCustomerEntity);
-                personCustomers.add(personCustomerEntity);
-            }
-        }
-
-        return personCustomers;
+        children.stream().filter(e -> !customersId.contains(e.getCustomer().getId())).forEach(e -> e.setParent(null));
     }
 
     @Override
@@ -262,7 +233,7 @@ public class PersonServiceImpl implements PersonService {
     public List<PersonDto> findByUserRoles() {
         UserInfoDto user = UserUtils.getUserDetails();
 
-        if (user.getAppRoles(appCode).contains("MAINTENANCE")) {
+        if (user.getAppRoles(appCode).contains(ALLOWED_ROLE)) {
             return this.beanMapper.mapList(this.personRepository.findAll(), PersonDto.class);
         } else {
             return this.beanMapper.mapList(this.personRepository.findByPersonCustomersCustomerManagersUsername(user.getUsername()), PersonDto.class);

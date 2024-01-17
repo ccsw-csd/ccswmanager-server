@@ -1,12 +1,13 @@
 package com.ccsw.ccswmanager.person;
 
-import java.util.List;
-import java.util.Set;
-
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
 import com.ccsw.ccswmanager.person.model.PersonDto;
 import com.ccsw.ccswmanager.person.model.PersonEntity;
 import com.ccsw.ccswmanager.person.model.PersonSimpleDto;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author aolmosca
@@ -34,7 +35,7 @@ public interface PersonService {
 
     List<PersonEntity> findAllContractsActivesByUserRoles();
 
-    void deleteById(Long id);
+    void deleteById(Long id) throws ConflictOnDeletionException;
 
     PersonEntity save(PersonDto dto) throws AlreadyExistsException;
 

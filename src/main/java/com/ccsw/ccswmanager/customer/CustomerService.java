@@ -1,14 +1,11 @@
 package com.ccsw.ccswmanager.customer;
 
-import java.util.List;
-
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
-import com.ccsw.ccswmanager.customer.model.CustomerDto;
-import com.ccsw.ccswmanager.customer.model.CustomerEntity;
-import com.ccsw.ccswmanager.customer.model.OrganizationCustomerDto;
-import com.ccsw.ccswmanager.customer.model.PersonCustomerEditRequest;
-import com.ccsw.ccswmanager.customer.model.PersonCustomerEntity;
+import com.ccsw.ccswmanager.customer.model.*;
+
+import java.util.List;
+import java.util.Map;
 
 public interface CustomerService {
 
@@ -22,10 +19,13 @@ public interface CustomerService {
 
     List<CustomerEntity> findByUserRoles();
 
+    Map<Long, Long> getPersonWithoutParentByCustomer();
+
     List<PersonCustomerEntity> findPersonCustomerOrganization(Long customerId);
 
-    void savePersonCustomerOrganization(PersonCustomerEditRequest request);
+    void savePersonCustomerOrganization(PersonCustomerEditDto request);
 
     List<OrganizationCustomerDto> findOrganizationChart(String customerIds);
 
+	List<PersonCustomerEntity> findByParentId(Long parentId);
 }

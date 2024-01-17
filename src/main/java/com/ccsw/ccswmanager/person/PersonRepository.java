@@ -1,13 +1,12 @@
 package com.ccsw.ccswmanager.person;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
+import com.ccsw.ccswmanager.person.model.PersonEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 
-import com.ccsw.ccswmanager.person.model.PersonEntity;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author aolmosca
@@ -16,7 +15,7 @@ import com.ccsw.ccswmanager.person.model.PersonEntity;
 public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     @Override
-    @EntityGraph(attributePaths = { "center", "province", "personCustomers" })
+    @EntityGraph(attributePaths = { "center", "province", "personCustomers", "personCustomers.customer" })
     List<PersonEntity> findAll();
 
     @EntityGraph(attributePaths = { "center" })
@@ -34,10 +33,10 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
     @EntityGraph(attributePaths = { "center" })
     List<PersonEntity> findByActive(Integer active);
 
-    @EntityGraph(attributePaths = { "center", "personCustomers" })
+    @EntityGraph(attributePaths = { "center", "personCustomers", "personCustomers.customer" })
     List<PersonEntity> findByGradeIsNotNullAndGradeIsNotAndActive(String grade, Integer active);
 
-    @EntityGraph(attributePaths = { "center", "personCustomers" })
+    @EntityGraph(attributePaths = { "center", "personCustomers", "personCustomers.customer" })
     List<PersonEntity> findByGradeIsNotNullAndGradeIsNotAndActiveAndPersonCustomersCustomerManagersUsername(String grade, Integer active, String username);
 
     @EntityGraph(attributePaths = { "center" })
@@ -55,7 +54,7 @@ public interface PersonRepository extends CrudRepository<PersonEntity, Long> {
 
     List<PersonEntity> findByNameContainingIgnoreCaseOrLastnameContainingIgnoreCaseOrUsernameContainingIgnoreCase(String name, String lastname, String username);
 
-    @EntityGraph(attributePaths = { "center", "province", "personCustomers" })
+    @EntityGraph(attributePaths = { "center", "province", "personCustomers", "personCustomers.customer" })
     List<PersonEntity> findByPersonCustomersCustomerManagersUsername(String username);
 
     boolean existsByPersonCustomersCustomerId(Long customerId);

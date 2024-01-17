@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,6 +24,7 @@ import java.util.stream.Stream;
 public class CustomerServiceImpl implements CustomerService {
 
     private static final int PERSON_ACTIVE = 1;
+    private static final String ALLOWED_ROLE = "MAINTENANCE";
 
     @Value("${app.code}")
     private String appCode;
@@ -34,10 +33,10 @@ public class CustomerServiceImpl implements CustomerService {
     CustomerRepository repository;
 
     @Autowired
-    PersonCustomerRepository organizationRepository;
+    PersonCustomerRepository personCustomerRepository;
 
     @Autowired
-    PersonCustomerWithPhotoRepository organizationWithPhotoRepository;
+    PersonCustomerWithPhotoRepository personCustomerWithPhotoRepository;
 
     @Autowired
     BeanMapper beanMapper;
@@ -85,7 +84,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         UserInfoDto user = UserUtils.getUserDetails();
 
-        if (user.getAppRoles(appCode).contains("MAINTENANCE")) {
+        if (user.getAppRoles(appCode).contains(ALLOWED_ROLE)) {
             return repository.findAll();
         } else {
             return repository.findByManagersUsername(user.getUsername());
@@ -93,9 +92,15 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Map<Long, Long> getPersonWithoutParentByCustomer() {
+
+        return personCustomerRepository.findByPersonActive(PERSON_ACTIVE).stream().filter(e -> e.getParent() == null).collect(Collectors.groupingBy(e -> e.getCustomer().getId(), Collectors.counting()));
+    }
+
+    @Override
     public List<PersonCustomerEntity> findPersonCustomerOrganization(Long customerId) {
 
-		return organizationRepository.findByCustomerIdAndPersonActive(customerId, PERSON_ACTIVE);
+		return personCustomerRepository.findByCustomerIdAndPersonActive(customerId, PERSON_ACTIVE);
     }
 
     private boolean isDistinctPerson(PersonEntity personEntity, PersonDto personDto) {
@@ -110,11 +115,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public void savePersonCustomerOrganization(PersonCustomerEditRequest request) {
+    public void savePersonCustomerOrganization(PersonCustomerEditDto request) {
 
         for (PersonCustomerDto personCustomerData : request.getData()) {
 
-            PersonCustomerEntity personCustomer = organizationRepository.findById(personCustomerData.getId()).orElse(null);
+            PersonCustomerEntity personCustomer = personCustomerRepository.findById(personCustomerData.getId()).orElse(null);
 
             if (isDistinctPerson(personCustomer.getParent(), personCustomerData.getParent())) {
 
@@ -123,7 +128,7 @@ public class CustomerServiceImpl implements CustomerService {
                     newPerson = personService.findById(personCustomerData.getParent().getId());
 
                 personCustomer.setParent(newPerson);
-                organizationRepository.save(personCustomer);
+                personCustomerRepository.save(personCustomer);
             }
         }
     }
@@ -143,7 +148,7 @@ public class CustomerServiceImpl implements CustomerService {
             data.setId(customer.getId());
             data.setName(customer.getName());
 
-            List<PersonCustomerWithPhotoEntity> personList = organizationWithPhotoRepository.findByCustomerAndPersonActive(customer.getId(), PERSON_ACTIVE);
+            List<PersonCustomerWithPhotoEntity> personList = personCustomerWithPhotoRepository.findByCustomerAndPersonActive(customer.getId(), PERSON_ACTIVE);
             List<PersonCustomerWithPhotoDto> memberList = new ArrayList<>();
 
             for (PersonCustomerWithPhotoEntity person : personList) {
@@ -167,6 +172,12 @@ public class CustomerServiceImpl implements CustomerService {
             list.add(data);
         }
         return list;
+    }
+
+    @Override
+    public List<PersonCustomerEntity> findByParentId(Long parentId) {
+
+        return personCustomerRepository.findByParentId(parentId);
     }
 
 }

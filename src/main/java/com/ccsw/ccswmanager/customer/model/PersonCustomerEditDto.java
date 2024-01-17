@@ -2,7 +2,7 @@ package com.ccsw.ccswmanager.customer.model;
 
 import java.util.List;
 
-public class PersonCustomerEditRequest {
+public class PersonCustomerEditDto {
 
     List<PersonCustomerDto> data;
 

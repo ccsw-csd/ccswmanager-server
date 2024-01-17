@@ -1,21 +1,9 @@
 package com.ccsw.ccswmanager.customer.model;
 
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Formula;
-
 import com.ccsw.ccswmanager.person.model.PersonEntity;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "customer")
@@ -32,9 +20,6 @@ public class CustomerEntity {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "customer_manager", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "person_id"))
     private List<PersonEntity> managers;
-
-    @Formula("(select count(1) from person_customer pc join person p on pc.person_id = p.id and p.active = 1 where pc.customer_id = id and pc.parent_id is null)")
-    private Long numberOfPersonWithoutOrganization;
 
     public Long getId() {
         return id;
@@ -58,14 +43,6 @@ public class CustomerEntity {
 
     public void setManagers(List<PersonEntity> managers) {
         this.managers = managers;
-    }
-
-    public Long getNumberOfPersonWithoutOrganization() {
-        return numberOfPersonWithoutOrganization;
-    }
-
-    public void setNumberOfPersonWithoutOrganization(Long numberOfPersonWithoutOrganization) {
-        this.numberOfPersonWithoutOrganization = numberOfPersonWithoutOrganization;
     }
 
 }
