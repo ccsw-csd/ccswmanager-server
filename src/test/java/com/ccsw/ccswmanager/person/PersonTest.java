@@ -1,10 +1,12 @@
 package com.ccsw.ccswmanager.person;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
+import com.ccsw.ccswmanager.common.exception.ConflictOnDeletionException;
+import com.ccsw.ccswmanager.config.mapper.BeanMapper;
+import com.ccsw.ccswmanager.customer.CustomerService;
+import com.ccsw.ccswmanager.customer.PersonCustomerRepository;
+import com.ccsw.ccswmanager.person.model.PersonDto;
+import com.ccsw.ccswmanager.person.model.PersonEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,10 +15,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
-import com.ccsw.ccswmanager.config.mapper.BeanMapper;
-import com.ccsw.ccswmanager.person.model.PersonDto;
-import com.ccsw.ccswmanager.person.model.PersonEntity;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PersonTest {
@@ -24,7 +26,13 @@ public class PersonTest {
     private PersonRepository personRepository;
 
     @Mock
+    private PersonCustomerRepository personCustomerRepository;
+
+    @Mock
     private BeanMapper beanMapper;
+
+    @Mock
+    private CustomerService customerService;
 
     @InjectMocks
     private PersonServiceImpl personService;
@@ -67,9 +75,11 @@ public class PersonTest {
     }
 
     @Test
-    public void deleteWithExistsIdShouldDeletePerson() {
+    public void deleteWithExistsIdShouldDeletePerson() throws ConflictOnDeletionException {
 
         Long idToDelete = 1L;
+
+        when(personCustomerRepository.existsByParentId(idToDelete)).thenReturn(false);
 
         personService.deleteById(idToDelete);
 
@@ -91,6 +101,8 @@ public class PersonTest {
         when(personRepository.getByEmail("johndoe@example.com")).thenReturn(null);
         when(beanMapper.map(personDto, PersonEntity.class)).thenReturn(personEntity);
         when(personRepository.save(personEntity)).thenReturn(personEntity);
+
+        when(customerService.findByParentId(any())).thenReturn(Collections.emptyList());
 
         PersonEntity savedPersonEntity = personService.save(personDto);
 
