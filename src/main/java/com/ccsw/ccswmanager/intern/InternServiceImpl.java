@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.ccsw.ccswmanager.action.model.ActionDto;
 import com.ccsw.ccswmanager.common.SearchCriteria;
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
@@ -137,6 +138,7 @@ public class InternServiceImpl implements InternService {
             List<Long> axisY = new ArrayList<>();
 
             internTimeline.setAxisX(getAxisX(intern));
+            internTimeline.setAction(this.beanMapper.map(intern.getAction(), ActionDto.class));
             if (intern.getStartDate() != null) {
                 axisY.add(getParsedTimestamp(intern.getStartDate()));
             }

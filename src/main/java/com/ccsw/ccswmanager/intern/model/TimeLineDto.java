@@ -1,8 +1,9 @@
 package com.ccsw.ccswmanager.intern.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
+
+import com.ccsw.ccswmanager.action.model.ActionDto;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TimeLineDto {
 
@@ -13,6 +14,8 @@ public class TimeLineDto {
     private List<Long> axisY;
 
     private String fillColor;
+
+    private ActionDto action;
 
     public String getAxisX() {
         return axisX;
@@ -36,6 +39,14 @@ public class TimeLineDto {
 
     public void setFillColor(String fillColor) {
         this.fillColor = fillColor;
+    }
+
+    public void setAction(ActionDto action) {
+        this.action = action;
+    }
+
+    public ActionDto getAction() {
+        return action;
     }
 
 }
