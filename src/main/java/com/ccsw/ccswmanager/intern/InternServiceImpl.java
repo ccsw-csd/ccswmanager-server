@@ -18,7 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.ccsw.ccswmanager.action.model.ActionDto;
 import com.ccsw.ccswmanager.common.SearchCriteria;
 import com.ccsw.ccswmanager.common.exception.AlreadyExistsException;
 import com.ccsw.ccswmanager.config.mapper.BeanMapper;
@@ -30,11 +29,12 @@ import com.ccsw.ccswmanager.intern.model.TimeLineSearchDto;
 @Service
 public class InternServiceImpl implements InternService {
 
-    static final String ACTION_OUT_INT = "Rechazo por CCA";
-    static final String ACTION_OUT_EXT = "Rechazo por becario";
+    static final String ACTION_OUT_INT = "Rechazado por CCA";
+    static final String ACTION_OUT_EXT = "Rechazado por becario";
     static final String ACTION_OUT_FUT = "Rechazado, buscar a futuro";
     static final String ACTION_CONTRACT = "Contrato";
     static final String ACTION_CONTINUE = "Continuar";
+    static final String ACTION_PENDING = "Pendiente de valoración final";
 
     static final String GREEN = "#00E396";
     static final String RED = "#FF4560";
@@ -138,7 +138,6 @@ public class InternServiceImpl implements InternService {
             List<Long> axisY = new ArrayList<>();
 
             internTimeline.setAxisX(getAxisX(intern));
-            internTimeline.setAction(this.beanMapper.map(intern.getAction(), ActionDto.class));
             if (intern.getStartDate() != null) {
                 axisY.add(getParsedTimestamp(intern.getStartDate()));
             }
@@ -147,14 +146,22 @@ public class InternServiceImpl implements InternService {
             }
             internTimeline.setAxisY(axisY);
 
-            if (intern.getAction() != null && (ACTION_CONTINUE.equals(intern.getAction().getName())
-                    || ACTION_CONTRACT.equals(intern.getAction().getName()))) {
+            String actionName = intern.getAction() != null ? intern.getAction().getName() : "";
+
+            switch (actionName) {
+            case ACTION_CONTRACT:
                 internTimeline.setFillColor(GREEN);
-            } else if (intern.getAction() != null && (ACTION_OUT_INT.equals(intern.getAction().getName())
-                    || ACTION_OUT_EXT.equals(intern.getAction().getName())
-                    || ACTION_OUT_FUT.equals(intern.getAction().getName()))) {
+                break;
+            case ACTION_OUT_INT:
                 internTimeline.setFillColor(RED);
-            } else {
+                break;
+            case ACTION_OUT_EXT:
+                internTimeline.setFillColor(RED);
+                break;
+            case ACTION_OUT_FUT:
+                internTimeline.setFillColor(RED);
+                break;
+            default:
                 internTimeline.setFillColor(BLUE);
             }
 
